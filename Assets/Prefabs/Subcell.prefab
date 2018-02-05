@@ -21,8 +21,9 @@ GameObject:
   - component: {fileID: 4560900495063258}
   - component: {fileID: 33125350103034298}
   - component: {fileID: 23065894466200412}
-  - component: {fileID: 64012348919644728}
   - component: {fileID: 114831720521875704}
+  - component: {fileID: 54612843765473190}
+  - component: {fileID: 135289764928861834}
   m_Layer: 0
   m_Name: Subcell
   m_TagString: Untagged
@@ -84,8 +85,34 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1392636984587748}
   m_Mesh: {fileID: 4300000, guid: 4b59ec4e3abbc3b43afb4364934785a3, type: 3}
---- !u!64 &64012348919644728
-MeshCollider:
+--- !u!54 &54612843765473190
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1392636984587748}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &114831720521875704
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1392636984587748}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb80f3ae235fe404e9dfa591a16ed553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!135 &135289764928861834
+SphereCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -93,19 +120,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 4300000, guid: 4b59ec4e3abbc3b43afb4364934785a3, type: 3}
---- !u!114 &114831720521875704
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1392636984587748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb80f3ae235fe404e9dfa591a16ed553, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  serializedVersion: 2
+  m_Radius: 3.29
+  m_Center: {x: -1.77, y: 1.64, z: 0}
