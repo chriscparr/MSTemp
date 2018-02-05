@@ -24,18 +24,34 @@ public class ModelManager : MonoBehaviour
 
 	private void Start()
 	{
-		InitialiseModel (GenerateDebugPresentation ());
+		//InitialiseModel (GenerateDebugPresentation ());
 	}
 
 
 	public void InitialiseModel(PresentationData a_pData)
 	{
-		//m_mainContainer = 
+		m_mainContainer = Instantiate<GameObject> (m_mainContainerPrefab, m_modelRoot.transform);
+		Vector3 minBounds = m_mainContainer.GetComponent<MeshCollider> ().bounds.min;
 
+		//Debug.Log ("MainContainer Size - x:" + size.x.ToString() + " y:" + size.y.ToString() + " z:" + size.z.ToString());
+		for (int i = 0; i < 8; i++)
+		{
+			GameObject sub = Instantiate<GameObject> (m_subcellPrefab, m_modelRoot.transform);
+			m_subcells.Add (sub.GetComponent<Subcell> ());
+			sub.transform.localPosition = Vector3.Scale (minBounds, Random.insideUnitSphere);
+		}
 	}
 
 
-
+	private void ClearModel()
+	{
+		foreach (Subcell cell in m_subcells)
+		{
+			Destroy (cell.gameObject);
+		}
+		m_subcells.Clear ();
+		Destroy (m_mainContainer);
+	}
 
 
 	private PresentationData GenerateDebugPresentation()
@@ -48,6 +64,15 @@ public class ModelManager : MonoBehaviour
 
 	private void Update()
 	{
+		if (Input.GetKeyDown (KeyCode.Q))
+		{
+			InitialiseModel (GenerateDebugPresentation ());
+		}
+		if (Input.GetKeyDown (KeyCode.W))
+		{
+			ClearModel ();
+		}
+		/*
 		if (Input.GetKeyDown (KeyCode.Alpha1))
 		{
 			PresentationData presData = GenerateDebugPresentation ();
@@ -59,5 +84,6 @@ public class ModelManager : MonoBehaviour
 				"</color>"
 			);
 		}
+		*/
 	}
 }
