@@ -17,6 +17,19 @@ public class ModelManager : MonoBehaviour
 	private GameObject m_mainContainer;
 	private List<Subcell> m_subcells = new List<Subcell>();
 
+	private Vector3[] m_placementVectors = new Vector3[] { 
+		new Vector3(-1f, 1f, -1f),
+		new Vector3(-1f, 1f, 1f),
+		new Vector3(1f, 1f, -1f),
+		new Vector3(1f, 1f, 1f),
+		new Vector3(-1f, -1f, -1f),
+		new Vector3(-1f, -1f, 1f),
+		new Vector3(1f, -1f, -1f),
+		new Vector3(1f, -1f, 1f)
+	};
+
+
+
 	private void Awake()
 	{
 		s_instance = this;
@@ -24,7 +37,7 @@ public class ModelManager : MonoBehaviour
 
 	private void Start()
 	{
-		//InitialiseModel (GenerateDebugPresentation ());
+		InitialiseModel (GenerateDebugPresentation ());
 	}
 
 
@@ -32,13 +45,14 @@ public class ModelManager : MonoBehaviour
 	{
 		m_mainContainer = Instantiate<GameObject> (m_mainContainerPrefab, m_modelRoot.transform);
 		Vector3 minBounds = m_mainContainer.GetComponent<MeshCollider> ().bounds.min;
-
-		//Debug.Log ("MainContainer Size - x:" + size.x.ToString() + " y:" + size.y.ToString() + " z:" + size.z.ToString());
-		for (int i = 0; i < 8; i++)
+		minBounds.Scale (new Vector3 (0.3f, 0.3f, 0.3f));
+		for (int i = 0; i < m_placementVectors.Length; i++)
 		{
 			GameObject sub = Instantiate<GameObject> (m_subcellPrefab, m_modelRoot.transform);
 			m_subcells.Add (sub.GetComponent<Subcell> ());
-			sub.transform.localPosition = Vector3.Scale (minBounds, Random.insideUnitSphere);
+			sub.transform.localPosition = Vector3.Scale (minBounds, m_placementVectors [i]);
+
+
 		}
 	}
 
@@ -52,7 +66,6 @@ public class ModelManager : MonoBehaviour
 		m_subcells.Clear ();
 		Destroy (m_mainContainer);
 	}
-
 
 	private PresentationData GenerateDebugPresentation()
 	{
@@ -72,18 +85,5 @@ public class ModelManager : MonoBehaviour
 		{
 			ClearModel ();
 		}
-		/*
-		if (Input.GetKeyDown (KeyCode.Alpha1))
-		{
-			PresentationData presData = GenerateDebugPresentation ();
-			Debug.Log (
-				"<color=#aaaa00>" +
-				"PresenterName:" + presData.PresenterName.ToString() + ",\n" +
-				"PresenterPosition:" + presData.PresenterPosition.ToString() + ",\n" +
-				"ClientName:" + presData.ClientName.ToString() + ",\n" +
-				"</color>"
-			);
-		}
-		*/
 	}
 }
