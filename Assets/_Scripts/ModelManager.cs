@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ModelManager : MonoBehaviour {
+public class ModelManager : MonoBehaviour 
+{
 
 	public static ModelManager Instance {get { return s_instance;}}
 	private static ModelManager s_instance = null;
