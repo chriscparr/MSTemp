@@ -1,55 +1,178 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System.IO;
+using System.Text;
+using System;
+using System.Collections.Generic;
 
-public class PersistentDataHandler : MonoBehaviour 
+public class PersistentDataHandler 
 {
+	//----------------------------------------------------------------------------
+	// Private Variables:
+	//----------------------------------------------------------------------------
 
-	//Replace this with code from previous work
+	private static string path = "";
+	private const string fileExtension = ".json";
+	private const string folder = "/Data/";
 
-	public void SaveJSON(string a_jsonStr, string a_fileName)
+	/// <summary>
+	/// Saves the json file to persistant datapath of the device
+	/// </summary>
+	/// <param name="fileName">File name.</param>
+	/// <param name="jsonFile">Json file.</param>
+	/// <typeparam name="T">The 1st type parameter.</typeparam>
+	public static void SaveFile<T>(string fileName,T jsonFile) where T : class
 	{
-		string path = Application.persistentDataPath + "/" + a_fileName + ".json";
-		if (!File.Exists (path))
+		ValidateFolderPath();
+
+		string json = JsonUtility.ToJson(jsonFile,true);
+
+		// Optimization
+		// Stringbuilder uses the same reference when you append strings instead of creates a new copy each time
+		StringBuilder filePath = new StringBuilder();
+		filePath.Append(path);
+		filePath.Append(fileName);
+		filePath.Append(fileExtension);
+
+		try
 		{
-			StreamWriter writer = new StreamWriter (path, false);
-			writer.Write (a_jsonStr);
-			writer.Close ();
-		} 
-		else
+			using (FileStream fs = new FileStream(filePath.ToString(), FileMode.Create))
+			{
+				using (StreamWriter writer = new StreamWriter(fs))
+				{
+					writer.Write(json);	
+				}
+			}
+			Debug.Log("PersistentDataHandler: Save of " + fileName + " Completed");
+		}
+		catch(Exception e)
 		{
-			throw new FileLoadException ("File already exists!");
+			Debug.Log("PersistentDataHandler: Save Error: " + e.Message);
 		}
 	}
-	/*
-	public PresentationData[] LoadPresentationData()
+
+	/// <summary>
+	/// Saves the json file to persistant datapath of the device
+	/// </summary>
+	/// <param name="fileName">File name.</param>
+	/// <param name="jsonString">Json String.</param>
+	public static void SaveFile(string fileName, string jsonString)
 	{
-		List<PresentationData> presentations = new List<PresentationData> ();
-		string path = Application.persistentDataPath;
-		DirectoryInfo d = new DirectoryInfo (path);
-		FileInfo[] files = d.GetFiles ();
+		ValidateFolderPath();
+		StringBuilder filePath = new StringBuilder();
+		filePath.Append(path);
+		filePath.Append(fileName);
+		filePath.Append(fileExtension);
 
-		int jsonCount = 0;
-		foreach (FileInfo finfo in files)
+		try
 		{
-			if (finfo.Extension.Contains ("json"))
+			using (FileStream fs = new FileStream(filePath.ToString(), FileMode.Create))
 			{
-				jsonCount++;
+				using (StreamWriter writer = new StreamWriter(fs))
+				{
+					writer.Write(jsonString);	
+				}
+			}
+			Debug.Log("PersistentDataHandler: Save of " + fileName + " Completed");
+		}
+		catch(Exception e)
+		{
+			Debug.Log("PersistentDataHandler: Save Error: " + e.Message);
+		}
+	}
 
+	/// <summary>
+	/// Loads the json file from the persistant datapath of the device
+	/// </summary>
+	/// <returns>The file.</returns>
+	/// <param name="fileName">File name.</param>
+	/// <typeparam name="T">The 1st type parameter.</typeparam>
+	public static T LoadFile<T>(string fileName) where T : class
+	{
+		ValidateFolderPath();
+		T file = null;
+		try
+		{
+			StringBuilder filePath = new StringBuilder();
+			filePath.Append(path);
+			filePath.Append(fileName);
+			filePath.Append(fileExtension);
+
+			using (StreamReader reader = new StreamReader(filePath.ToString()))
+			{
+				string json = "";
+				json = reader.ReadToEnd();
+				file = JsonUtility.FromJson<T>(json);
+			}
+			Debug.Log("PersistentDataHandler: Load of " + fileName + " Completed");
+		}
+		catch(Exception e)
+		{
+			Debug.Log("PersistentDataHandler: Load Error: " + e.Message);
+		}
+		return file;
+	}
+
+	/// <summary>
+	/// Loads the json file from the persistant datapath of the device
+	/// </summary>
+	/// <returns>Json string.</returns>
+	/// <param name="fileName">File name.</param>
+	public static string LoadFile(string fileName)
+	{
+		ValidateFolderPath();
+		string jsonString = null;
+		try
+		{
+			StringBuilder filePath = new StringBuilder();
+			filePath.Append(path);
+			filePath.Append(fileName);
+			filePath.Append(fileExtension);
+
+			using (StreamReader reader = new StreamReader(filePath.ToString()))
+			{
+				string json = "";
+				json = reader.ReadToEnd();
+				jsonString = json;
+			}
+			Debug.Log("PersistentDataHandler: Load of " + fileName + " Completed");
+		}
+		catch(Exception e)
+		{
+			Debug.Log("PersistentDataHandler: Load Error: " + e.Message);
+		}
+		return jsonString;
+	}
+
+	public static string[] GetJsonFilenames()
+	{
+		ValidateFolderPath ();
+		List<string> fileNames = new List<string> ();
+		DirectoryInfo d = new DirectoryInfo (path);
+		FileInfo[] fInfos = d.GetFiles ();
+		foreach (FileInfo f in fInfos)
+		{
+			if (f.Extension.Contains ("json"))
+			{
+				fileNames.Add (f.FullName);
 			}
 		}
-
+		return fileNames.ToArray ();
 	}
-	*/
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+	//----------------------------------------------------------------------------
+	// Private Methods:
+	//----------------------------------------------------------------------------
+
+	private static void ValidateFolderPath()
+	{
+		if(string.IsNullOrEmpty(path))
+		{
+			path = Application.persistentDataPath + folder;
+
+			if(!Directory.Exists(path))
+			{
+				Directory.CreateDirectory(path);
+			}
+		}
 	}
 }
