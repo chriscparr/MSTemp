@@ -3,6 +3,12 @@
 [System.Serializable]
 public class PresentationData
 {
+	public PresentationData()
+	{
+		ID = System.Guid.NewGuid ().ToString ();
+	}
+
+	public string ID;
 	public string PresenterName;
 	public string PresenterPosition;
 	public string ClientName;
