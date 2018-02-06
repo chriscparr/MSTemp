@@ -28,18 +28,10 @@ public class ModelManager : MonoBehaviour
 		new Vector3(1f, -1f, 1f)
 	};
 
-
-
 	private void Awake()
 	{
 		s_instance = this;
 	}
-
-	private void Start()
-	{
-		InitialiseModel (GenerateDebugPresentation ());
-	}
-
 
 	public void InitialiseModel(PresentationData a_pData)
 	{
@@ -51,13 +43,22 @@ public class ModelManager : MonoBehaviour
 			GameObject sub = Instantiate<GameObject> (m_subcellPrefab, m_modelRoot.transform);
 			m_subcells.Add (sub.GetComponent<Subcell> ());
 			sub.transform.localPosition = Vector3.Scale (minBounds, m_placementVectors [i]);
-
-
 		}
 	}
 
+	public void ShakeModel()
+	{
+		Vector3 origin = m_mainContainer.transform.position;
+		Vector3 dir = new Vector3 ();
+		foreach (Subcell cell in m_subcells)
+		{
+			dir = origin - cell.transform.position;
+			dir.Scale(new Vector3(0.5f, 0.5f, 0.5f));
+			cell.RigidBody.AddForce (dir, ForceMode.Impulse);
+		}
+	}
 
-	private void ClearModel()
+	public void ClearModel()
 	{
 		foreach (Subcell cell in m_subcells)
 		{
@@ -66,28 +67,4 @@ public class ModelManager : MonoBehaviour
 		m_subcells.Clear ();
 		Destroy (m_mainContainer);
 	}
-
-	private PresentationData GenerateDebugPresentation()
-	{
-		//string testData = "{\n\"PresenterName\":\"Mr. Tester\",\n\"PresenterPosition\":\"Test Manager\",\n\"ClientName\":\"IndustryLeader Inc.\",\n\"Industries\":[\"Finance\", \"Retail\", \"World Domination\"],\n\"Markets\":[\"Europe\", \"Asia\", \"America\"],\n\"Notes\":[\"Note 1\", \"Note 2\", \"Note 3\"],\n\"Services\":\n[\n{\"ServiceName\":\"FAST\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"SHOP\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"GROWTH\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"DATA\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"LOOP\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"CONTENT\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"AGILE\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"LIFE\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]}\n]\n}";
-
-		string testData = "{\n\"ID\":\"" + System.Guid.NewGuid ().ToString () + "\",\n\"PresenterName\":\"Mr. Tester\",\n\"PresenterPosition\":\"Test Manager\",\n\"ClientName\":\"IndustryLeader Inc.\",\n\"Industries\":[\"Finance\", \"Retail\", \"World Domination\"],\n\"Markets\":[\"Europe\", \"Asia\", \"America\"],\n\"Notes\":[\"Note 1\", \"Note 2\", \"Note 3\"],\n\"Services\":\n[\n{\"ServiceName\":\"FAST\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"SHOP\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"GROWTH\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"DATA\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"LOOP\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"CONTENT\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"AGILE\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"LIFE\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]}\n]\n}";
-
-		PresentationData pData = JsonUtility.FromJson<PresentationData> (testData);
-		return pData;
-	}
-
-	/*
-	private void Update()
-	{
-		if (Input.GetKeyDown (KeyCode.Q))
-		{
-			InitialiseModel (GenerateDebugPresentation ());
-		}
-		if (Input.GetKeyDown (KeyCode.W))
-		{
-			ClearModel ();
-		}
-	}
-	*/
 }
