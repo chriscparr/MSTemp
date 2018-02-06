@@ -18,6 +18,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	}
 	private ServiceType m_serviceType;
 
+	private Rigidbody m_rigidBody;
 	//[SerializeField]
 	//private Mesh[] m_cellMeshes;
 	//private Dictionary<string, Mesh> m_meshDict = new Dictionary<string, Mesh> ();
@@ -35,6 +36,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 
 	private void Awake()
 	{
+		m_rigidBody = GetComponent<Rigidbody> ();
+
 		m_spinVector = new Vector3 (Random.Range (-1f, 1f) * m_spinSpeed, Random.Range (-1f, 1f) * m_spinSpeed, Random.Range (-1f, 1f) * m_spinSpeed);
 		/*
 		foreach (Mesh msh in m_cellMeshes)
@@ -44,9 +47,14 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		*/
 	}
 
+	private void Start()
+	{
+		m_rigidBody.AddRelativeForce (m_spinVector, ForceMode.Impulse);
+	}
+
 	private void Update()
 	{
-		gameObject.transform.Rotate (m_spinVector);
+		//gameObject.transform.Rotate (m_spinVector);
 	}
 
 	public void InitAsType(ServiceType a_type)
