@@ -1,0 +1,251 @@
+fileFormatVersion: 2
+guid: b1d33e9edfe8a47deb71cb7a88ac8eab
+timeCreated: 1517934131
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Background
+    100002: Camera___1
+    100004: Camera___2
+    100006: Camera___2_360
+    100008: Camera___2_360_1
+    100010: Camera___3
+    100012: ECOSYSTEM
+    100014: HDR_Studio_Rig
+    100016: Illumination_Sky
+    100018: Light
+    100020: Light_1
+    100022: Light_1_2
+    100024: Light_1_3
+    100026: Light_1_4
+    100028: Light_2
+    100030: Light_2_2
+    100032: Light_3
+    100034: Light_3_2
+    100036: Light_4
+    100038: Main
+    100040: //RootNode
+    100042: Moving
+    100044: Moving_1
+    100046: Moving_10
+    100048: Moving_11
+    100050: Moving_12
+    100052: Moving_13
+    100054: Moving_14
+    100056: Moving_14_2
+    100058: Moving_15
+    100060: Moving_2
+    100062: Moving_2_2
+    100064: Moving_3
+    100066: Moving_4
+    100068: Moving_4_2
+    100070: Moving_5
+    100072: Moving_6
+    100074: Moving_7
+    100076: Moving_8
+    100078: Moving_9
+    100080: Null
+    100082: Reflection_Sky
+    100084: RIG
+    400000: Background
+    400002: Camera___1
+    400004: Camera___2
+    400006: Camera___2_360
+    400008: Camera___2_360_1
+    400010: Camera___3
+    400012: ECOSYSTEM
+    400014: HDR_Studio_Rig
+    400016: Illumination_Sky
+    400018: Light
+    400020: Light_1
+    400022: Light_1_2
+    400024: Light_1_3
+    400026: Light_1_4
+    400028: Light_2
+    400030: Light_2_2
+    400032: Light_3
+    400034: Light_3_2
+    400036: Light_4
+    400038: Main
+    400040: //RootNode
+    400042: Moving
+    400044: Moving_1
+    400046: Moving_10
+    400048: Moving_11
+    400050: Moving_12
+    400052: Moving_13
+    400054: Moving_14
+    400056: Moving_14_2
+    400058: Moving_15
+    400060: Moving_2
+    400062: Moving_2_2
+    400064: Moving_3
+    400066: Moving_4
+    400068: Moving_4_2
+    400070: Moving_5
+    400072: Moving_6
+    400074: Moving_7
+    400076: Moving_8
+    400078: Moving_9
+    400080: Null
+    400082: Reflection_Sky
+    400084: RIG
+    2000000: Camera___1
+    2000002: Camera___2
+    2000004: Camera___2_360
+    2000006: Camera___2_360_1
+    2000008: Camera___3
+    2100000: No Name
+    2100002: Mat.2
+    2300000: Main
+    2300002: Moving
+    2300004: Moving_1
+    2300006: Moving_10
+    2300008: Moving_11
+    2300010: Moving_12
+    2300012: Moving_13
+    2300014: Moving_14
+    2300016: Moving_14_2
+    2300018: Moving_15
+    2300020: Moving_2
+    2300022: Moving_2_2
+    2300024: Moving_3
+    2300026: Moving_4
+    2300028: Moving_4_2
+    2300030: Moving_5
+    2300032: Moving_6
+    2300034: Moving_7
+    2300036: Moving_8
+    2300038: Moving_9
+    3300000: Main
+    3300002: Moving
+    3300004: Moving_1
+    3300006: Moving_10
+    3300008: Moving_11
+    3300010: Moving_12
+    3300012: Moving_13
+    3300014: Moving_14
+    3300016: Moving_14_2
+    3300018: Moving_15
+    3300020: Moving_2
+    3300022: Moving_2_2
+    3300024: Moving_3
+    3300026: Moving_4
+    3300028: Moving_4_2
+    3300030: Moving_5
+    3300032: Moving_6
+    3300034: Moving_7
+    3300036: Moving_8
+    3300038: Moving_9
+    4300000: Moving_15
+    4300002: Moving
+    4300004: Moving_4
+    4300006: Moving_14
+    4300008: Moving_13
+    4300010: Moving_12
+    4300012: Moving_10
+    4300014: Moving_11
+    4300016: Moving_9
+    4300018: Moving_5
+    4300020: Moving_8
+    4300022: Moving_6
+    4300024: Moving_14_2
+    4300026: Moving_4_2
+    4300028: Moving_7
+    4300030: Moving_3
+    4300032: Moving_2
+    4300034: Moving_1
+    4300036: Moving_2_2
+    4300038: Main
+    9500000: //RootNode
+    10800000: Light
+    10800002: Light_1
+    10800004: Light_1_2
+    10800006: Light_1_3
+    10800008: Light_1_4
+    10800010: Light_2
+    10800012: Light_2_2
+    10800014: Light_3
+    10800016: Light_3_2
+    10800018: Light_4
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
