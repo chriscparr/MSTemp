@@ -32,7 +32,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	//private float m_morphInterval = 0.5f;
 
 	private Vector3 m_spinVector;
-	private float m_spinSpeed = 0.5f;
+	private float m_spinSpeed = 2f;
 
 	private void Awake()
 	{
@@ -50,11 +50,6 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	private void Start()
 	{
 		m_rigidBody.AddRelativeForce (m_spinVector, ForceMode.Impulse);
-	}
-
-	private void Update()
-	{
-		//gameObject.transform.Rotate (m_spinVector);
 	}
 
 	public void InitAsType(ServiceType a_type)
