@@ -46,6 +46,18 @@ public class ModelManager : MonoBehaviour
 		}
 	}
 
+	public void ShakeModel()
+	{
+		Vector3 origin = m_mainContainer.transform.position;
+		Vector3 dir = new Vector3 ();
+		foreach (Subcell cell in m_subcells)
+		{
+			dir = origin - cell.transform.position;
+			dir.Scale(new Vector3(0.5f, 0.5f, 0.5f));
+			cell.RigidBody.AddForce (dir, ForceMode.Impulse);
+		}
+	}
+
 	public void ClearModel()
 	{
 		foreach (Subcell cell in m_subcells)

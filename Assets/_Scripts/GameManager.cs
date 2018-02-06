@@ -29,6 +29,10 @@ public class GameManager : MonoBehaviour
 			//ClearModel ();
 			Debug.Log ("<color=#ff0000>" + "Persistent data directory contains " + PersistentDataHandler.GetJsonFilenames().Length.ToString() + " json data files!</color>");
 		}
+		if (Input.GetKeyDown (KeyCode.S))
+		{
+			ModelManager.Instance.ShakeModel ();
+		}
 	}
 
 	private PresentationData GenerateTestPresentation ()

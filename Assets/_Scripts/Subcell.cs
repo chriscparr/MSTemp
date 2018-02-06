@@ -18,6 +18,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	}
 	private ServiceType m_serviceType;
 
+	public Rigidbody RigidBody {get{ return m_rigidBody; }}
 	private Rigidbody m_rigidBody;
 	//[SerializeField]
 	//private Mesh[] m_cellMeshes;
