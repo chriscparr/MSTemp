@@ -17,6 +17,9 @@ public class ModelManager : MonoBehaviour
 	private GameObject m_mainContainer;
 	private List<Subcell> m_subcells = new List<Subcell>();
 
+	public bool IsInitialised {get { return m_isInitialised; }}
+	private bool m_isInitialised = false;
+
 	private Vector3[] m_placementVectors = new Vector3[] { 
 		new Vector3(-1f, 1f, -1f),
 		new Vector3(-1f, 1f, 1f),
@@ -35,36 +38,47 @@ public class ModelManager : MonoBehaviour
 
 	public void InitialiseModel(PresentationData a_pData)
 	{
-		m_mainContainer = Instantiate<GameObject> (m_mainContainerPrefab, m_modelRoot.transform);
-		Vector3 minBounds = m_mainContainer.GetComponent<MeshCollider> ().bounds.min;
-		minBounds.Scale (new Vector3 (0.3f, 0.3f, 0.3f));
-		for (int i = 0; i < m_placementVectors.Length; i++)
+		if (!m_isInitialised)
 		{
-			GameObject sub = Instantiate<GameObject> (m_subcellPrefab, m_modelRoot.transform);
-			m_subcells.Add (sub.GetComponent<Subcell> ());
-			sub.transform.localPosition = Vector3.Scale (minBounds, m_placementVectors [i]);
+			m_mainContainer = Instantiate<GameObject> (m_mainContainerPrefab, m_modelRoot.transform);
+			Vector3 minBounds = m_mainContainer.GetComponent<MeshCollider> ().bounds.min;
+			minBounds.Scale (new Vector3 (0.3f, 0.3f, 0.3f));
+			for (int i = 0; i < m_placementVectors.Length; i++)
+			{
+				GameObject sub = Instantiate<GameObject> (m_subcellPrefab, m_modelRoot.transform);
+				m_subcells.Add (sub.GetComponent<Subcell> ());
+				sub.transform.localPosition = Vector3.Scale (minBounds, m_placementVectors [i]);
+			}
+			m_isInitialised = true;
 		}
 	}
 
 	public void ShakeModel()
 	{
-		Vector3 origin = m_mainContainer.transform.position;
-		Vector3 dir = new Vector3 ();
-		foreach (Subcell cell in m_subcells)
+		if (m_isInitialised)
 		{
-			dir = origin - cell.transform.position;
-			dir.Scale(new Vector3(0.5f, 0.5f, 0.5f));
-			cell.RigidBody.AddForce (dir, ForceMode.Impulse);
+			Vector3 origin = m_mainContainer.transform.position;
+			Vector3 dir = new Vector3 ();
+			foreach (Subcell cell in m_subcells)
+			{
+				dir = origin - cell.transform.position;
+				dir.Scale(new Vector3(0.5f, 0.5f, 0.5f));
+				cell.RigidBody.AddForce (dir, ForceMode.Impulse);
+			}
 		}
 	}
 
 	public void ClearModel()
 	{
-		foreach (Subcell cell in m_subcells)
+		if (m_isInitialised)
 		{
-			Destroy (cell.gameObject);
+			foreach (Subcell cell in m_subcells)
+			{
+				Destroy (cell.gameObject);
+			}
+			m_subcells.Clear ();
+			Destroy (m_mainContainer);
+			m_isInitialised = false;
 		}
-		m_subcells.Clear ();
-		Destroy (m_mainContainer);
 	}
 }

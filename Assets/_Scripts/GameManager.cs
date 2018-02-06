@@ -7,6 +7,11 @@ public class GameManager : MonoBehaviour
 	public static GameManager Instance {get { return s_instance;}}
 	private static GameManager s_instance = null;
 
+	private float m_shakeForce = 10f;		//acceleration must exceed this limit to count as a shake
+	private float m_shakeInterval = 1f;		//2 shakes must happen within this time (s)
+	private float m_lastShakeTime = 0f;		//time of last detected shake
+	private float m_nextShakeAfter = 0f;	//to avoid triggering more than once, wait until this time
+
 	private void Awake()
 	{
 		s_instance = this;
@@ -20,6 +25,19 @@ public class GameManager : MonoBehaviour
 	
 	private void Update()
 	{
+		if ((Input.acceleration.sqrMagnitude >= m_shakeForce) && (Time.fixedTime >= m_nextShakeAfter))
+		{
+			//Debug.Log ("<color=#ff00ff>Single shake detected! Squared Magnitude: " + Input.acceleration.sqrMagnitude.ToString() + "</color>");
+			if (m_lastShakeTime - Time.fixedTime <= m_shakeInterval)
+			{
+				//Debug.Log ("<color=#ff00ff>Double shake detected! Do stuff here!</color>");
+				m_nextShakeAfter = Time.fixedTime + 5f;
+				ModelManager.Instance.ShakeModel ();
+			}
+			m_lastShakeTime = Time.fixedTime;
+		}
+
+
 		if (Input.GetKeyDown (KeyCode.Q))
 		{
 			SaveDummyData(GenerateTestPresentation ());
