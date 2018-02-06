@@ -10,7 +10,7 @@ PlayerSettings:
   defaultScreenOrientation: 4
   targetDevice: 2
   useOnDemandResources: 1
-  accelerometerFrequency: 0
+  accelerometerFrequency: 60
   companyName: mindshare
   productName: openmind
   defaultCursor: {fileID: 0}
