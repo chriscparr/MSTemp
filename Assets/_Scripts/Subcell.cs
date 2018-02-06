@@ -18,6 +18,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	}
 	private ServiceType m_serviceType;
 
+	public Rigidbody RigidBody {get{ return m_rigidBody; }}
+	private Rigidbody m_rigidBody;
 	//[SerializeField]
 	//private Mesh[] m_cellMeshes;
 	//private Dictionary<string, Mesh> m_meshDict = new Dictionary<string, Mesh> ();
@@ -31,10 +33,12 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	//private float m_morphInterval = 0.5f;
 
 	private Vector3 m_spinVector;
-	private float m_spinSpeed = 0.5f;
+	private float m_spinSpeed = 2f;
 
 	private void Awake()
 	{
+		m_rigidBody = GetComponent<Rigidbody> ();
+
 		m_spinVector = new Vector3 (Random.Range (-1f, 1f) * m_spinSpeed, Random.Range (-1f, 1f) * m_spinSpeed, Random.Range (-1f, 1f) * m_spinSpeed);
 		/*
 		foreach (Mesh msh in m_cellMeshes)
@@ -44,9 +48,9 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		*/
 	}
 
-	private void Update()
+	private void Start()
 	{
-		gameObject.transform.Rotate (m_spinVector);
+		m_rigidBody.AddRelativeForce (m_spinVector, ForceMode.Impulse);
 	}
 
 	public void InitAsType(ServiceType a_type)
