@@ -38,62 +38,45 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	private void Awake()
 	{
 		m_rigidBody = GetComponent<Rigidbody> ();
-
-		m_spinVector = new Vector3 (Random.Range (-1f, 1f) * m_spinSpeed, Random.Range (-1f, 1f) * m_spinSpeed, Random.Range (-1f, 1f) * m_spinSpeed);
-		/*
-		foreach (Mesh msh in m_cellMeshes)
-		{
-			m_meshDict.Add (msh.name, msh);
-		}
-		*/
 	}
 
-	private void Start()
+	public void Initialise(ServiceData a_data)
 	{
-		m_rigidBody.AddRelativeForce (m_spinVector, ForceMode.Impulse);
-	}
-
-	public void InitAsType(ServiceType a_type)
-	{
-		MeshFilter m_filt = GetComponent<MeshFilter> ();
-		switch (a_type) 
+		switch (a_data.ServiceName)
 		{
-			case ServiceType.AGILE:
-				//m_filt.mesh = m_agileMesh;
+			case "AGILE":
+				m_serviceType = ServiceType.AGILE;
 				break;
-				
-			case ServiceType.CONTENT:
-				
+
+			case "CONTENT":
+				m_serviceType = ServiceType.CONTENT;
 				break;
-				
-			case ServiceType.DATA:
-				
+
+			case "DATA":
+				m_serviceType = ServiceType.DATA;
 				break;
-				
-			case ServiceType.FAST:
-				
+
+			case "FAST":
+				m_serviceType = ServiceType.FAST;
 				break;
-				
-			case ServiceType.GROWTH:
-				
+
+			case "GROWTH":
+				m_serviceType = ServiceType.GROWTH;
 				break;
-				
-			case ServiceType.LIFE:
-				
+
+			case "LIFE":
+				m_serviceType = ServiceType.LIFE;
 				break;
-				
-			case ServiceType.LOOP:
-				
+
+			case "LOOP":
+				m_serviceType = ServiceType.LOOP;
 				break;
-				
-			case ServiceType.SHOP:
-				
-				break;
-				
-			default:
-				
+
+			case "SHOP":
+				m_serviceType = ServiceType.SHOP;
 				break;
 		}
+		gameObject.transform.localScale = Vector3.one * a_data.ServiceWeighting;
 	}
 	
 	public void OnPointerClick(PointerEventData pointerEventData)
