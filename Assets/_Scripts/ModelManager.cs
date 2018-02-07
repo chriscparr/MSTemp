@@ -124,7 +124,6 @@ public class ModelManager : MonoBehaviour
 	{
 		if (m_highlightActive)
 		{
-			//+ new Vector3 (0f, 8f * m_highlightedSubcell.ServiceDat.ServiceWeighting, 0f);
 			m_highlight.transform.position = m_highlightedSubcell.transform.position + new Vector3 (0f, 0f, -8f);
 		}
 	}
