@@ -10,7 +10,7 @@ public class EndPresentationView : MonoBehaviour
 
 	private void OnStartAgainButtonPressed()
 	{
-		//UIManager - display next screen
+		UIManager.Instance.ShowNewOrSavedView ();
 		gameObject.SetActive(false);
 	}
 
