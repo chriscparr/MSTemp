@@ -18,6 +18,7 @@ public class PresentationView : MonoBehaviour
 	private void OnEnable()
 	{
 		m_finishedButton.onClick.AddListener (OnFinishedButtonPressed);
+		ModelManager.Instance.ShakeModel ();
 	}
 
 	private void OnDisable()
