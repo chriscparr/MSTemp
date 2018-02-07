@@ -20,6 +20,11 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 
 	public Rigidbody RigidBody {get{ return m_rigidBody; }}
 	private Rigidbody m_rigidBody;
+
+	public ServiceData ServiceDat {get{ return m_serviceData; }}
+	private ServiceData m_serviceData;
+
+
 	//[SerializeField]
 	//private Mesh[] m_cellMeshes;
 	//private Dictionary<string, Mesh> m_meshDict = new Dictionary<string, Mesh> ();
@@ -43,7 +48,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	public void Initialise(ServiceData a_data)
 	{
 		Color col = Color.white;
-		switch (a_data.ServiceName)
+		m_serviceData = a_data;
+		switch (m_serviceData.ServiceName)
 		{
 			case "AGILE":
 				m_serviceType = ServiceType.AGILE;
@@ -85,7 +91,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 				col = Color.red;
 				break;
 		}
-		gameObject.transform.localScale = Vector3.one * a_data.ServiceWeighting;
+		gameObject.transform.localScale = Vector3.one * m_serviceData.ServiceWeighting;
 		GetComponent<MeshRenderer> ().material.color = col;
 	}
 	
@@ -99,6 +105,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		else 
 		{
 			Debug.Log(name + " Game Object Clicked!");
+			ModelManager.Instance.HighlightSubcell (this);
 			//MorphScaleReset ();
 		}
 		m_lastClickTime = Time.fixedTime;
