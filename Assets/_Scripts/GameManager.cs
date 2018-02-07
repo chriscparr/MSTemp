@@ -55,7 +55,23 @@ public class GameManager : MonoBehaviour
 
 	private PresentationData GenerateTestPresentation ()
 	{
-		string testData = "{\n\"ID\":\"" + System.Guid.NewGuid ().ToString () + "\",\n\"PresenterName\":\"Mr. Tester\",\n\"PresenterPosition\":\"Test Manager\",\n\"ClientName\":\"IndustryLeader Inc.\",\n\"Industries\":[\"Finance\", \"Retail\", \"World Domination\"],\n\"Markets\":[\"Europe\", \"Asia\", \"America\"],\n\"Notes\":[\"Note 1\", \"Note 2\", \"Note 3\"],\n\"Services\":\n[\n{\"ServiceName\":\"FAST\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"SHOP\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"GROWTH\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"DATA\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"LOOP\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"CONTENT\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"AGILE\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"LIFE\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]}\n]\n}";
+		string testData = "";			// "{\n\"ID\":\"" + System.Guid.NewGuid ().ToString () + "\",\n\"PresenterName\":\"Mr. Tester\",\n\"PresenterPosition\":\"Test Manager\",\n\"ClientName\":\"IndustryLeader Inc.\",\n\"Industries\":[\"Finance\", \"Retail\", \"World Domination\"],\n\"Markets\":[\"Europe\", \"Asia\", \"America\"],\n\"Notes\":[\"Note 1\", \"Note 2\", \"Note 3\"],\n\"Services\":\n[\n{\"ServiceName\":\"FAST\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"SHOP\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"GROWTH\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"DATA\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"LOOP\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"CONTENT\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"AGILE\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]},\n{\"ServiceName\":\"LIFE\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]}\n]\n}";
+		string testData_pre = "{\n\"ID\":\"" + System.Guid.NewGuid ().ToString () + "\",\n\"PresenterName\":\"Mr. Tester\",\n\"PresenterPosition\":\"Test Manager\",\n\"ClientName\":\"IndustryLeader Inc.\",\n\"Industries\":[\"Finance\", \"Retail\", \"World Domination\"],\n\"Markets\":[\"Europe\", \"Asia\", \"America\"],\n\"Notes\":[\"Note 1\", \"Note 2\", \"Note 3\"],\n\"Services\":\n[\n";
+		string testData1 = "{\"ServiceName\":\"SHOP\",\"ServiceWeighting\":1.5,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]}";
+		string testData2 = "{\"ServiceName\":\"GROWTH\",\"ServiceWeighting\":0.8,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]}";
+		string testData3 = "{\"ServiceName\":\"DATA\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]}";
+		string testData4 = "{\"ServiceName\":\"FAST\",\"ServiceWeighting\":0.5,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]}";
+		string testData5 = "{\"ServiceName\":\"LOOP\",\"ServiceWeighting\":0.7,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]}";
+		string testData6 = "{\"ServiceName\":\"CONTENT\",\"ServiceWeighting\":1.8,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]}";
+		string testData7 = "{\"ServiceName\":\"AGILE\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]}";
+		string testData8 = "{\"ServiceName\":\"LIFE\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]}";
+		string testData_post = "]\n}";
+
+		testData = testData_pre + testData1 + ",\n" + testData2 + ",\n" + testData3 + ",\n" + testData4 + ",\n" + testData5 + ",\n" + testData6 + ",\n" + testData7 + ",\n" + testData8 + "\n" + testData_post;
+
+		//testData = testData_pre + testData1 + ",\n" + testData2 + ",\n" + testData3 + "\n" + testData_post;
+
+
 		return JsonUtility.FromJson<PresentationData> (testData);
 	}
 

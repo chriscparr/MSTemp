@@ -20,6 +20,10 @@ public class ModelManager : MonoBehaviour
 	public bool IsInitialised {get { return m_isInitialised; }}
 	private bool m_isInitialised = false;
 
+	private Subcell m_highlightedSubcell;
+	private Light m_highlight;
+	private bool m_highlightActive = false;
+
 	private Vector3[] m_placementVectors = new Vector3[] { 
 		new Vector3(-1f, 1f, -1f),
 		new Vector3(-1f, 1f, 1f),
@@ -34,22 +38,47 @@ public class ModelManager : MonoBehaviour
 	private void Awake()
 	{
 		s_instance = this;
+		m_highlight = m_modelRoot.GetComponentInChildren<Light> ();
+		m_highlight.enabled = false;
 	}
 
 	public void InitialiseModel(PresentationData a_pData)
 	{
 		if (!m_isInitialised)
 		{
+			float containerScale = 0f;
+			foreach (ServiceData serv in a_pData.Services)
+			{
+				containerScale += serv.ServiceWeighting;
+			}
+			containerScale = (2f * containerScale) + 2f;
+			if (containerScale < 10f)
+			{
+				containerScale = 10f;
+			}
 			m_mainContainer = Instantiate<GameObject> (m_mainContainerPrefab, m_modelRoot.transform);
+			m_mainContainer.transform.localScale = new Vector3 (containerScale, containerScale, containerScale);
 			Vector3 minBounds = m_mainContainer.GetComponent<MeshCollider> ().bounds.min;
 			minBounds.Scale (new Vector3 (0.3f, 0.3f, 0.3f));
-			for (int i = 0; i < m_placementVectors.Length; i++)
+
+			for (int i = 0; i < a_pData.Services.Length; i++)
 			{
 				GameObject sub = Instantiate<GameObject> (m_subcellPrefab, m_modelRoot.transform);
 				m_subcells.Add (sub.GetComponent<Subcell> ());
+				m_subcells [i].Initialise (a_pData.Services [i]);
 				sub.transform.localPosition = Vector3.Scale (minBounds, m_placementVectors [i]);
 			}
 			m_isInitialised = true;
+		}
+	}
+
+	public void HighlightSubcell(Subcell a_subcell)
+	{
+		if (!m_highlightActive)
+		{
+			m_highlightedSubcell = a_subcell;
+			m_highlightActive = true;
+			StartCoroutine ("IlluminateHighlightedSubcell");
 		}
 	}
 
@@ -79,6 +108,24 @@ public class ModelManager : MonoBehaviour
 			m_subcells.Clear ();
 			Destroy (m_mainContainer);
 			m_isInitialised = false;
+		}
+	}
+
+	private IEnumerator IlluminateHighlightedSubcell()
+	{
+		m_highlight.enabled = true;
+		yield return new WaitForSeconds (3f);
+		m_highlightActive = false;
+		m_highlight.enabled = false;
+		yield return null;
+	}
+
+	private void Update()
+	{
+		if (m_highlightActive)
+		{
+			//+ new Vector3 (0f, 8f * m_highlightedSubcell.ServiceDat.ServiceWeighting, 0f);
+			m_highlight.transform.position = m_highlightedSubcell.transform.position + new Vector3 (0f, 0f, -8f);
 		}
 	}
 }

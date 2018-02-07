@@ -20,6 +20,11 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 
 	public Rigidbody RigidBody {get{ return m_rigidBody; }}
 	private Rigidbody m_rigidBody;
+
+	public ServiceData ServiceDat {get{ return m_serviceData; }}
+	private ServiceData m_serviceData;
+
+
 	//[SerializeField]
 	//private Mesh[] m_cellMeshes;
 	//private Dictionary<string, Mesh> m_meshDict = new Dictionary<string, Mesh> ();
@@ -38,62 +43,56 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	private void Awake()
 	{
 		m_rigidBody = GetComponent<Rigidbody> ();
-
-		m_spinVector = new Vector3 (Random.Range (-1f, 1f) * m_spinSpeed, Random.Range (-1f, 1f) * m_spinSpeed, Random.Range (-1f, 1f) * m_spinSpeed);
-		/*
-		foreach (Mesh msh in m_cellMeshes)
-		{
-			m_meshDict.Add (msh.name, msh);
-		}
-		*/
 	}
 
-	private void Start()
+	public void Initialise(ServiceData a_data)
 	{
-		m_rigidBody.AddRelativeForce (m_spinVector, ForceMode.Impulse);
-	}
-
-	public void InitAsType(ServiceType a_type)
-	{
-		MeshFilter m_filt = GetComponent<MeshFilter> ();
-		switch (a_type) 
+		Color col = Color.white;
+		m_serviceData = a_data;
+		switch (m_serviceData.ServiceName)
 		{
-			case ServiceType.AGILE:
-				//m_filt.mesh = m_agileMesh;
+			case "AGILE":
+				m_serviceType = ServiceType.AGILE;
+				col = Color.magenta;
 				break;
-				
-			case ServiceType.CONTENT:
-				
+
+			case "CONTENT":
+				m_serviceType = ServiceType.CONTENT;
+				col = Color.yellow;
 				break;
-				
-			case ServiceType.DATA:
-				
+
+			case "DATA":
+				m_serviceType = ServiceType.DATA;
+				col = Color.grey;
 				break;
-				
-			case ServiceType.FAST:
-				
+
+			case "FAST":
+				m_serviceType = ServiceType.FAST;
+				col = Color.blue;
 				break;
-				
-			case ServiceType.GROWTH:
-				
+
+			case "GROWTH":
+				m_serviceType = ServiceType.GROWTH;
+				col = Color.green;
 				break;
-				
-			case ServiceType.LIFE:
-				
+
+			case "LIFE":
+				m_serviceType = ServiceType.LIFE;
+				ColorUtility.TryParseHtmlString ("#800080", out col);
 				break;
-				
-			case ServiceType.LOOP:
-				
+
+			case "LOOP":
+				m_serviceType = ServiceType.LOOP;
+				col = Color.cyan;
 				break;
-				
-			case ServiceType.SHOP:
-				
-				break;
-				
-			default:
-				
+
+			case "SHOP":
+				m_serviceType = ServiceType.SHOP;
+				col = Color.red;
 				break;
 		}
+		gameObject.transform.localScale = Vector3.one * m_serviceData.ServiceWeighting;
+		GetComponent<MeshRenderer> ().material.color = col;
 	}
 	
 	public void OnPointerClick(PointerEventData pointerEventData)
@@ -106,6 +105,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		else 
 		{
 			Debug.Log(name + " Game Object Clicked!");
+			ModelManager.Instance.HighlightSubcell (this);
 			//MorphScaleReset ();
 		}
 		m_lastClickTime = Time.fixedTime;
