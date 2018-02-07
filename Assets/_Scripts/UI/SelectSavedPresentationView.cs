@@ -11,7 +11,8 @@ public class SelectSavedPresentationView : MonoBehaviour
 
 	private void OnPresentationOneButtonPressed()
 	{
-		//UIManager - display next screen
+		GameManager.Instance.SetupModel ();
+		UIManager.Instance.ShowPresentationView ();
 		gameObject.SetActive(false);
 	}
 

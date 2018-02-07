@@ -10,7 +10,8 @@ public class PresentationView : MonoBehaviour
 
 	private void OnFinishedButtonPressed()
 	{
-		//UIManager - display next screen
+		ModelManager.Instance.ClearModel ();
+		UIManager.Instance.ShowEndPresentationView ();
 		gameObject.SetActive(false);
 	}
 

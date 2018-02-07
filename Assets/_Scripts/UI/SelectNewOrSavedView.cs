@@ -12,13 +12,13 @@ public class SelectNewOrSavedView : MonoBehaviour
 
 	private void OnUseExistingButtonPressed()
 	{
-		//UIManager - display next screen
+		UIManager.Instance.ShowSelectSavedView ();
 		gameObject.SetActive(false);
 	}
 
 	private void OnNewPresentationButtonPressed()
 	{
-		//UIManager - display next screen
+		UIManager.Instance.ShowNewPresentationView ();
 		gameObject.SetActive(false);
 	}
 

@@ -10,7 +10,7 @@ public class LoginView : MonoBehaviour
 
 	private void OnLoginButtonPressed()
 	{
-		//UIManager - display next screen
+		UIManager.Instance.ShowNewOrSavedView ();
 		gameObject.SetActive(false);
 	}
 
