@@ -502,6 +502,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db22bfc005e2c497f954c1298c6a7b53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_loginViewPrefab: {fileID: 1569270561255230, guid: 913f19459aec8432592b096e8497cb6c,
+    type: 2}
+  m_newOrSavedViewPrefab: {fileID: 1481108821057080, guid: 1e699522f824b4ee8968accad400d0aa,
+    type: 2}
+  m_newPresentationViewPrefab: {fileID: 1126668090743456, guid: bfe8f2fc47a9d421fa583fcee7051a3e,
+    type: 2}
+  m_selectSavedViewPrefab: {fileID: 1357935561895060, guid: 0190f5d085a48421495a2320301086f2,
+    type: 2}
+  m_presentationViewPrefab: {fileID: 1435061488560134, guid: fc970823ee56f42d991600631476f444,
+    type: 2}
+  m_endPresentationViewPrefab: {fileID: 1269443973304594, guid: a7d2c0a6162aa491b8faaee03e5566ac,
+    type: 2}
 --- !u!114 &1838350192
 MonoBehaviour:
   m_ObjectHideFlags: 0
