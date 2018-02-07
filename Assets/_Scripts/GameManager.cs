@@ -17,10 +17,19 @@ public class GameManager : MonoBehaviour
 		s_instance = this;
 	}
 
+	public void SetupModel(PresentationData a_pData = null)
+	{
+		if (a_pData == null)
+		{
+			a_pData = GenerateTestPresentation ();
+		}
+		ModelManager.Instance.InitialiseModel (a_pData);
+	}
+
 	// Use this for initialization
 	void Start () 
 	{
-		ModelManager.Instance.InitialiseModel (GenerateTestPresentation ());
+		UIManager.Instance.ShowLoginView();
 	}
 	
 	private void Update()
