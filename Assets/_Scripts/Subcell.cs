@@ -42,41 +42,51 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 
 	public void Initialise(ServiceData a_data)
 	{
+		Color col = Color.white;
 		switch (a_data.ServiceName)
 		{
 			case "AGILE":
 				m_serviceType = ServiceType.AGILE;
+				col = Color.magenta;
 				break;
 
 			case "CONTENT":
 				m_serviceType = ServiceType.CONTENT;
+				col = Color.yellow;
 				break;
 
 			case "DATA":
 				m_serviceType = ServiceType.DATA;
+				col = Color.grey;
 				break;
 
 			case "FAST":
 				m_serviceType = ServiceType.FAST;
+				col = Color.blue;
 				break;
 
 			case "GROWTH":
 				m_serviceType = ServiceType.GROWTH;
+				col = Color.green;
 				break;
 
 			case "LIFE":
 				m_serviceType = ServiceType.LIFE;
+				ColorUtility.TryParseHtmlString ("#800080", out col);
 				break;
 
 			case "LOOP":
 				m_serviceType = ServiceType.LOOP;
+				col = Color.cyan;
 				break;
 
 			case "SHOP":
 				m_serviceType = ServiceType.SHOP;
+				col = Color.red;
 				break;
 		}
 		gameObject.transform.localScale = Vector3.one * a_data.ServiceWeighting;
+		GetComponent<MeshRenderer> ().material.color = col;
 	}
 	
 	public void OnPointerClick(PointerEventData pointerEventData)

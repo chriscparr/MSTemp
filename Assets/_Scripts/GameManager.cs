@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
 		string testData8 = "{\"ServiceName\":\"LIFE\",\"ServiceWeighting\":1.0,\"ServiceIntroText\":\"Introduction Text!\",\"ServiceVideoPaths\":[]}";
 		string testData_post = "]\n}";
 
-		testData = testData_pre + testData1 + ",\n" + testData2 + ",\n" + testData3 + ",\n" + testData4 + ",\n" + testData5 + ",\n" + testData6 + ",\n" + testData7 + "\n" + testData_post;
+		testData = testData_pre + testData1 + ",\n" + testData2 + ",\n" + testData3 + ",\n" + testData4 + ",\n" + testData5 + ",\n" + testData6 + ",\n" + testData7 + ",\n" + testData8 + "\n" + testData_post;
 
 		//testData = testData_pre + testData1 + ",\n" + testData2 + ",\n" + testData3 + "\n" + testData_post;
 
