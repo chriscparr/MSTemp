@@ -53,8 +53,13 @@ public class GameManager : MonoBehaviour
 		}
 		if (Input.GetKeyDown (KeyCode.W))
 		{
-			//ClearModel ();
 			Debug.Log ("<color=#ff0000>" + "Persistent data directory contains " + PersistentDataHandler.GetJsonFilenames().Length.ToString() + " json data files!</color>");
+			/*
+			foreach (string filePath in PersistentDataHandler.GetJsonFilenames())
+			{
+				PersistentDataHandler.DeleteFile (filePath);
+			}
+			*/
 		}
 		if (Input.GetKeyDown (KeyCode.S))
 		{

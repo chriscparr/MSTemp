@@ -159,6 +159,15 @@ public class PersistentDataHandler
 		return fileNames.ToArray ();
 	}
 
+	public static void DeleteFile(string a_path)
+	{
+		if (File.Exists (a_path))
+		{
+			File.Delete (a_path);
+			Debug.Log("PersistentDataHandler: " + a_path + " successfully deleted!");
+		}
+	}
+
 	//----------------------------------------------------------------------------
 	// Private Methods:
 	//----------------------------------------------------------------------------
