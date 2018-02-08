@@ -21,7 +21,14 @@ public class SelectSavedPresentationView : MonoBehaviour
 
 	private void OnEnable()
 	{
-		SetupScrollView ();
+		if (PersistentDataHandler.GetJsonFilenames ().Length > 0)
+		{
+			SetupScrollView ();
+		} 
+		else
+		{
+			OnPresentationOneButtonPressed ();
+		}
 	}
 
 	private void OnDisable()
