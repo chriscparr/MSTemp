@@ -143,6 +143,16 @@ public class PersistentDataHandler
 		return jsonString;
 	}
 
+	public static PresentationData[] GetAllSavedPresentations()
+	{
+		List<PresentationData> savedPres = new List<PresentationData> ();
+		foreach (string fName in GetJsonFilenames())
+		{
+			savedPres.Add (LoadFile<PresentationData>(fName));
+		}
+		return savedPres.ToArray ();
+	}
+
 	public static string[] GetJsonFilenames()
 	{
 		ValidateFolderPath ();
@@ -153,18 +163,24 @@ public class PersistentDataHandler
 		{
 			if (f.Extension.Contains ("json"))
 			{
-				fileNames.Add (f.FullName);
+				//f.Name.Replace (".json", "");
+				fileNames.Add (f.Name.Replace (".json", ""));
 			}
 		}
 		return fileNames.ToArray ();
 	}
 
-	public static void DeleteFile(string a_path)
+	public static void DeleteFile(string fileName)
 	{
-		if (File.Exists (a_path))
+		StringBuilder filePath = new StringBuilder();
+		filePath.Append(path);
+		filePath.Append(fileName);
+		filePath.Append(fileExtension);
+
+		if (File.Exists (filePath.ToString()))
 		{
-			File.Delete (a_path);
-			Debug.Log("PersistentDataHandler: " + a_path + " successfully deleted!");
+			File.Delete (filePath.ToString());
+			Debug.Log("PersistentDataHandler: " + filePath.ToString() + " successfully deleted!");
 		}
 	}
 
