@@ -163,7 +163,6 @@ public class PersistentDataHandler
 		{
 			if (f.Extension.Contains ("json"))
 			{
-				//f.Name.Replace (".json", "");
 				fileNames.Add (f.Name.Replace (".json", ""));
 			}
 		}
