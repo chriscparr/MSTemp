@@ -29,6 +29,10 @@ public class GameManager : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+		if (PersistentDataHandler.GetJsonFilenames ().Length == 0)
+		{
+			SaveDummyData(GenerateTestPresentation ());
+		}
 		UIManager.Instance.ShowLoginView();
 	}
 	
