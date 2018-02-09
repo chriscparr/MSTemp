@@ -77,28 +77,5 @@ public class ArrayInput : MonoBehaviour
 		stringList.Append (DisplaySuffix);
 		m_listDisplay.text = stringList.ToString ();
 
-		/*
-		 * 
-		if (m_elements.Count > 0)
-		{
-			StringBuilder stringList = new StringBuilder();
-			stringList.Append (DisplayPrefix);
-			for (int i = 0; i < m_elements.Count; i++)
-			{
-				stringList.Append (m_elements [i]);
-				if (i != m_elements.Count - 1)
-				{
-					stringList.Append (",");
-				}
-			}
-			stringList.Append (DisplaySuffix);
-			m_listDisplay.text = stringList.ToString ();
-		}
-		else
-		{
-			m_listDisplay.text = DisplayPrefix + DisplaySuffix;
-		}
-		
-		*/
 	}
 }
