@@ -10,14 +10,7 @@ public class SelectSavedPresentationView : MonoBehaviour
 	[SerializeField]
 	private GameObject m_contentArea;
 
-	private List<Button> m_scrollButtons = new List<Button>();
-
-	private void OnPresentationOneButtonPressed()
-	{
-		GameManager.Instance.SetupModel ();
-		UIManager.Instance.ShowPresentationView ();
-		gameObject.SetActive(false);
-	}
+	private List<SavedPresentationButton> m_scrollButtons = new List<SavedPresentationButton>();
 
 	private void OnEnable()
 	{
@@ -26,9 +19,9 @@ public class SelectSavedPresentationView : MonoBehaviour
 
 	private void OnDisable()
 	{
-		foreach (Button btn in m_scrollButtons)
+		foreach (SavedPresentationButton btn in m_scrollButtons)
 		{
-			btn.onClick.RemoveAllListeners ();
+			btn.OnPresentationSelected -= OnPresentationSelectedEventHandler;
 			Destroy (btn.gameObject);
 		}
 		m_scrollButtons.Clear ();
@@ -41,10 +34,17 @@ public class SelectSavedPresentationView : MonoBehaviour
 		foreach (PresentationData pData in PersistentDataHandler.GetAllSavedPresentations())
 		{
 			GameObject btnObj = Instantiate<GameObject> (m_savedButtonPrefab, m_contentArea.transform);
-			Button btn = btnObj.GetComponent<Button> ();
+			SavedPresentationButton btn = btnObj.GetComponent<SavedPresentationButton> ();
 			m_scrollButtons.Add (btn);
-			btn.GetComponentInChildren<Text> ().text = pData.ClientName;
-			btn.onClick.AddListener (OnPresentationOneButtonPressed);
+			btn.Presentation = pData;
+			btn.OnPresentationSelected += OnPresentationSelectedEventHandler;
 		}
+	}
+
+	private void OnPresentationSelectedEventHandler(PresentationData a_pData)
+	{
+		GameManager.Instance.SetupModel (a_pData);
+		UIManager.Instance.ShowPresentationView ();
+		gameObject.SetActive(false);
 	}
 }
