@@ -82,19 +82,11 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		gameObject.transform.localScale = Vector3.one * m_serviceData.ServiceWeighting;
 		GetComponent<MeshRenderer> ().material.color = col;
 	}
-	
+
 	public void OnPointerClick(PointerEventData pointerEventData)
 	{
 		if (m_clickCount == 0)
 		{
-<<<<<<< .merge_file_NHi4Ub
-			Debug.Log (name + " Game Object Double Clicked!");
-            CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.FocusedSubCellPhase);
-            CameraInputManager.Instance.FocusOnSubCell(this);
-			//MorphScale ();
-		} 
-		else 
-=======
 			StartCoroutine ("ProcessClicks");
 		}
 		m_clickCount++;
@@ -104,14 +96,15 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	{
 		yield return new WaitForSecondsRealtime (m_doubleClickInterval);
 		switch (m_clickCount)
->>>>>>> .merge_file_Q0fCjD
 		{
 			case 1:
 				Debug.Log(name + " Game Object Single Clicked!");
 				ModelManager.Instance.HighlightSubcell (this);
 				break;
 			case 2:
-				Debug.Log(name + " Game Object Double Clicked!");
+				Debug.Log (name + " Game Object Double Clicked!");
+				CameraInputManager.Instance.SetPhase (CameraInputManager.Phase.FocusedSubCellPhase);
+				CameraInputManager.Instance.FocusOnSubCell (this);
 				break;
 			default:
 				//do nothing...
@@ -120,7 +113,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		m_clickCount = 0;
 		yield return null;
 	}
-	
+
 	/*
 	private void Start()
 	{

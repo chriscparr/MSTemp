@@ -385,6 +385,7 @@ GameObject:
   - component: {fileID: 1724715068}
   - component: {fileID: 1724715067}
   - component: {fileID: 1724715070}
+  - component: {fileID: 1724715071}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -443,6 +444,22 @@ MonoBehaviour:
   m_subcellPrefab: {fileID: 1392636984587748, guid: a622407b4cc66412989a580c372fc66c,
     type: 2}
   m_modelRoot: {fileID: 1782334244}
+--- !u!114 &1724715071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1724715066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 917fe0a3c35074a04a7ae575b20e0c83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CurrentPhase: 0
+  m_RotationSpeed: 5
+  m_ZoomSpeed: 5
+  m_MainCamera: {fileID: 1088703387}
+  m_DistanceFromSubCell: 25
 --- !u!1 &1782334244
 GameObject:
   m_ObjectHideFlags: 0
