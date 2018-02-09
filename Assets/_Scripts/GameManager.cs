@@ -17,22 +17,14 @@ public class GameManager : MonoBehaviour
 		s_instance = this;
 	}
 
-	public void SetupModel(PresentationData a_pData = null)
+	public void SetupModel(PresentationData a_pData)
 	{
-		if (a_pData == null)
-		{
-			a_pData = GenerateTestPresentation ();
-		}
 		ModelManager.Instance.InitialiseModel (a_pData);
 	}
 
 	// Use this for initialization
 	void Start () 
 	{
-		if (PersistentDataHandler.GetJsonFilenames ().Length == 0)
-		{
-			SaveDummyData(GenerateTestPresentation ());
-		}
 		UIManager.Instance.ShowLoginView();
 	}
 	
