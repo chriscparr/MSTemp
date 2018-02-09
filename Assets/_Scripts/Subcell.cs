@@ -32,13 +32,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	//private Mesh m_sharedMsh;
 	//private SkinnedMeshRenderer m_meshRend;
 
-	private float m_doubleClickInterval = 1f;
-	private float m_lastClickTime = 0f;
-
-	//private float m_morphInterval = 0.5f;
-
-	private Vector3 m_spinVector;
-	private float m_spinSpeed = 2f;
+	private float m_doubleClickInterval = 0.25f;
+	private int m_clickCount = 0;
 
 	private void Awake()
 	{
@@ -55,37 +50,30 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 				m_serviceType = ServiceType.AGILE;
 				col = Color.magenta;
 				break;
-
 			case "CONTENT":
 				m_serviceType = ServiceType.CONTENT;
 				col = Color.yellow;
 				break;
-
 			case "DATA":
 				m_serviceType = ServiceType.DATA;
 				col = Color.grey;
 				break;
-
 			case "FAST":
 				m_serviceType = ServiceType.FAST;
 				col = Color.blue;
 				break;
-
 			case "GROWTH":
 				m_serviceType = ServiceType.GROWTH;
 				col = Color.green;
 				break;
-
 			case "LIFE":
 				m_serviceType = ServiceType.LIFE;
 				ColorUtility.TryParseHtmlString ("#800080", out col);
 				break;
-
 			case "LOOP":
 				m_serviceType = ServiceType.LOOP;
 				col = Color.cyan;
 				break;
-
 			case "SHOP":
 				m_serviceType = ServiceType.SHOP;
 				col = Color.red;
@@ -97,18 +85,31 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	
 	public void OnPointerClick(PointerEventData pointerEventData)
 	{
-		if ((Time.fixedTime - m_lastClickTime) < m_doubleClickInterval) 
+		if (m_clickCount == 0)
 		{
-			Debug.Log (name + " Game Object Double Clicked!");
-			//MorphScale ();
-		} 
-		else 
-		{
-			Debug.Log(name + " Game Object Clicked!");
-			ModelManager.Instance.HighlightSubcell (this);
-			//MorphScaleReset ();
+			StartCoroutine ("ProcessClicks");
 		}
-		m_lastClickTime = Time.fixedTime;
+		m_clickCount++;
+	}
+
+	private IEnumerator ProcessClicks()
+	{
+		yield return new WaitForSecondsRealtime (m_doubleClickInterval);
+		switch (m_clickCount)
+		{
+			case 1:
+				Debug.Log(name + " Game Object Single Clicked!");
+				ModelManager.Instance.HighlightSubcell (this);
+				break;
+			case 2:
+				Debug.Log(name + " Game Object Double Clicked!");
+				break;
+			default:
+				//do nothing...
+				break;
+		}
+		m_clickCount = 0;
+		yield return null;
 	}
 	
 	/*
