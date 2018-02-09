@@ -12,6 +12,7 @@ public class PresentationView : MonoBehaviour
 	{
 		ModelManager.Instance.ClearModel ();
 		UIManager.Instance.ShowEndPresentationView ();
+        CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.SetupPhase);
 		gameObject.SetActive(false);
 	}
 

@@ -100,6 +100,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		if ((Time.fixedTime - m_lastClickTime) < m_doubleClickInterval) 
 		{
 			Debug.Log (name + " Game Object Double Clicked!");
+            CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.FocusedSubCellPhase);
+            CameraInputManager.Instance.FocusOnSubCell(this);
 			//MorphScale ();
 		} 
 		else 

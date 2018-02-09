@@ -58,6 +58,7 @@ public class ModelManager : MonoBehaviour
 			}
 			m_mainContainer = Instantiate<GameObject> (m_mainContainerPrefab, m_modelRoot.transform);
 			m_mainContainer.transform.localScale = new Vector3 (containerScale, containerScale, containerScale);
+            CameraInputManager.Instance.SetLookAtTarget(m_mainContainer.transform);
 			Vector3 minBounds = m_mainContainer.GetComponent<MeshCollider> ().bounds.min;
 			minBounds.Scale (new Vector3 (0.3f, 0.3f, 0.3f));
 
@@ -69,6 +70,7 @@ public class ModelManager : MonoBehaviour
 				sub.transform.localPosition = Vector3.Scale (minBounds, m_placementVectors [i]);
 			}
 			m_isInitialised = true;
+            CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
 		}
 	}
 
@@ -113,10 +115,17 @@ public class ModelManager : MonoBehaviour
 
 	private IEnumerator IlluminateHighlightedSubcell()
 	{
+        // here, you are focusing on a sub cell
+        // so zoom into it, get up nice and close.
+        // let the camera input manager deal with the movement
+
 		m_highlight.enabled = true;
-		yield return new WaitForSeconds (3f);
+        m_highlightedSubcell.RigidBody.isKinematic = true;
+		yield return new WaitForSeconds (10f);
+        m_highlightedSubcell.RigidBody.isKinematic = false;
 		m_highlightActive = false;
 		m_highlight.enabled = false;
+        CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
 		yield return null;
 	}
 
