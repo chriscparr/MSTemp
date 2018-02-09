@@ -26,7 +26,7 @@ public class CameraInputManager : MonoBehaviour {
     [SerializeField]
     private GameObject m_MainCamera;
     [SerializeField]
-    private float m_DistanceFromSubCell = 10;
+    private float m_DistanceFromSubCell = 25;
 
     private Transform m_CurrentTarget;
     private Vector3 m_CachedPosition;
@@ -37,6 +37,7 @@ public class CameraInputManager : MonoBehaviour {
     {
         s_instance = this;
         m_MainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        m_CachedPosition = m_MainCamera.transform.position;
         SetPhase(Phase.SetupPhase);
 
 
@@ -59,10 +60,14 @@ public class CameraInputManager : MonoBehaviour {
 
         switch (newPhase) {
             case Phase.SetupPhase:
+                m_selectedCell = null;
                 // ban all movement here
                 break;
             case Phase.MainCellPhase:
-                
+                if (GameObject.Find("SynapseGenerator"))
+                {
+                    FindObjectOfType<SynapseGenerator>().enabled = true;
+                }
                 // allow rotation and pinch and zoom to move in? google earth controls
                 // dont forget to use the actual f'n event handlers
                 break;
@@ -71,7 +76,8 @@ public class CameraInputManager : MonoBehaviour {
                 // here we pinch and zoom to scale the sub cell, so you may not need to do anything
                 break;
             case Phase.InsideSubCellPhase:
-                // here we want to do case study stuff, so enable the RailMover
+                // here we want to do case study stuff, so enable BOTH OnRailsMovement and RailMover, put buttons to move to/from paths (do that listener and event stuff)
+                // ps learn about listeners and events already. 
                 break;
 
         }
@@ -84,7 +90,9 @@ public class CameraInputManager : MonoBehaviour {
         m_CurrentTarget = selectedCell.transform;
         Vector3 desiredPosition = selectedCell.transform.position;
         desiredPosition.z -= m_DistanceFromSubCell;
-        m_Mover.TweenToPosition(desiredPosition, m_ZoomSpeed, iTween.EaseType.easeInOutSine);
+
+        SetLookAtTarget(m_selectedCell.transform);
+        m_Mover.TweenToPosition(desiredPosition, m_ZoomSpeed, false, iTween.EaseType.easeInOutSine);
     }
 
     // Update is called once per frame
@@ -98,10 +106,11 @@ public class CameraInputManager : MonoBehaviour {
                 // ONE TOUCH TO SWIPE
                 if (Input.touchCount == 1)
                 {
-                    //// Store currnet touch.
                     Touch touch = Input.GetTouch(0);
 
                     Vector3 axis = touch.deltaPosition;
+
+                    // i swear this is needed
                     Vector3 correction = axis;
                     axis.x = correction.y;
                     axis.y = correction.x;
@@ -111,9 +120,6 @@ public class CameraInputManager : MonoBehaviour {
                     m_MainCamera.transform.LookAt(m_CurrentTarget);
                     m_MainCamera.transform.RotateAround(m_CurrentTarget.position, axis, Time.deltaTime * m_RotationSpeed);
                 }
-
-                // move all this stuff to use the EventSystem and handlers later on, this just for test
-                // build me soon pls :-)
             }
             #endregion
 
@@ -128,29 +134,24 @@ public class CameraInputManager : MonoBehaviour {
 
     void HandleTwoFingers()
     {
-                // Store both touches.
         Touch touchZero = Input.GetTouch(0);
         Touch touchOne = Input.GetTouch(1);
 
-        // Find the position in the previous frame of each touch.
         Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
         Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
 
-        // Find the magnitude of the vector (the distance) between the touches in each frame.
         float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
         float touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
 
-        // Find the difference in the distances between each frame.
         float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
 
         if (m_CurrentPhase == Phase.MainCellPhase)
         {
-            // ... change the orthographic size based on the change in distance between the touches.
             m_MainCamera.transform.Translate(transform.forward * (deltaMagnitudeDiff * Time.deltaTime));
-
         }
         if (m_CurrentPhase == Phase.FocusedSubCellPhase)
         {
+            // there is probably a much nicer way of doing this - consider Tween pls
             float gentleDelta = (deltaMagnitudeDiff / 100);
             m_selectedCell.transform.localScale -= new Vector3(gentleDelta, gentleDelta, gentleDelta);
         }

@@ -58,7 +58,7 @@ public class ModelManager : MonoBehaviour
 			}
 			m_mainContainer = Instantiate<GameObject> (m_mainContainerPrefab, m_modelRoot.transform);
 			m_mainContainer.transform.localScale = new Vector3 (containerScale, containerScale, containerScale);
-            CameraInputManager.Instance.SetLookAtTarget(m_mainContainer.transform);
+
 			Vector3 minBounds = m_mainContainer.GetComponent<MeshCollider> ().bounds.min;
 			minBounds.Scale (new Vector3 (0.3f, 0.3f, 0.3f));
 
@@ -70,6 +70,8 @@ public class ModelManager : MonoBehaviour
 				sub.transform.localPosition = Vector3.Scale (minBounds, m_placementVectors [i]);
 			}
 			m_isInitialised = true;
+
+            CameraInputManager.Instance.SetLookAtTarget(m_mainContainer.transform);
             CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
 		}
 	}
@@ -121,7 +123,9 @@ public class ModelManager : MonoBehaviour
 
 		m_highlight.enabled = true;
         m_highlightedSubcell.RigidBody.isKinematic = true;
+        m_highlightedSubcell.RigidBody.Sleep();
 		yield return new WaitForSeconds (10f);
+        m_highlightedSubcell.RigidBody.WakeUp();
         m_highlightedSubcell.RigidBody.isKinematic = false;
 		m_highlightActive = false;
 		m_highlight.enabled = false;

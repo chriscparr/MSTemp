@@ -26,7 +26,7 @@ public class SynapseGenerator : MonoBehaviour {
 	int charAmount;
 
 	// Use this for initialization
-	void Start () {
+	void OnEnable () {
 
 		charAmount = Random.Range(5,10);
 
