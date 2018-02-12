@@ -13,7 +13,16 @@ public class RailMover : MonoBehaviour {
     // Use this for initialization
     public void TweenToPosition(Vector3 pos, float speed, bool orientToPath = true, iTween.EaseType easeMethod = iTween.EaseType.easeInOutSine)
     {
-        iTween.MoveTo(this.gameObject, iTween.Hash("position", pos, "time", speed, "easetype", easeMethod, "orienttopath", orientToPath, "lookTime", 5));
+        Debug.Log("WE TWEEENIN BOIS" + this.gameObject.name + " AT TGHE SPEED OF " + speed);
+        iTween.MoveTo(this.gameObject, iTween.Hash("position", pos, "time", speed, "easetype", easeMethod, "orienttopath", orientToPath));
     }
+
+    //public void Finish()
+    //{
+    //    if (CameraInputManager.Instance.m_CurrentPhase == CameraInputManager.Phase.FocusedSubCellPhase)
+    //    {
+    //        CameraInputManager.Instance.FollowTarget();
+    //    }
+    //}
 
 }
