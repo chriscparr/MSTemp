@@ -42,6 +42,30 @@ public class ModelManager : MonoBehaviour
 		m_highlight.enabled = false;
 	}
 
+	public void ScaleSubcell(Subcell a_subcell, float a_newScale)
+	{
+		a_subcell.transform.localScale = new Vector3 (a_newScale,a_newScale,a_newScale);
+		RecalculateModelScale ();
+	}
+
+	private void RecalculateModelScale()
+	{
+		if (m_isInitialised)
+		{
+			float containerScale = 0f;
+			foreach(Subcell subcell in m_subcells)
+			{
+				containerScale += subcell.transform.localScale;
+			}
+			containerScale = (2f * containerScale) + 2f;
+			if (containerScale < 10f)
+			{
+				containerScale = 10f;
+			}
+			m_mainContainer.transform.localScale = new Vector3 (containerScale, containerScale, containerScale);
+		}
+	}
+
 	public void InitialiseModel(PresentationData a_pData)
 	{
 		if (!m_isInitialised)
