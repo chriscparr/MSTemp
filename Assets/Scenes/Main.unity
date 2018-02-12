@@ -531,6 +531,8 @@ MonoBehaviour:
     type: 2}
   m_endPresentationViewPrefab: {fileID: 1269443973304594, guid: a7d2c0a6162aa491b8faaee03e5566ac,
     type: 2}
+  m_serviceSummaryViewPrefab: {fileID: 1469433790401032, guid: 5ac48cf721e204f6d901a9bbed70ff83,
+    type: 2}
 --- !u!114 &1838350192
 MonoBehaviour:
   m_ObjectHideFlags: 0
