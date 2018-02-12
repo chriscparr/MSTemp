@@ -83,6 +83,11 @@ public class CameraInputManager : MonoBehaviour {
         }
     }
 
+	public void ResetPosition()
+	{
+		Camera.main.transform.position = m_CachedPosition;
+	}
+
     public void FocusOnSubCell(Subcell selectedCell)
     {
         m_selectedCell = selectedCell;
@@ -93,6 +98,7 @@ public class CameraInputManager : MonoBehaviour {
 
         SetLookAtTarget(m_selectedCell.transform);
         m_Mover.TweenToPosition(desiredPosition, m_ZoomSpeed, false, iTween.EaseType.easeInOutSine);
+		UIManager.Instance.ShowServiceSummaryView (selectedCell.ServiceDat);
     }
 
     // Update is called once per frame
