@@ -392,7 +392,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1481236822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,9 +564,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CurrentPhase: 0
   m_RotationSpeed: 30
-  m_ZoomSpeed: 5
+  m_ZoomSpeed: 30
   m_MainCamera: {fileID: 0}
-  m_DistanceFromSubCell: 18
+  m_DistanceFromSubCell: -15
+  m_DistanceInsideSubcell: 0
+  zLimitForMainView: 0
 --- !u!1 &1782334244
 GameObject:
   m_ObjectHideFlags: 0

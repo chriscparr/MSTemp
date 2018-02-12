@@ -38,6 +38,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	private void Awake()
 	{
 		m_rigidBody = GetComponent<Rigidbody> ();
+        this.gameObject.AddComponent<RailMover>();
 	}
 
 	public void Initialise(ServiceData a_data)
@@ -81,7 +82,22 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		}
 		gameObject.transform.localScale = Vector3.one * m_serviceData.ServiceWeighting;
 		GetComponent<MeshRenderer> ().material.color = col;
+        transform.parent = null;
+
+        CreateReversedMesh();
 	}
+
+    void CreateReversedMesh()
+    {
+        GameObject clone = Instantiate(this.gameObject, transform.position, Quaternion.identity) as GameObject;
+        clone.transform.parent = this.transform;
+        clone.AddComponent<ReverseNormals>();
+
+        // messy
+        Destroy(clone.GetComponent<Rigidbody>());
+        Destroy(clone.GetComponent<SphereCollider>());
+        Destroy(clone.GetComponent<Subcell>());
+    }
 
 	public void OnPointerClick(PointerEventData pointerEventData)
 	{
@@ -94,6 +110,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 
 	private IEnumerator ProcessClicks()
 	{
+        
 		yield return new WaitForSecondsRealtime (m_doubleClickInterval);
 		switch (m_clickCount)
 		{
@@ -103,8 +120,19 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 				break;
 			case 2:
 				Debug.Log (name + " Game Object Double Clicked!");
-				CameraInputManager.Instance.SetPhase (CameraInputManager.Phase.FocusedSubCellPhase);
-				CameraInputManager.Instance.FocusOnSubCell (this);
+                CameraInputManager.Phase curPhase = CameraInputManager.Instance.m_CurrentPhase;
+                switch (curPhase) {
+                    case CameraInputManager.Phase.MainCellPhase:
+                        CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.FocusedSubCellPhase);
+                        CameraInputManager.Instance.FocusOnSubCell(this);
+                        break;
+                    case CameraInputManager.Phase.FocusedSubCellPhase:
+                        CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.InsideSubCellPhase);
+                        break;
+                    default:
+                        break;
+                }
+				
 				break;
 			default:
 				//do nothing...

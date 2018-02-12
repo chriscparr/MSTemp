@@ -146,14 +146,12 @@ public class ModelManager : MonoBehaviour
         // let the camera input manager deal with the movement
 
 		m_highlight.enabled = true;
-        m_highlightedSubcell.RigidBody.isKinematic = true;
-        m_highlightedSubcell.RigidBody.Sleep();
-		yield return new WaitForSeconds (10f);
-        m_highlightedSubcell.RigidBody.WakeUp();
-        m_highlightedSubcell.RigidBody.isKinematic = false;
+        CameraInputManager.Instance.SetLookAtTarget(m_highlightedSubcell.transform);
+        CameraInputManager.Instance.FollowTarget();
+        yield return new WaitForSeconds(3);
 		m_highlightActive = false;
 		m_highlight.enabled = false;
-        CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
+
 		yield return null;
 	}
 
