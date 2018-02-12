@@ -93,6 +93,7 @@ public class CameraInputManager : MonoBehaviour {
 
         SetLookAtTarget(m_selectedCell.transform);
         m_Mover.TweenToPosition(desiredPosition, m_ZoomSpeed, false, iTween.EaseType.easeInOutSine);
+		UIManager.Instance.ShowServiceSummaryView (selectedCell.ServiceDat);
     }
 
     // Update is called once per frame

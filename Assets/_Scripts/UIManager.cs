@@ -54,9 +54,10 @@ public class UIManager : MonoBehaviour
 	{
 		m_endPresentationView.SetActive (true);
 	}
-	public void ShowServiceSummaryView()
+	public void ShowServiceSummaryView(ServiceData a_sData)
 	{
 		m_serviceSummaryView.SetActive (true);
+		m_serviceSummaryView.GetComponent<ServiceSummaryView> ().SetupServiceView (a_sData);
 	}
 
 

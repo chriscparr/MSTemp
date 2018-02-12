@@ -30,6 +30,7 @@ public class ServiceSummaryView : MonoBehaviour
 
 	private void OnFinishButtonPressed()
 	{
+		UIManager.Instance.ShowPresentationView ();
 		gameObject.SetActive (false);
 	}
 }
