@@ -49,6 +49,7 @@ public class UIManager : MonoBehaviour
 	public void ShowPresentationView()
 	{
 		m_presentationView.SetActive (true);
+		CameraInputManager.Instance.ResetPosition ();
 	}
 	public void ShowEndPresentationView()
 	{

@@ -83,6 +83,11 @@ public class CameraInputManager : MonoBehaviour {
         }
     }
 
+	public void ResetPosition()
+	{
+		Camera.main.transform.position = m_CachedPosition;
+	}
+
     public void FocusOnSubCell(Subcell selectedCell)
     {
         m_selectedCell = selectedCell;
