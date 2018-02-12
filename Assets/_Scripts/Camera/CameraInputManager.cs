@@ -15,6 +15,8 @@ public class CameraInputManager : MonoBehaviour {
 
     public static CameraInputManager Instance { get { return s_instance; } }
 
+    public float zAxisLimit = 0;
+
     private static CameraInputManager s_instance = null;
 
     public Phase m_CurrentPhase; // so we can change phases from other scripts. could make it static?
@@ -32,11 +34,12 @@ public class CameraInputManager : MonoBehaviour {
     private Vector3 m_CachedPosition;
     private Subcell m_selectedCell;
     private RailMover m_Mover;
+    private Vector3 m_SafetyScaleVector = new Vector3(3,3,3);
 
     private void Awake() 
     {
         s_instance = this;
-        m_MainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        m_MainCamera = Camera.main.gameObject;
         m_CachedPosition = m_MainCamera.transform.position;
         SetPhase(Phase.SetupPhase);
 
@@ -93,12 +96,24 @@ public class CameraInputManager : MonoBehaviour {
         m_selectedCell = selectedCell;
         m_CachedPosition = m_MainCamera.transform.position;
         m_CurrentTarget = selectedCell.transform;
-        Vector3 desiredPosition = selectedCell.transform.position;
+
+        Vector3 desiredPosition = ModelManager.Instance.m_mainContainer.transform.position;
+       
+
+        selectedCell.RigidBody.isKinematic = true;
+        selectedCell.gameObject.AddComponent<RailMover>();
+        m_Mover = selectedCell.GetComponent<RailMover>();
+
+        m_Mover.TweenToPosition(desiredPosition, 5f, false, iTween.EaseType.easeInOutSine);
+
         desiredPosition.z -= m_DistanceFromSubCell;
 
-        SetLookAtTarget(m_selectedCell.transform);
-        m_Mover.TweenToPosition(desiredPosition, m_ZoomSpeed, false, iTween.EaseType.easeInOutSine);
-		UIManager.Instance.ShowServiceSummaryView (selectedCell.ServiceDat);
+        // as the main container scales up/down,
+        // TODO: Consider increasing/decreasing the m_DistanceFromSubcell along with it
+        // so you're always a good distance away from the subcell
+        m_MainCamera.GetComponent<RailMover>().TweenToPosition(desiredPosition, 5f, false, iTween.EaseType.easeInOutSine);
+
+		// UIManager.Instance.ShowServiceSummaryView (selectedCell.ServiceDat);
     }
 
     // Update is called once per frame
@@ -123,14 +138,28 @@ public class CameraInputManager : MonoBehaviour {
 
                     // Vector3 axis = new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
 
-                    m_MainCamera.transform.LookAt(m_CurrentTarget);
-                    m_MainCamera.transform.RotateAround(m_CurrentTarget.position, axis, Time.deltaTime * m_RotationSpeed);
+                    if (touch.position.y > 0)
+                    {
+                        m_MainCamera.transform.Translate(transform.forward * m_ZoomSpeed * Time.deltaTime);
+                    }
+                    if (touch.position.y < 0)
+                    {
+                        m_MainCamera.transform.Translate(-transform.forward * m_ZoomSpeed * Time.deltaTime);
+                    }
+
+                    if (m_MainCamera.transform.position.z >= zAxisLimit)
+                    {
+                        m_MainCamera.transform.position = new Vector3(
+                        m_MainCamera.transform.position.x,
+                        m_MainCamera.transform.position.y,
+                            zAxisLimit);
+                    }
                 }
             }
             #endregion
 
             // If there are two touches on the device...
-            if (Input.touchCount == 2)
+            if (Input.touchCount == 2 && m_CurrentPhase == Phase.FocusedSubCellPhase)
             {
                 HandleTwoFingers();
             }
@@ -151,16 +180,25 @@ public class CameraInputManager : MonoBehaviour {
 
         float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
 
-        if (m_CurrentPhase == Phase.MainCellPhase)
+        float gentleDelta = (deltaMagnitudeDiff / 100);
+
+
+
+        Debug.Log("OUR DELTA MAGNITUDE IS " + gentleDelta + " AND OUR SCALE IS " + m_selectedCell.transform.localScale );
+        m_selectedCell.transform.localScale = new Vector3(m_selectedCell.transform.localScale.x + (gentleDelta * -1),
+                                                          m_selectedCell.transform.localScale.y + (gentleDelta * -1),
+                                                          m_selectedCell.transform.localScale.z + (gentleDelta * -1));
+
+        if (m_selectedCell.transform.localScale.x >= 3)
         {
-            m_MainCamera.transform.Translate(transform.forward * (deltaMagnitudeDiff * Time.deltaTime));
+            m_selectedCell.transform.localScale = m_SafetyScaleVector;
         }
-        if (m_CurrentPhase == Phase.FocusedSubCellPhase)
+        if (m_selectedCell.transform.localScale.x <= 0)
         {
-            // there is probably a much nicer way of doing this - consider Tween pls
-            float gentleDelta = (deltaMagnitudeDiff / 100);
-            m_selectedCell.transform.localScale -= new Vector3(gentleDelta, gentleDelta, gentleDelta);
+            m_selectedCell.transform.localScale = Vector3.zero;
         }
+
+        ModelManager.Instance.ScaleSubcell(m_selectedCell, m_selectedCell.transform.localScale.z);
     }
      
 

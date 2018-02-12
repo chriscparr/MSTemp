@@ -123,10 +123,12 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
                 CameraInputManager.Phase curPhase = CameraInputManager.Instance.m_CurrentPhase;
                 switch (curPhase) {
                     case CameraInputManager.Phase.MainCellPhase:
-                        CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.FocusedSubCellPhase);
                         CameraInputManager.Instance.FocusOnSubCell(this);
+                        CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.FocusedSubCellPhase);
+
                         break;
                     case CameraInputManager.Phase.FocusedSubCellPhase:
+                        
                         CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.InsideSubCellPhase);
                         break;
                     default:

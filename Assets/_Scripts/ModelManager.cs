@@ -14,7 +14,7 @@ public class ModelManager : MonoBehaviour
 	public static ModelManager Instance {get { return s_instance;}}
 	private static ModelManager s_instance = null;
 
-	private GameObject m_mainContainer;
+	public GameObject m_mainContainer;
 	private List<Subcell> m_subcells = new List<Subcell>();
 
 	public bool IsInitialised {get { return m_isInitialised; }}
@@ -55,7 +55,7 @@ public class ModelManager : MonoBehaviour
 			float containerScale = 0f;
 			foreach(Subcell subcell in m_subcells)
 			{
-				containerScale += subcell.transform.localScale;
+				containerScale += subcell.transform.localScale.x;
 			}
 			containerScale = (2f * containerScale) + 2f;
 			if (containerScale < 10f)
@@ -95,8 +95,9 @@ public class ModelManager : MonoBehaviour
 			}
 			m_isInitialised = true;
 
-            CameraInputManager.Instance.SetLookAtTarget(m_mainContainer.transform);
+            // CameraInputManager.Instance.SetLookAtTarget(m_mainContainer.transform);
             CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
+            ShakeModel();
 		}
 	}
 
@@ -146,8 +147,8 @@ public class ModelManager : MonoBehaviour
         // let the camera input manager deal with the movement
 
 		m_highlight.enabled = true;
-        CameraInputManager.Instance.SetLookAtTarget(m_highlightedSubcell.transform);
-        CameraInputManager.Instance.FollowTarget();
+        // CameraInputManager.Instance.SetLookAtTarget(m_highlightedSubcell.transform);
+        // CameraInputManager.Instance.FollowTarget();
         yield return new WaitForSeconds(3);
 		m_highlightActive = false;
 		m_highlight.enabled = false;
