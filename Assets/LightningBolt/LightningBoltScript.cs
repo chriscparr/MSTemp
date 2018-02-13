@@ -202,7 +202,7 @@ public class LightningBoltScript : MonoBehaviour
 	private void UpdateLineRenderer()
 	{
 		int num = this.segments.Count - this.startIndex + 1;
-		this.lineRenderer.SetVertexCount(num);
+		this.lineRenderer.positionCount = num;
 		if (num < 1)
 		{
 			return;
@@ -220,7 +220,7 @@ public class LightningBoltScript : MonoBehaviour
 	private void Start()
 	{
 		this.lineRenderer = base.GetComponent<LineRenderer>();
-		this.lineRenderer.SetVertexCount(0);
+		this.lineRenderer.positionCount = 0;
 		this.UpdateFromMaterialChange();
 	}
 	
@@ -231,7 +231,7 @@ public class LightningBoltScript : MonoBehaviour
 			if (this.ManualMode)
 			{
 				this.timer = this.Duration;
-				this.lineRenderer.SetVertexCount(0);
+				this.lineRenderer.positionCount = 0;
 			}
 			else
 			{

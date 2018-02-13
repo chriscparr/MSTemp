@@ -39,6 +39,8 @@ using System.Reflection;
 using UnityEngine;
 #endregion
 
+#pragma warning disable 0618
+
 /// <summary>
 /// <para>Version: 2.0.5</para>	 
 /// <para>Author: Bob Berkebile (http://pixelplacement.com)</para>
