@@ -119,53 +119,54 @@ public class CameraInputManager : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (m_CurrentPhase != Phase.SetupPhase)
-        {
-            #region Main Cell Movement
-            if (m_CurrentPhase == Phase.MainCellPhase)
-            {
-                // ONE TOUCH TO SWIPE
-                if (Input.touchCount == 1)
-                {
-                    Touch touch = Input.GetTouch(0);
 
-                    Vector3 axis = touch.deltaPosition;
+		// If there are two touches on the device...
+		if (Input.touchCount == 2 && m_CurrentPhase == Phase.FocusedSubCellPhase)
+		{
+			HandleTwoFingers();
+			return;
+		}
 
-                    // i swear this is needed
-                    Vector3 correction = axis;
-                    axis.x = correction.y;
-                    axis.y = correction.x;
-
-                    // Vector3 axis = new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
-
-                    if (touch.position.y > 0)
-                    {
-                        m_MainCamera.transform.Translate(transform.forward * m_ZoomSpeed * Time.deltaTime);
-                    }
-                    if (touch.position.y < 0)
-                    {
-                        m_MainCamera.transform.Translate(-transform.forward * m_ZoomSpeed * Time.deltaTime);
-                    }
-
-                    if (m_MainCamera.transform.position.z >= zAxisLimit)
-                    {
-                        m_MainCamera.transform.position = new Vector3(
-                        m_MainCamera.transform.position.x,
-                        m_MainCamera.transform.position.y,
-                            zAxisLimit);
-                    }
-                }
-            }
-            #endregion
-
-            // If there are two touches on the device...
-            if (Input.touchCount == 2 && m_CurrentPhase == Phase.FocusedSubCellPhase)
-            {
-                HandleTwoFingers();
-            }
-
-        }
+		if (Input.touchCount == 1)
+		{
+			HandleOneFinger ();
+		}
     }
+
+	private void HandleOneFinger()
+	{
+		Touch touch = Input.GetTouch(0);
+		if (touch.phase == TouchPhase.Moved)
+		{
+			Vector3 axis = touch.deltaPosition;
+			
+			// i swear this is needed
+			Vector3 correction = axis;
+			axis.x = correction.y;
+			axis.y = correction.x;
+			
+			// Vector3 axis = new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
+			
+			if (touch.deltaPosition.y > 0f)
+			{
+				m_MainCamera.transform.Translate(transform.forward * m_ZoomSpeed * Time.deltaTime);
+			}
+			if (touch.deltaPosition.y < 0f)
+			{
+				m_MainCamera.transform.Translate(-transform.forward * m_ZoomSpeed * Time.deltaTime);
+			}
+			
+			if (m_MainCamera.transform.position.z >= zAxisLimit)
+			{
+				m_MainCamera.transform.position = new Vector3(
+					m_MainCamera.transform.position.x,
+					m_MainCamera.transform.position.y,
+					zAxisLimit);
+			}
+
+		}
+
+	}
 
     void HandleTwoFingers()
     {
