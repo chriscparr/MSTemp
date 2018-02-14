@@ -97,7 +97,7 @@ public class CameraInputManager : MonoBehaviour {
         m_CachedPosition = m_MainCamera.transform.position;
         m_CurrentTarget = selectedCell.transform;
 
-        Vector3 desiredPosition = ModelManager.Instance.m_mainContainer.transform.position;
+		Vector3 desiredPosition = Vector3.zero;	//m_mainContainer is always at zero, lets keep it private if we can...
        
 
         selectedCell.RigidBody.isKinematic = true;
