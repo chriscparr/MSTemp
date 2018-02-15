@@ -36,6 +36,8 @@ public class CameraInputManager : MonoBehaviour {
     private RailMover m_Mover;
     private Vector3 m_SafetyScaleVector = new Vector3(3,3,3);
 
+	private Vector2 m_initialTouchPosition1;
+
     private void Awake() 
     {
         s_instance = this;
@@ -97,7 +99,7 @@ public class CameraInputManager : MonoBehaviour {
         m_CachedPosition = m_MainCamera.transform.position;
         m_CurrentTarget = selectedCell.transform;
 
-        Vector3 desiredPosition = ModelManager.Instance.m_mainContainer.transform.position;
+		Vector3 desiredPosition = Vector3.zero;	//m_mainContainer is always at zero, lets keep it private if we can...
        
 
         selectedCell.RigidBody.isKinematic = true;
@@ -119,53 +121,121 @@ public class CameraInputManager : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (m_CurrentPhase != Phase.SetupPhase)
-        {
-            #region Main Cell Movement
-            if (m_CurrentPhase == Phase.MainCellPhase)
-            {
-                // ONE TOUCH TO SWIPE
-                if (Input.touchCount == 1)
-                {
-                    Touch touch = Input.GetTouch(0);
+		if (Input.GetKey(KeyCode.P))
+		{
+			DebugMoveCamera ();
+		}
+		// If there are two touches on the device...
+		if (Input.touchCount == 2 && m_CurrentPhase == Phase.FocusedSubCellPhase)
+		{
+			HandleTwoFingers();
+			return;
+		}
 
-                    Vector3 axis = touch.deltaPosition;
-
-                    // i swear this is needed
-                    Vector3 correction = axis;
-                    axis.x = correction.y;
-                    axis.y = correction.x;
-
-                    // Vector3 axis = new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
-
-                    if (touch.position.y > 0)
-                    {
-                        m_MainCamera.transform.Translate(transform.forward * m_ZoomSpeed * Time.deltaTime);
-                    }
-                    if (touch.position.y < 0)
-                    {
-                        m_MainCamera.transform.Translate(-transform.forward * m_ZoomSpeed * Time.deltaTime);
-                    }
-
-                    if (m_MainCamera.transform.position.z >= zAxisLimit)
-                    {
-                        m_MainCamera.transform.position = new Vector3(
-                        m_MainCamera.transform.position.x,
-                        m_MainCamera.transform.position.y,
-                            zAxisLimit);
-                    }
-                }
-            }
-            #endregion
-
-            // If there are two touches on the device...
-            if (Input.touchCount == 2 && m_CurrentPhase == Phase.FocusedSubCellPhase)
-            {
-                HandleTwoFingers();
-            }
-
-        }
+		if (Input.touchCount == 1)
+		{
+			if (Input.GetTouch (0).phase == TouchPhase.Began)
+			{
+				// i swear this is needed
+				Vector2 output = Vector2.zero;
+				Vector2 correction = Input.GetTouch (0).position;
+				output.x = correction.y;
+				output.y = correction.x;
+				m_initialTouchPosition1 = output;
+			}
+			HandleOneFinger ();
+		}
     }
+
+	private void DebugMoveCamera()
+	{
+		Vector3 origin = Vector3.zero;
+		//Vector3 camera = Camera.main.transform.localPosition;
+		float angleVal = 10f * m_ZoomSpeed * Time.deltaTime;
+		Camera.main.transform.RotateAround (origin, Vector3.up, angleVal);
+		Camera.main.transform.LookAt (origin);
+	}
+
+	private void HandleOneFinger()
+	{
+		Touch touch = Input.GetTouch(0);
+		if (touch.phase == TouchPhase.Moved)
+		{
+			Vector2 axis = touch.deltaPosition;
+			
+			// i swear this is needed
+			Vector2 correction = axis;
+			axis.x = correction.y;
+			axis.y = correction.x;
+
+			Vector2 touchPositionDelta = axis - m_initialTouchPosition1;
+
+			Vector3 origin = Vector3.zero;
+			float angleVal = touchPositionDelta.x * Time.fixedDeltaTime;
+			Camera.main.transform.RotateAround (origin, Vector3.up, angleVal);
+			Camera.main.transform.LookAt (origin);
+
+
+			m_MainCamera.transform.Translate (origin * touchPositionDelta.y * Time.fixedDeltaTime);
+
+			//m_MainCamera.transform.Translate(transform.forward * touchPositionDelta.y * Time.deltaTime);
+
+			if (m_MainCamera.transform.position.z >= zAxisLimit)
+			{
+				m_MainCamera.transform.position = new Vector3(
+					m_MainCamera.transform.position.x,
+					m_MainCamera.transform.position.y,
+					zAxisLimit);
+			}
+
+
+			/*
+			if (touchPositionDelta.x > touchPositionDelta.y * 5 || touchPositionDelta.x < touchPositionDelta.y * -5)
+			{
+				Debug.Log ("HORIZONTAL DRAG!");
+				if (touch.deltaPosition.x > 0f)
+				{
+					Vector3 origin = Vector3.zero;
+					float angleVal = 10f * m_ZoomSpeed * Time.deltaTime;
+					Camera.main.transform.RotateAround (origin, Vector3.up, angleVal);
+					Camera.main.transform.LookAt (origin);
+				}
+				if (touch.deltaPosition.x < 0f)
+				{
+					Vector3 origin = Vector3.zero;
+					float angleVal = -10f * m_ZoomSpeed * Time.deltaTime;
+					Camera.main.transform.RotateAround (origin, Vector3.up, angleVal);
+					Camera.main.transform.LookAt (origin);
+				}
+				return;
+			}
+			if (touchPositionDelta.y > touchPositionDelta.x * 5 || touchPositionDelta.y < touchPositionDelta.x * -5)
+			{
+				Debug.Log ("VERTICAL DRAG!");
+				if (touch.deltaPosition.y > 0f)
+				{
+					m_MainCamera.transform.Translate(transform.forward * m_ZoomSpeed * Time.deltaTime);
+				}
+				if (touch.deltaPosition.y < 0f)
+				{
+					m_MainCamera.transform.Translate(-transform.forward * m_ZoomSpeed * Time.deltaTime);
+				}
+
+
+				if (m_MainCamera.transform.position.z >= zAxisLimit)
+				{
+					m_MainCamera.transform.position = new Vector3(
+						m_MainCamera.transform.position.x,
+						m_MainCamera.transform.position.y,
+						zAxisLimit);
+				}
+			}
+			*/
+
+
+		}
+
+	}
 
     void HandleTwoFingers()
     {

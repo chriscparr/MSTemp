@@ -14,7 +14,7 @@ public class ModelManager : MonoBehaviour
 	public static ModelManager Instance {get { return s_instance;}}
 	private static ModelManager s_instance = null;
 
-	public GameObject m_mainContainer;
+	private GameObject m_mainContainer;
 	private List<Subcell> m_subcells = new List<Subcell>();
 
 	public bool IsInitialised {get { return m_isInitialised; }}
