@@ -123,13 +123,10 @@ public class ModelManager : MonoBehaviour
 	{
 		if (m_isInitialised)
 		{
-			Vector3 origin = m_mainContainer.transform.position;
-			Vector3 dir = new Vector3 ();
 			foreach (Subcell cell in m_subcells)
 			{
-				dir = origin - cell.transform.position;
-				dir.Scale(new Vector3(0.5f, 0.5f, 0.5f));
-				cell.RigidBody.AddForce (dir, ForceMode.Impulse);
+				//Subcells being more circular means we have to randomise a bit here
+				cell.RigidBody.AddForce ((Random.onUnitSphere * 3f), ForceMode.Impulse);
 			}
 		}
 	}

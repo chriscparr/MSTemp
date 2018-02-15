@@ -449,8 +449,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mainContainerPrefab: {fileID: 1402283628938490, guid: 85a6ee7354a824e09844da9dc23551b6,
     type: 2}
-  m_subcellPrefab: {fileID: 1392636984587748, guid: a622407b4cc66412989a580c372fc66c,
-    type: 2}
   m_modelRoot: {fileID: 1782334244}
   m_modelPrefabDefs:
   - PrefabName: AGILE
@@ -520,6 +518,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1782334245}
+  - component: {fileID: 1782334246}
   m_Layer: 0
   m_Name: ModelRoot
   m_TagString: Untagged
@@ -541,6 +540,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1782334246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1782334244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 694bb6381e57446838e3533bcf96a6aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SynapsePrefab: {fileID: 1569196351689810, guid: 25937f31dcb384be58fd73f9707203de,
+    type: 2}
+  NumberOfSynapsesToGenerate: 3
+  BoundingSphere: {fileID: 0}
+  MinimumRadiusRandomisation: 2.5
+  MaximumRadiusRandomisation: 5
+  MinimumDistanceRandomisation: -10
+  MaximumDistanceRandomisation: 10
+  shouldIEndWhereIBegin: 1
+  minimumNumberOfNodes: 4
+  maximumNumberOfNodes: 10
 --- !u!1 &1838350190
 GameObject:
   m_ObjectHideFlags: 0
