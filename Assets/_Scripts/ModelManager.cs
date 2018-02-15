@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ModelManager : MonoBehaviour 
-{
+{	
 	[SerializeField]
 	private GameObject m_mainContainerPrefab;
 	[SerializeField]
-	private GameObject m_subcellPrefab;
-	[SerializeField]
 	private GameObject m_modelRoot;
+	[SerializeField]
+	private	NamedPrefab[] m_modelPrefabDefs;
+
+	private Dictionary<string, GameObject> m_modelPrefabs = new Dictionary<string, GameObject> ();
 
 	public static ModelManager Instance {get { return s_instance;}}
 	private static ModelManager s_instance = null;
@@ -42,6 +44,10 @@ public class ModelManager : MonoBehaviour
 		s_instance = this;
 		m_highlight = m_modelRoot.GetComponentInChildren<Light> ();
 		m_highlight.enabled = false;
+		foreach (NamedPrefab np in m_modelPrefabDefs)
+		{
+			m_modelPrefabs.Add (np.PrefabName, np.PrefabGameObject);
+		}
 	}
 
 	public void ScaleSubcell(Subcell a_subcell, float a_newScale)
@@ -90,7 +96,7 @@ public class ModelManager : MonoBehaviour
 
 			for (int i = 0; i < a_pData.Services.Length; i++)
 			{
-				GameObject sub = Instantiate<GameObject> (m_subcellPrefab, m_modelRoot.transform);
+				GameObject sub = Instantiate<GameObject> (m_modelPrefabs[a_pData.Services[i].ServiceName], m_modelRoot.transform);
 				m_subcells.Add (sub.GetComponent<Subcell> ());
 				m_subcells [i].Initialise (a_pData.Services [i]);
 				sub.transform.localPosition = Vector3.Scale (minBounds, m_placementVectors [i]);
@@ -147,12 +153,11 @@ public class ModelManager : MonoBehaviour
         // here, you are focusing on a sub cell
         // so zoom into it, get up nice and close.
         // let the camera input manager deal with the movement
-        acell.Label.text = acell.ServiceDat.ServiceName;
+        
 		m_highlight.enabled = true;
         // CameraInputManager.Instance.SetLookAtTarget(m_highlightedSubcell.transform);
         // CameraInputManager.Instance.FollowTarget();
         yield return new WaitForSeconds(3);
-        acell.Label.text = "";
 		m_highlightActive = false;
 		m_highlight.enabled = false;
 
@@ -166,4 +171,11 @@ public class ModelManager : MonoBehaviour
 			m_highlight.transform.position = m_highlightedSubcell.transform.position + new Vector3 (0f, 0f, -8f);
 		}
 	}
+}
+
+[System.Serializable]
+public struct NamedPrefab
+{
+	public string PrefabName;
+	public GameObject PrefabGameObject;
 }
