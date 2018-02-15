@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 
 [RequireComponent(typeof(iTweenPath))]
 public class OnRailsMovement : MonoBehaviour {
@@ -30,6 +31,12 @@ public class OnRailsMovement : MonoBehaviour {
     public static bool amDoing;
     public static bool amGoing;
 
+    List<VideoClip> currentVids = new List<VideoClip>();
+
+    [Header("leave me blank")]
+    public string currentServiceType;
+
+
     CaseStudyData[] c;
 
 	// Use this for initialization
@@ -37,10 +44,18 @@ public class OnRailsMovement : MonoBehaviour {
 		iTween.Init (this.gameObject);
 	}
 
+    void Start()
+    {
+        
+    }
+
 	// IMPORTANT NOTE:
 	// ONLY USE THIS SCRIPT IF THE CASE STUDY VIDEOS INSIDE THE SUBCELLS ARE GOING TO MOVE (THEY PROBABLY WONT)
 
 	public void Initialise () {
+
+
+
         if (amDoing != true)
         {
             amDoing = true;
@@ -64,7 +79,52 @@ public class OnRailsMovement : MonoBehaviour {
 
             MoveTo();
         }
+
+        InitiliaseVideos();
 	}
+
+    void InitiliaseVideos()
+    {
+        VideoManager vidManager = VideoManager.Instance;
+        switch (currentServiceType)
+        {
+            //case "AGILE":
+            //    m_serviceType = ServiceType.AGILE;
+            //    col = Color.magenta;
+            //    break;
+            //case "CONTENT":
+            //    m_serviceType = ServiceType.CONTENT;
+            //    col = Color.yellow;
+            //    break;
+            //case "DATA":
+            //m_serviceType = ServiceType.DATA;
+            //col = Color.grey;
+            //break;
+            case "FAST":
+                currentVids = vidManager.m_FastVideos;
+                break;
+                //case "GROWTH":
+                //    m_serviceType = ServiceType.GROWTH;
+                //    col = Color.green;
+                //    break;
+                //case "LIFE":
+                //    m_serviceType = ServiceType.LIFE;
+                //    ColorUtility.TryParseHtmlString("#800080", out col);
+                //    break;
+                //case "LOOP":
+                //    m_serviceType = ServiceType.LOOP;
+                //    col = Color.cyan;
+                //    break;
+                //case "SHOP":
+                //    m_serviceType = ServiceType.SHOP;
+                //    col = Color.red;
+                //    break;
+                //default:
+                //m_serviceType = ServiceType.FAST;
+                //col = Color.blue;
+                //break;
+        }
+    }
 
     void MoveTo()
     {
@@ -73,7 +133,6 @@ public class OnRailsMovement : MonoBehaviour {
 
     void VideoReached() 
     {
-       
         StartCoroutine("PlayAndWait");
     }
 	
@@ -99,15 +158,36 @@ public class OnRailsMovement : MonoBehaviour {
         }
     }
 
+    public void GoToPreviousPoint()
+    {
+        if (amGoing != true)
+        {
+            amGoing = true;
+
+            VideoManager.Instance.StopVideo();
+            Debug.Log("CURRENT NODE = " + nodeI.ToString() + " / and OUR NODE LIMIT = " + thisPath.nodeCount.ToString());
+            if (nodeI >= thisPath.nodeCount)
+            {
+                // get out, we are done.
+                CameraInputManager.Instance.ResetPosition();
+
+            }
+            else
+            {
+                nodeI -= 2;
+                i -= 2;
+                MoveTo();
+            }
+        }
+    }
+
 
 	IEnumerator PlayAndWait() {
         Debug.Log("CURRENT VID INDEX = " + i.ToString());
-        string url = c[i].VideoPath;
 
-        Debug.Log(url);
 		yield return new WaitForSeconds (2);
         amGoing = false;
-        if (url == "" || url == null || nodeI >= thisPath.nodeCount)
+        if ( nodeI > thisPath.nodeCount)
         {
             nodeI = 0;
             i = 0;
@@ -115,7 +195,7 @@ public class OnRailsMovement : MonoBehaviour {
         }
         else
         {
-            VideoManager.Instance.PlayVideo(url);
+            VideoManager.Instance.PlayVideo(currentVids[nodeI]);
         }
         i++;
         nodeI++;

@@ -1553,6 +1553,7 @@ MonoBehaviour:
   ease: 0
   thisPath: {fileID: 0}
   maxTime: 5
+  currentServiceType: 
 --- !u!65 &1448073848
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1596,7 +1597,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 18f54ac8783964a31aacd864cfb16edb, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 46227d2b51fc44bf5a9ebe95f77f5ddb, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -2220,10 +2221,9 @@ MonoBehaviour:
   zAxisLimit: 0
   m_CurrentPhase: 0
   m_RotationSpeed: 5
-  m_CameraZoomSpeed: 10
+  m_ZoomSpeed: 3
   m_MainCamera: {fileID: 1448073838}
   m_DistanceFromSubCell: 25
-  m_ZoomTime: 2
 --- !u!114 &1920632291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2240,7 +2240,6 @@ MonoBehaviour:
   m_subcellPrefab: {fileID: 1392636984587748, guid: a622407b4cc66412989a580c372fc66c,
     type: 2}
   m_modelRoot: {fileID: 604309239}
-  m_mainContainer: {fileID: 0}
 --- !u!114 &1920632292
 MonoBehaviour:
   m_ObjectHideFlags: 0
