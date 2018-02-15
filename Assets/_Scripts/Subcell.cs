@@ -24,8 +24,6 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	public ServiceData ServiceDat {get{ return m_serviceData; }}
 	private ServiceData m_serviceData;
 
-    public string typeName;
-
     public TextMesh Label;
 
     int numberOfStudiesInService = 0;
@@ -48,6 +46,50 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
       
 	}
 
+	public void Initialise(ServiceData a_data)
+	{
+		m_serviceData = a_data;
+		switch (m_serviceData.ServiceName)
+		{
+			case "AGILE":
+				m_serviceType = ServiceType.AGILE;
+				break;
+			case "CONTENT":
+				m_serviceType = ServiceType.CONTENT;
+				break;
+			case "DATA":
+				m_serviceType = ServiceType.DATA;
+				break;
+			case "FAST":
+				m_serviceType = ServiceType.FAST;
+				numberOfStudiesInService = VideoManager.Instance.m_FastVideos.Count+1;
+				break;
+			case "GROWTH":
+				m_serviceType = ServiceType.GROWTH;
+				break;
+			case "LIFE":
+				m_serviceType = ServiceType.LIFE;
+				break;
+			case "LOOP":
+				m_serviceType = ServiceType.LOOP;
+				break;
+			case "SHOP":
+				m_serviceType = ServiceType.SHOP;
+				break;
+			default:
+				//m_serviceType = ServiceType.FAST;
+				break;
+		}
+		gameObject.transform.localScale = Vector3.one * m_serviceData.ServiceWeighting;
+		//transform.parent = null;
+
+		Label.text = "";
+
+		CreateReversedMesh();
+	}
+
+
+	/*
 	public void Initialise(ServiceData a_data)
 	{
         VideoManager vidManager = VideoManager.Instance;
@@ -103,8 +145,9 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 
         CreateReversedMesh();
 	}
+	*/
 
-    void CreateReversedMesh()
+    private void CreateReversedMesh()
     {
         GameObject clone = Instantiate(this.gameObject, transform.position, Quaternion.identity) as GameObject;
         clone.transform.parent = this.transform;
