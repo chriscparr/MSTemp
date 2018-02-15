@@ -72,7 +72,7 @@ public class CaseStudyManager : MonoBehaviour {
 
                     break;
                 case "CONTENT":
-                    cdata.VideoPath = VideoManager.Instance.m_ContentVideos[Cindex];
+                    // cdata.VideoPath = VideoManager.Instance.m_ContentVideos[Cindex];
                     break;
                 case "DATA":
 
@@ -90,7 +90,7 @@ public class CaseStudyManager : MonoBehaviour {
 
                     break;
                 case "SHOP":
-                    cdata.VideoPath = VideoManager.Instance.m_ShopVideos[Cindex];
+                    // cdata.VideoPath = VideoManager.Instance.m_ShopVideos[Cindex];
                     break;
                     //}
             }

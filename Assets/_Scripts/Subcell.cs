@@ -28,6 +28,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 
     public TextMesh Label;
 
+    int numberOfStudiesInService = 0;
+
 
 	//[SerializeField]
 	//private Mesh[] m_cellMeshes;
@@ -48,6 +50,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 
 	public void Initialise(ServiceData a_data)
 	{
+        VideoManager vidManager = VideoManager.Instance;
+
 		Color col = Color.white;
 		m_serviceData = a_data;
 		switch (m_serviceData.ServiceName)
@@ -68,6 +72,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 				m_serviceType = ServiceType.FAST;
                 typeName = "FAST";
 				col = Color.blue;
+                numberOfStudiesInService = vidManager.m_FastVideos.Count+1;
 				break;
 			case "GROWTH":
 				m_serviceType = ServiceType.GROWTH;
@@ -147,7 +152,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
                         break;
                     case CameraInputManager.Phase.FocusedSubCellPhase:
                         Debug.Log(ServiceDat.ServiceName);
-                        //CameraInputManager.Instance.EnterSubCell();
+                        CameraInputManager.Instance.EnterSubCell(numberOfStudiesInService);
                         CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.InsideSubCellPhase);
                         break;
                     default:

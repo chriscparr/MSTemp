@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class CaseStudyData : MonoBehaviour {
 
@@ -11,7 +12,7 @@ public class CaseStudyData : MonoBehaviour {
 
     public string ID;
     // public string[] VideoPaths;
-    public string VideoPath;
+    public VideoClip VideoPath;
     public TextMesh Label;
 
 }

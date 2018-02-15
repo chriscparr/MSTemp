@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 using System.IO;
+using System.Linq;
 
 public class VideoManager : MonoBehaviour {
 
@@ -18,7 +19,7 @@ public class VideoManager : MonoBehaviour {
 
     List<string> m_CurrentFiles = new List<string>();
 
-    public List<string> m_FastVideos = new List<string>();
+    public List<VideoClip> m_FastVideos = new List<VideoClip>();
     public List<string> m_ShopVideos = new List<string>();
     public List<string> m_ContentVideos = new List<string>();
 
@@ -28,68 +29,68 @@ public class VideoManager : MonoBehaviour {
 
     void Start()
     {
-        DirectoryInfo directory = new DirectoryInfo(Application.streamingAssetsPath + "/" + "Videos");
+        //DirectoryInfo directory = new DirectoryInfo(Resources.Load);
 
-        DirectoryInfo[] subDirectories = directory.GetDirectories();
+        //DirectoryInfo[] subDirectories = directory.GetDirectories();
 
-        List<string> allPotentialSubdirectories = new List<string>();
+        //List<string> allPotentialSubdirectories = new List<string>();
 
-        foreach (DirectoryInfo dic in subDirectories)
-        {
-            allPotentialSubdirectories.Add(dic.Name);
-        }
+        //foreach (DirectoryInfo dic in subDirectories)
+        //{
+        //    allPotentialSubdirectories.Add(dic.Name);
+        //}
 
-        for (int i = 0; i < subDirectories.Length; i++)
-        {
-            DirectoryInfo sInfo = subDirectories[i];
+        //for (int i = 0; i < subDirectories.Length; i++)
+        //{
+        //    DirectoryInfo sInfo = subDirectories[i];
 
-            FileInfo[] sFiles = sInfo.GetFiles();
+        //    FileInfo[] sFiles = sInfo.GetFiles();
 
-            //for (int p = 0; p < sFiles.Length; p++)
-            //{
+        //    //for (int p = 0; p < sFiles.Length; p++)
+        //    //{
 
-                switch (subDirectories[i].Name)
-                {
-                    case "AGILE":
+        //        switch (subDirectories[i].Name)
+        //        {
+        //            case "AGILE":
 
-                        break;
-                    case "CONTENT":
-                    
-                    foreach (FileInfo content in sFiles)
-                    {
-                        if (!content.FullName.Contains("meta") && !content.FullName.Contains(".DS_Store"))
-                        m_ContentVideos.Add(content.FullName);
-                    }
-                        break;
-                    case "DATA":
+        //                break;
+        //            case "CONTENT":
 
-                        break;
-                    case "FAST":
-                    foreach (FileInfo content in sFiles)
-                    {
-                        if (!content.FullName.Contains("meta") && !content.FullName.Contains(".DS_Store"))
-                        m_FastVideos.Add(content.FullName);
-                    }
-                        break;
-                    case "GROWTH":
+        //            foreach (FileInfo content in sFiles)
+        //            {
+        //                if (!content.FullName.Contains("meta") && !content.FullName.Contains(".DS_Store"))
+        //                m_ContentVideos.Add(content.FullName);
+        //            }
+        //                break;
+        //            case "DATA":
 
-                        break;
-                    case "LIFE":
+        //                break;
+        //            case "FAST":
+        //            foreach (FileInfo content in sFiles)
+        //            {
+        //                if (!content.FullName.Contains("meta") && !content.FullName.Contains(".DS_Store"))
+        //                m_FastVideos.Add(content.FullName);
+        //            }
+        //                break;
+        //            case "GROWTH":
 
-                        break;
-                    case "LOOP":
+        //                break;
+        //            case "LIFE":
 
-                        break;
-                    case "SHOP":
-                    foreach (FileInfo content in sFiles)
-                    {
-                        if (!content.FullName.Contains("meta") && !content.FullName.Contains(".DS_Store"))
-                        m_ShopVideos.Add(content.FullName);
-                    }
-                        break;
-                //}
-            }
-        }
+        //                break;
+        //            case "LOOP":
+
+        //                break;
+        //            case "SHOP":
+        //            foreach (FileInfo content in sFiles)
+        //            {
+        //                if (!content.FullName.Contains("meta") && !content.FullName.Contains(".DS_Store"))
+        //                m_ShopVideos.Add(content.FullName);
+        //            }
+        //                break;
+        //        //}
+        //    }
+        //}
 
         //foreach (FileInfo file in subDirectories)
         //{
@@ -99,10 +100,18 @@ public class VideoManager : MonoBehaviour {
         //    }
         //}
 
-
-        foreach (string s in m_FastVideos)
+        var URLs = Resources.LoadAll("FAST");
+        List<VideoClip> vids = new List<VideoClip>();
+        foreach (var s in URLs)
         {
-            print("FAST VID: " + s);
+            m_FastVideos.Add(s as VideoClip);
+            Debug.Log("ADDING VID");
+        }
+
+
+        foreach (VideoClip s in m_FastVideos)
+        {
+            print("FAST VID: " + s.name);
         }
 
         foreach (string s in m_ContentVideos)
@@ -133,11 +142,12 @@ public class VideoManager : MonoBehaviour {
         //}
     }
 
-    public void PlayVideo(string vidURL)
+    public void PlayVideo(VideoClip vidClip)
     {
         var videoPlayer = Camera.main.gameObject.GetComponent<VideoPlayer>();
-        videoPlayer.source = VideoSource.Url;
-        videoPlayer.url = vidURL;
+        videoPlayer.source = VideoSource.VideoClip;
+        videoPlayer.clip = vidClip;
+        // videoPlayer.url = vidURL;
         AudioManager.Instance.Pause();
         AudioManager.Instance.AddVideoAudio();
 

@@ -91,6 +91,7 @@ public class CameraInputManager : MonoBehaviour {
 	public void ResetPosition()
 	{
 		Camera.main.transform.position = m_CachedPosition;
+        Camera.main.transform.eulerAngles = Vector3.zero;
 	}
 
     public void FocusOnSubCell(Subcell selectedCell)
@@ -106,16 +107,22 @@ public class CameraInputManager : MonoBehaviour {
         selectedCell.gameObject.AddComponent<RailMover>();
         m_Mover = selectedCell.GetComponent<RailMover>();
 
-        m_Mover.TweenToPosition(desiredPosition, 5f, false, iTween.EaseType.easeInOutSine);
+        m_Mover.TweenToPosition(desiredPosition, m_ZoomSpeed, false, iTween.EaseType.easeInOutSine);
 
         desiredPosition.z -= m_DistanceFromSubCell;
 
         // as the main container scales up/down,
         // TODO: Consider increasing/decreasing the m_DistanceFromSubcell along with it
         // so you're always a good distance away from the subcell
-        m_MainCamera.GetComponent<RailMover>().TweenToPosition(desiredPosition, 5f, false, iTween.EaseType.easeInOutSine);
+        m_MainCamera.GetComponent<RailMover>().TweenToPosition(desiredPosition, m_ZoomSpeed, false, iTween.EaseType.easeInOutSine);
 
 		// UIManager.Instance.ShowServiceSummaryView (selectedCell.ServiceDat);
+    }
+
+    public void EnterSubCell(int numberOfStudiesToInstantiate)     {         Vector3 desiredPosition = m_selectedCell.transform.position;
+        Camera.main.GetComponent<RailMover>().TweenToPosition(desiredPosition, m_ZoomSpeed, false, iTween.EaseType.easeInElastic);         SynapseGenerator.Instance.GenerateSynapses(desiredPosition, m_selectedCell.gameObject);
+        CaseStudyManager.Instance.GenerateCaseStudies(m_selectedCell.gameObject, numberOfStudiesToInstantiate, m_selectedCell.ServiceDat.ServiceName);
+        Camera.main.GetComponent<OnRailsMovement>().currentServiceType = m_selectedCell.ServiceDat.ServiceName;
     }
 
     // Update is called once per frame
@@ -145,6 +152,24 @@ public class CameraInputManager : MonoBehaviour {
 			}
 			HandleOneFinger ();
 		}
+
+        // TODO ALI DEBUG CONTROLS, THESE ARE TEMP PLS DELETE ME LATER
+        if ((Input.GetKeyDown(KeyCode.Alpha1)) && m_CurrentPhase == Phase.InsideSubCellPhase)
+        {
+            OnRailsMovement mover = m_MainCamera.GetComponent<OnRailsMovement>();
+            mover.Initialise();
+        }
+        if ((Input.GetKeyDown(KeyCode.Alpha2)) && m_CurrentPhase == Phase.InsideSubCellPhase)
+        {
+            OnRailsMovement mover = m_MainCamera.GetComponent<OnRailsMovement>();
+            mover.GoToNextPoint();
+        }
+        if ((Input.GetKeyDown(KeyCode.Alpha3)) && m_CurrentPhase == Phase.InsideSubCellPhase)
+        {
+            OnRailsMovement mover = m_MainCamera.GetComponent<OnRailsMovement>();
+            mover.GoToPreviousPoint();
+        }
+        // TODO END OF DEBUG CONTROLS
     }
 
 	private void DebugMoveCamera()
