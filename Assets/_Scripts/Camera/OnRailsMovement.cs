@@ -20,8 +20,18 @@ public class OnRailsMovement : MonoBehaviour {
 	private float originAsIncrement = 0;
 	private float destinationAsIncrement = 1;
 
+    private string url = "";
+    private int currentCaseStudy = 0;
+
 	private float ourNodeCount = 1;
 	int i = 0;
+    int nodeI = 0;
+
+    public static bool amDoing;
+    public static bool amGoing;
+
+    CaseStudyData[] c;
+
 	// Use this for initialization
 	void Awake() {
 		iTween.Init (this.gameObject);
@@ -30,86 +40,84 @@ public class OnRailsMovement : MonoBehaviour {
 	// IMPORTANT NOTE:
 	// ONLY USE THIS SCRIPT IF THE CASE STUDY VIDEOS INSIDE THE SUBCELLS ARE GOING TO MOVE (THEY PROBABLY WONT)
 
-	void Start () {
-		thisPath = GetComponent<iTweenPath> ();
-		// after we have created our path positions (aka, locations of the case studies)
+	public void Initialise () {
+        if (amDoing != true)
+        {
+            amDoing = true;
+            i = 0;
+            nodeI = 0;
+            thisPath = GetComponent<iTweenPath>();
+            // after we have created our path positions (aka, locations of the case studies)
 
-		GameObject[] c = GameObject.FindGameObjectsWithTag ("CaseStudy"); // do this a different way later
-		foreach (GameObject g in c) {
-			caseStudyPositions.Add (g.transform.position);
-		}
+            c = CaseStudyManager.Instance.allCases.ToArray();
 
-		arr = caseStudyPositions.ToArray();
+            // do this a different way later, please.
+            foreach (CaseStudyData g in c)
+            {
+                caseStudyPositions.Add(g.transform.position);
+            }
 
-		increment = 0;
+            arr = caseStudyPositions.ToArray();
 
-		thisPath.nodeCount = caseStudyPositions.Count;
-		thisPath.nodes = caseStudyPositions;
+            thisPath.nodeCount = caseStudyPositions.Count;
+            thisPath.nodes = caseStudyPositions;
 
-		distanceBetweenPositions = (float)(1f / (float)thisPath.nodeCount);
-		marginForError = (float)(distanceBetweenPositions / (float)(thisPath.nodeCount * 2));
-		destinationAsIncrement = (0 + distanceBetweenPositions);
-		Debug.LogError (destinationAsIncrement);
-
+            MoveTo();
+        }
 	}
+
+    void MoveTo()
+    {
+        iTween.MoveTo(this.gameObject, iTween.Hash("position", thisPath.nodes[nodeI], "time", 5, "easetype", iTween.EaseType.easeInOutSine, "orienttopath", true, "lookTime", 5, "oncomplete", "VideoReached"));
+    }
+
+    void VideoReached() 
+    {
+       
+        StartCoroutine("PlayAndWait");
+    }
 	
-	// Update is called once per frame
-	void Update () {
 
-		if (Input.GetMouseButtonDown(0)) {
-			RailMover rm = GetComponent<RailMover> ();
-			rm.TweenToPosition (arr [i], 6);
-			i++;
-		}
+    public void GoToNextPoint()
+    {
+        if (amGoing != true)
+        {
+            amGoing = true;
 
+            VideoManager.Instance.StopVideo();
+            Debug.Log("CURRENT NODE = " + nodeI.ToString() + " / and OUR NODE LIMIT = " + thisPath.nodeCount.ToString());
+            if (nodeI >= thisPath.nodeCount)
+            {
+                // get out, we are done.
+				CameraInputManager.Instance.ResetPosition();
 
-		if (allowMove) {
-			Debug.Log (increment);
-			increment = Mathf.SmoothDamp (originAsIncrement, destinationAsIncrement, ref maxTime, speed);
-
-
-
-			if (increment >= (destinationAsIncrement - marginForError) && increment > 0) {
-				increment = (destinationAsIncrement - marginForError);
-				AssignIncrements (increment, (increment + distanceBetweenPositions), true);
-				allowMove = false;
-			}
-		}
-
-		if (increment >= 1) {
-			increment = 1;
-			allowMove = false;
-		}
-
-	}
+            }
+            else
+            {
+                MoveTo();
+            }
+        }
+    }
 
 
+	IEnumerator PlayAndWait() {
+        Debug.Log("CURRENT VID INDEX = " + i.ToString());
+        string url = c[i].VideoPath;
 
-	public void AssignIncrements(float orig, float dest, bool wait)
-	{
-
-		Debug.LogError (orig + " , " + dest);
-		allowMove = false;
-		originAsIncrement = orig;
-		destinationAsIncrement = dest;
-		increment = orig;
-
-		if (destinationAsIncrement >= 1) {
-			destinationAsIncrement = 1;
-		}
-		if (wait) {
-			StartCoroutine ("Wait");
-		} else {
-			allowMove = true;
-			Debug.Log ("INCREMENT = " + increment);
-		}
-	}
-
-	IEnumerator Wait() {
+        Debug.Log(url);
 		yield return new WaitForSeconds (2);
-
-	
-
-		allowMove = true;
+        amGoing = false;
+        if (url == "" || url == null || nodeI >= thisPath.nodeCount)
+        {
+            nodeI = 0;
+            i = 0;
+			CameraInputManager.Instance.ResetPosition ();
+        }
+        else
+        {
+            VideoManager.Instance.PlayVideo(url);
+        }
+        i++;
+        nodeI++;
 	}
 }

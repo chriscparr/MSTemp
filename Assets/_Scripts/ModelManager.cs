@@ -107,7 +107,7 @@ public class ModelManager : MonoBehaviour
 		{
 			m_highlightedSubcell = a_subcell;
 			m_highlightActive = true;
-			StartCoroutine ("IlluminateHighlightedSubcell");
+			StartCoroutine ("IlluminateHighlightedSubcell", a_subcell);
 		}
 	}
 
@@ -140,16 +140,17 @@ public class ModelManager : MonoBehaviour
 		}
 	}
 
-	private IEnumerator IlluminateHighlightedSubcell()
+	private IEnumerator IlluminateHighlightedSubcell(Subcell acell)
 	{
         // here, you are focusing on a sub cell
         // so zoom into it, get up nice and close.
         // let the camera input manager deal with the movement
-
+        acell.Label.text = acell.ServiceDat.ServiceName;
 		m_highlight.enabled = true;
         // CameraInputManager.Instance.SetLookAtTarget(m_highlightedSubcell.transform);
         // CameraInputManager.Instance.FollowTarget();
         yield return new WaitForSeconds(3);
+        acell.Label.text = "";
 		m_highlightActive = false;
 		m_highlight.enabled = false;
 

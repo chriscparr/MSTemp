@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class SynapseGenerator : MonoBehaviour {
 
+
+    public static SynapseGenerator Instance { get { return s_instance; } }
+    private static SynapseGenerator s_instance = null;
+
 	public GameObject SynapsePrefab;
 	public int NumberOfSynapsesToGenerate = 3;
 	public GameObject BoundingSphere; // this should be the clickable Subcell
@@ -25,13 +29,19 @@ public class SynapseGenerator : MonoBehaviour {
 	const string glyphs= "abcdefghijklmnopqrstuvwxyz";
 	int charAmount;
 
-	// Use this for initialization
-	void OnEnable () {
+    private void Awake()
+    {
+        s_instance = this;
+    }
 
-		charAmount = Random.Range(5,10);
+    // Use this for initialization
+    public void GenerateSynapses (Vector3 position, GameObject bound) {
+
+        charAmount = Random.Range(5,10); // get individual names for each paths (we have to do this)
+        BoundingSphere = bound;
 
 		for (int i = 0; i < NumberOfSynapsesToGenerate; i++) {
-			GameObject currentSynapse = Instantiate (SynapsePrefab, transform.position, Quaternion.identity) as GameObject;
+			GameObject currentSynapse = Instantiate (SynapsePrefab, position, Quaternion.identity) as GameObject;
 			pathData = currentSynapse.GetComponent<iTweenPath> ();
 
 			pathData.nodeCount = Random.Range (minimumNumberOfNodes, maximumNumberOfNodes);
@@ -63,7 +73,7 @@ public class SynapseGenerator : MonoBehaviour {
 	{
 		for (int n = 0; n < p.nodeCount; n++) {
 
-			Vector3 veryStartingPoint = BoundingSphere.GetComponent<Renderer>().bounds.center;
+            Vector3 veryStartingPoint = BoundingSphere.GetComponent<SphereCollider>().bounds.center;
 
 			p.nodes [n] = veryStartingPoint;
 

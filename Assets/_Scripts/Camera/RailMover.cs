@@ -17,12 +17,4 @@ public class RailMover : MonoBehaviour {
         iTween.MoveTo(this.gameObject, iTween.Hash("position", pos, "time", speed, "easetype", easeMethod, "orienttopath", orientToPath));
     }
 
-    //public void Finish()
-    //{
-    //    if (CameraInputManager.Instance.m_CurrentPhase == CameraInputManager.Phase.FocusedSubCellPhase)
-    //    {
-    //        CameraInputManager.Instance.FollowTarget();
-    //    }
-    //}
-
 }

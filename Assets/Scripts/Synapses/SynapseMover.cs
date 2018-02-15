@@ -24,10 +24,10 @@ public class SynapseMover : MonoBehaviour {
 	void Update() {
 		if (allowMove)
 			val = Mathf.SmoothStep(0, 1, Mathf.PingPong(Time.time/maxTime, 1));
-	
+        Debug.Log("SYNAPSE MOVING");
 		iTween.PutOnPath (this.gameObject, arr, val);
 
-		if (val >= 0.9f) {
+		if (this.val >= 0.99f) {
 			Debug.Log ("DISABLE THE MOVER");
 			this.enabled = false;
 		}

@@ -24,6 +24,10 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	public ServiceData ServiceDat {get{ return m_serviceData; }}
 	private ServiceData m_serviceData;
 
+    public string typeName;
+
+    public TextMesh Label;
+
 
 	//[SerializeField]
 	//private Mesh[] m_cellMeshes;
@@ -39,6 +43,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	{
 		m_rigidBody = GetComponent<Rigidbody> ();
         this.gameObject.AddComponent<RailMover>();
+      
 	}
 
 	public void Initialise(ServiceData a_data)
@@ -61,6 +66,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 				break;
 			case "FAST":
 				m_serviceType = ServiceType.FAST;
+                typeName = "FAST";
 				col = Color.blue;
 				break;
 			case "GROWTH":
@@ -79,10 +85,16 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 				m_serviceType = ServiceType.SHOP;
 				col = Color.red;
 				break;
+            default:
+                m_serviceType = ServiceType.FAST;
+                col = Color.blue;
+                break;
 		}
 		gameObject.transform.localScale = Vector3.one * m_serviceData.ServiceWeighting;
 		GetComponent<MeshRenderer> ().material.color = col;
         transform.parent = null;
+
+        Label.text = "";
 
         CreateReversedMesh();
 	}
@@ -97,6 +109,12 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
         Destroy(clone.GetComponent<Rigidbody>());
         Destroy(clone.GetComponent<SphereCollider>());
         Destroy(clone.GetComponent<Subcell>());
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (CameraInputManager.Instance.m_CurrentPhase == CameraInputManager.Phase.MainCellPhase)
+        VFXManager.Instance.ElectricPulse(this.transform.position, this.gameObject, collision.gameObject);
     }
 
 	public void OnPointerClick(PointerEventData pointerEventData)
@@ -128,7 +146,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 
                         break;
                     case CameraInputManager.Phase.FocusedSubCellPhase:
-                        
+                        Debug.Log(ServiceDat.ServiceName);
+                        //CameraInputManager.Instance.EnterSubCell();
                         CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.InsideSubCellPhase);
                         break;
                     default:
