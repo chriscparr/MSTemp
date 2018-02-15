@@ -20,7 +20,9 @@ public class ModelManager : MonoBehaviour
 	public bool IsInitialised {get { return m_isInitialised; }}
 	private bool m_isInitialised = false;
 
+	public Subcell HighlightedSubcell {get { return m_highlightedSubcell; }}
 	private Subcell m_highlightedSubcell;
+
 	private Light m_highlight;
 	private bool m_highlightActive = false;
 
