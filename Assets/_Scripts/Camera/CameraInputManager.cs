@@ -91,6 +91,7 @@ public class CameraInputManager : MonoBehaviour {
 	public void ResetPosition()
 	{
 		Camera.main.transform.position = m_CachedPosition;
+		Camera.main.transform.LookAt (Vector3.zero);
 	}
 
     public void FocusOnSubCell(Subcell selectedCell)
