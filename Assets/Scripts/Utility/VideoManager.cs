@@ -124,6 +124,8 @@ public class VideoManager : MonoBehaviour {
             print("SHOP VID " + s);
         }
 
+        // TODO I AM A PUSH CHANGE, PLEASE IGNORE ME
+
         var videoPlayer = Camera.main.gameObject.AddComponent<VideoPlayer>();
         videoPlayer.playOnAwake = false;
         videoPlayer.renderMode = UnityEngine.Video.VideoRenderMode.CameraNearPlane;
