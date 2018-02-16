@@ -449,9 +449,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mainContainerPrefab: {fileID: 1402283628938490, guid: 85a6ee7354a824e09844da9dc23551b6,
     type: 2}
-  m_subcellPrefab: {fileID: 1392636984587748, guid: a622407b4cc66412989a580c372fc66c,
-    type: 2}
   m_modelRoot: {fileID: 1782334244}
+  m_modelPrefabDefs:
+  - PrefabName: AGILE
+    PrefabGameObject: {fileID: 1156046861805356, guid: 7037847da678a4ec8b5f0074dd62c0fc,
+      type: 2}
+  - PrefabName: CONTENT
+    PrefabGameObject: {fileID: 1949097375708262, guid: 44a10294ea522462dbc8dae3b80ba8eb,
+      type: 2}
+  - PrefabName: DATA
+    PrefabGameObject: {fileID: 1508580368022082, guid: 00efed0cc558843f19f9cbd260a7cc4e,
+      type: 2}
+  - PrefabName: FAST
+    PrefabGameObject: {fileID: 1533463459065674, guid: 37db171f22d704d43b7a954c2886921a,
+      type: 2}
+  - PrefabName: GROWTH
+    PrefabGameObject: {fileID: 1981201059961054, guid: 4a94730e7e5f047199a2edd03e79d107,
+      type: 2}
+  - PrefabName: LIFE
+    PrefabGameObject: {fileID: 1999673112281984, guid: bf392675460994e81beea4064d8fa054,
+      type: 2}
+  - PrefabName: LOOP
+    PrefabGameObject: {fileID: 1629898729059758, guid: 8a2a64077661d4a4c94a424237dbf522,
+      type: 2}
+  - PrefabName: SHOP
+    PrefabGameObject: {fileID: 1273531743002108, guid: 9c5708ad99e7946f48552bfb520c050e,
+      type: 2}
 --- !u!114 &1724715071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -495,6 +518,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1782334245}
+  - component: {fileID: 1782334246}
   m_Layer: 0
   m_Name: ModelRoot
   m_TagString: Untagged
@@ -516,6 +540,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1782334246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1782334244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 694bb6381e57446838e3533bcf96a6aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SynapsePrefab: {fileID: 1569196351689810, guid: 25937f31dcb384be58fd73f9707203de,
+    type: 2}
+  NumberOfSynapsesToGenerate: 3
+  BoundingSphere: {fileID: 0}
+  MinimumRadiusRandomisation: 2.5
+  MaximumRadiusRandomisation: 5
+  MinimumDistanceRandomisation: -10
+  MaximumDistanceRandomisation: 10
+  shouldIEndWhereIBegin: 1
+  minimumNumberOfNodes: 4
+  maximumNumberOfNodes: 10
 --- !u!1 &1838350190
 GameObject:
   m_ObjectHideFlags: 0
