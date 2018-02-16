@@ -16,7 +16,7 @@ public class AudioManager : MonoBehaviour
 
     public DoubleAudioSource dSource;
 
-    [Header("Leave me blank")]
+	[HideInInspector]
     public AudioSource vidSauce;
     public AudioSource previousTrack;
     
