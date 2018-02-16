@@ -387,6 +387,7 @@ GameObject:
   - component: {fileID: 1724715070}
   - component: {fileID: 1724715071}
   - component: {fileID: 1724715072}
+  - component: {fileID: 1724715073}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -412,6 +413,8 @@ MonoBehaviour:
   dSource: {fileID: 0}
   vidSauce: {fileID: 0}
   previousTrack: {fileID: 0}
+  fadeOutSpeed: 0.5
+  fadeInSpeed: 0.5
 --- !u!114 &1724715068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -510,6 +513,20 @@ MonoBehaviour:
   maxGenerations: 6
   minChaos: 0.15
   maxChaos: 0.5
+--- !u!114 &1724715073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1724715066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 145d7b56080004056b073f21419973de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FastVideos: []
+  m_ShopVideos: []
+  m_ContentVideos: []
 --- !u!1 &1782334244
 GameObject:
   m_ObjectHideFlags: 0
@@ -605,6 +622,8 @@ MonoBehaviour:
   m_endPresentationViewPrefab: {fileID: 1269443973304594, guid: a7d2c0a6162aa491b8faaee03e5566ac,
     type: 2}
   m_serviceSummaryViewPrefab: {fileID: 1469433790401032, guid: 5ac48cf721e204f6d901a9bbed70ff83,
+    type: 2}
+  m_caseStudyViewPrefab: {fileID: 1419069704689890, guid: 475ddee996e864d59893d700fd9e487e,
     type: 2}
 --- !u!114 &1838350192
 MonoBehaviour:
