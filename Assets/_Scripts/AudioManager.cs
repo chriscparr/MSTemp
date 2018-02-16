@@ -19,6 +19,9 @@ public class AudioManager : MonoBehaviour
     [Header("Leave me blank")]
     public AudioSource vidSauce;
     public AudioSource previousTrack;
+
+    public float fadeOutSpeed = 0.5f;
+    public float fadeInSpeed = 0.5f;
     
 
 	private void Awake()
@@ -36,9 +39,9 @@ public class AudioManager : MonoBehaviour
         foreach (AudioSource asX in Camera.main.gameObject.GetComponents<AudioSource>())
         {
             if (asX.isPlaying)
-            {
-                asX.Pause();
+            {  
                 previousTrack = asX;
+                StartCoroutine("FadeOut", asX);
             }
         }
 
@@ -48,8 +51,27 @@ public class AudioManager : MonoBehaviour
 
     public void Unpause()
     {
-        previousTrack.UnPause();
+        StartCoroutine("FadeIn", previousTrack);
     }
+
+    public IEnumerator FadeOut (AudioSource a)
+    {
+        while (a.volume > 0)
+        {
+            a.volume -= fadeOutSpeed * Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    public IEnumerator FadeIn (AudioSource a)
+    {
+        while (a.volume < 1)
+        {
+            a.volume += fadeInSpeed * Time.deltaTime;
+            yield return null;
+        }
+    }
+
 	// Update is called once per frame
 	public void AddVideoAudio()
     {

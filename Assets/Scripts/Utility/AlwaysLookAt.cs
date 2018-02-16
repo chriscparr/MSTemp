@@ -9,6 +9,7 @@ public class AlwaysLookAt : MonoBehaviour {
     void Start()
     {
         mainCam = GameObject.FindGameObjectWithTag ("MainCamera").transform;
+        transform.localPosition = Vector3.zero;
     }
     
     // Update is called once per frame

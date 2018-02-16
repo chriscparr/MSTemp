@@ -634,6 +634,7 @@ GameObject:
   - component: {fileID: 1014088785}
   - component: {fileID: 1014088784}
   - component: {fileID: 1014088783}
+  - component: {fileID: 1014088787}
   m_Layer: 5
   m_Name: TEMPORARY AUDIO CANVAS
   m_TagString: Untagged
@@ -720,6 +721,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!225 &1014088787
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1014088782}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1107236394
 GameObject:
   m_ObjectHideFlags: 0
@@ -1553,6 +1565,7 @@ MonoBehaviour:
   ease: 0
   thisPath: {fileID: 0}
   maxTime: 5
+  nodeI: 0
   currentServiceType: 
 --- !u!65 &1448073848
 BoxCollider:
@@ -1869,6 +1882,8 @@ MonoBehaviour:
   m_endPresentationViewPrefab: {fileID: 1269443973304594, guid: a7d2c0a6162aa491b8faaee03e5566ac,
     type: 2}
   m_serviceSummaryViewPrefab: {fileID: 1469433790401032, guid: 5ac48cf721e204f6d901a9bbed70ff83,
+    type: 2}
+  m_caseStudyViewPrefab: {fileID: 1419069704689890, guid: 475ddee996e864d59893d700fd9e487e,
     type: 2}
 --- !u!114 &1557258822
 MonoBehaviour:
@@ -2237,9 +2252,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mainContainerPrefab: {fileID: 1402283628938490, guid: 85a6ee7354a824e09844da9dc23551b6,
     type: 2}
-  m_subcellPrefab: {fileID: 1392636984587748, guid: a622407b4cc66412989a580c372fc66c,
-    type: 2}
   m_modelRoot: {fileID: 604309239}
+  m_modelPrefabDefs:
+  - PrefabName: AGILE
+    PrefabGameObject: {fileID: 1156046861805356, guid: 7037847da678a4ec8b5f0074dd62c0fc,
+      type: 2}
+  - PrefabName: CONTENT
+    PrefabGameObject: {fileID: 1949097375708262, guid: 44a10294ea522462dbc8dae3b80ba8eb,
+      type: 2}
+  - PrefabName: DATA
+    PrefabGameObject: {fileID: 1508580368022082, guid: 00efed0cc558843f19f9cbd260a7cc4e,
+      type: 2}
+  - PrefabName: FAST
+    PrefabGameObject: {fileID: 1533463459065674, guid: 37db171f22d704d43b7a954c2886921a,
+      type: 2}
+  - PrefabName: GROWTH
+    PrefabGameObject: {fileID: 1981201059961054, guid: 4a94730e7e5f047199a2edd03e79d107,
+      type: 2}
+  - PrefabName: LIFE
+    PrefabGameObject: {fileID: 1999673112281984, guid: bf392675460994e81beea4064d8fa054,
+      type: 2}
+  - PrefabName: LOOP
+    PrefabGameObject: {fileID: 1629898729059758, guid: 8a2a64077661d4a4c94a424237dbf522,
+      type: 2}
+  - PrefabName: SHOP
+    PrefabGameObject: {fileID: 1273531743002108, guid: 9c5708ad99e7946f48552bfb520c050e,
+      type: 2}
 --- !u!114 &1920632292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2258,6 +2296,8 @@ MonoBehaviour:
   dSource: {fileID: 1448073852}
   vidSauce: {fileID: 0}
   previousTrack: {fileID: 0}
+  fadeOutSpeed: 0.5
+  fadeInSpeed: 0.5
 --- !u!114 &1920632293
 MonoBehaviour:
   m_ObjectHideFlags: 0

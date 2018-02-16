@@ -51,7 +51,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 			case "DATA":
 				break;
 			case "FAST":
-				//numberOfStudiesInService = VideoManager.Instance.m_FastVideos.Count+1;
+				numberOfStudiesInService = VideoManager.Instance.m_FastVideos.Count+1;
 				break;
 			case "GROWTH":
 				break;

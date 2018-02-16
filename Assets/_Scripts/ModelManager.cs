@@ -150,11 +150,13 @@ public class ModelManager : MonoBehaviour
         // here, you are focusing on a sub cell
         // so zoom into it, get up nice and close.
         // let the camera input manager deal with the movement
-        
+
+        acell.ToggleLabelText(true);
 		m_highlight.enabled = true;
         // CameraInputManager.Instance.SetLookAtTarget(m_highlightedSubcell.transform);
         // CameraInputManager.Instance.FollowTarget();
         yield return new WaitForSeconds(3);
+        acell.ToggleLabelText(false);
 		m_highlightActive = false;
 		m_highlight.enabled = false;
 

@@ -26,7 +26,9 @@ public class OnRailsMovement : MonoBehaviour {
 
 	private float ourNodeCount = 1;
 	int i = 0;
-    int nodeI = 0;
+
+    [SerializeField]
+    public int nodeI = 0;
 
     public static bool amDoing;
     public static bool amGoing;
@@ -167,10 +169,12 @@ public class OnRailsMovement : MonoBehaviour {
 
             VideoManager.Instance.StopVideo();
             Debug.Log("CURRENT NODE = " + nodeI.ToString() + " / and OUR NODE LIMIT = " + thisPath.nodeCount.ToString());
-            if (nodeI >= thisPath.nodeCount)
+            if (nodeI <= 0)
             {
                 // get out, we are done.
-                CameraInputManager.Instance.ResetPosition();
+
+                CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
+                CameraInputManager.Instance.ResetPosition(true);
 
             }
             else
@@ -180,6 +184,16 @@ public class OnRailsMovement : MonoBehaviour {
                 MoveTo();
             }
         }
+    }
+
+    public void GoHome()
+    {
+        VideoManager.Instance.StopVideo();
+
+        nodeI = 0;
+        i = 0;
+        CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
+        CameraInputManager.Instance.ResetPosition(true);
     }
 
 
@@ -192,7 +206,8 @@ public class OnRailsMovement : MonoBehaviour {
         {
             nodeI = 0;
             i = 0;
-			CameraInputManager.Instance.ResetPosition ();
+            CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
+			CameraInputManager.Instance.ResetPosition (true);
         }
         else
         {

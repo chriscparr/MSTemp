@@ -75,12 +75,15 @@ public class VideoManager : MonoBehaviour {
         videoPlayer.EnableAudioTrack(0, true);
 
         videoPlayer.SetTargetAudioSource(0, tempAud);
+        tempAud.volume = 0;
+        AudioManager.Instance.StartCoroutine("FadeIn", tempAud);
         videoPlayer.Play();
     }
 
     public void StopVideo()
     {
         var videoPlayer = Camera.main.gameObject.GetComponent<VideoPlayer>();
+        AudioManager.Instance.StartCoroutine("FadeOut", AudioManager.Instance.vidSauce);
         AudioManager.Instance.vidSauce = null;
         videoPlayer.Stop();
         AudioManager.Instance.Unpause();

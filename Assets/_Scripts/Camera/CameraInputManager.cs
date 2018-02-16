@@ -90,16 +90,24 @@ public class CameraInputManager : MonoBehaviour {
 		}
 	}
 
-	public void ResetPosition()
+	public void ResetPosition(bool doSmoothly = false)
 	{
-		Camera.main.transform.position = m_CachedPosition;
-		Camera.main.transform.LookAt (Vector3.zero);
+        // TODO make me a tween, so we gradually go back to the main phase, dont just snap it back.
+        if (!doSmoothly)
+        {
+            Camera.main.transform.position = m_CachedPosition;
+            Camera.main.transform.eulerAngles = Vector3.zero;
+        }
+        else
+        {
+            m_MainCamera.GetComponent<RailMover>().TweenToPosition(m_CachedPosition, 5, false, iTween.EaseType.easeOutSine);
+            Camera.main.transform.eulerAngles = Vector3.zero;
+        }
 	}
 
 	public void FocusOnSubCell(Subcell selectedCell)
 	{
 		m_selectedCell = selectedCell;
-		m_CachedPosition = m_MainCamera.transform.position;
 		m_CurrentTarget = selectedCell.transform;
 
 		Vector3 desiredPosition = Vector3.zero;	//m_mainContainer is always at zero, lets keep it private if we can...
@@ -109,7 +117,7 @@ public class CameraInputManager : MonoBehaviour {
 		selectedCell.gameObject.AddComponent<RailMover>();
 		m_Mover = selectedCell.GetComponent<RailMover>();
 
-		m_Mover.TweenToPosition(desiredPosition, 5f, false, iTween.EaseType.easeInOutSine);
+		m_Mover.TweenToPosition(desiredPosition, 3f, false, iTween.EaseType.easeInOutSine);
 
 		desiredPosition.z -= m_DistanceFromSubCell;
 
@@ -117,18 +125,22 @@ public class CameraInputManager : MonoBehaviour {
 		// TODO: Consider increasing/decreasing the m_DistanceFromSubcell along with it
 		// so you're always a good distance away from the subcell
 
-		m_MainCamera.GetComponent<RailMover>().TweenToPosition(desiredPosition, 5f, false, iTween.EaseType.easeInOutSine);
+		m_MainCamera.GetComponent<RailMover>().TweenToPosition(desiredPosition, 3f, false, iTween.EaseType.easeInOutSine);
 
 		// UIManager.Instance.ShowServiceSummaryView (selectedCell.ServiceDat);
 	}
 
 	public void EnterSubCell(int numberOfStudiesToInstantiate)
 	{
+        m_CachedPosition = m_MainCamera.transform.position;
+
 		Vector3 desiredPosition = m_selectedCell.transform.position;
 		Camera.main.GetComponent<RailMover>().TweenToPosition(desiredPosition, m_ZoomSpeed, false, iTween.EaseType.easeInElastic);
 		SynapseGenerator.Instance.GenerateSynapses(desiredPosition, m_selectedCell.gameObject);
 		CaseStudyManager.Instance.GenerateCaseStudies(m_selectedCell.gameObject, numberOfStudiesToInstantiate, m_selectedCell.ServiceDat.ServiceName);
 		Camera.main.GetComponent<OnRailsMovement>().currentServiceType = m_selectedCell.ServiceDat.ServiceName;
+
+        UIManager.Instance.ShowCaseStudyView();
 	}
 
 	private void Update()
