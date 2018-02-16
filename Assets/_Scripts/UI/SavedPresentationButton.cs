@@ -21,7 +21,7 @@ public class SavedPresentationButton : MonoBehaviour
 
 	private void InitButton()
 	{
-		m_buttonText.text = m_pData.ClientName;
+		m_buttonText.text = m_pData.ClientName.ToUpper ();
 		m_mainButton.onClick.AddListener (OnButtonClicked);
 	}
 
