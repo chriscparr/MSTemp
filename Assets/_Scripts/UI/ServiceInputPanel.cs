@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Text;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +21,17 @@ public class ServiceInputPanel : MonoBehaviour
 	private Button m_submitBtn;
 	[SerializeField]
 	private Button m_closeBtn;
+	[SerializeField]
+	private Button m_addElementButton;
+	[SerializeField]
+	private Button m_removeElementButton;
+	[SerializeField]
+	private Text m_listDisplay;
+
+	private const string DisplayPrefix = "Current Videos: [";
+	private const string DisplaySuffix = "]";
+	private List<string> m_videoPathsList = new List<string>();
+	private VideoPicker m_videoPicker;
 
 	private string[] m_serviceTypes = new string[] { 
 		"FAST",
@@ -32,22 +44,65 @@ public class ServiceInputPanel : MonoBehaviour
 		"LIFE"
 	};
 
+	private void Awake()
+	{
+		m_videoPicker = gameObject.AddComponent<VideoPicker> ();
+	}
+
+	private void Start () 
+	{
+		m_typeSelect.AddOptions (new List<string> (m_serviceTypes));
+	}
+
 	private void OnEnable()
 	{
 		m_submitBtn.onClick.AddListener (OnSubmitButton);
 		m_closeBtn.onClick.AddListener (OnCloseButton);
+		m_addElementButton.onClick.AddListener (AddVideoToList);
+		m_removeElementButton.onClick.AddListener (RemoveVideoFromList);
+		m_videoPicker.OnVideoSelected += VideoSelectedEventHandler;
 	}
 
 	private void OnDisable()
 	{
 		m_submitBtn.onClick.RemoveListener (OnSubmitButton);
 		m_closeBtn.onClick.RemoveListener (OnCloseButton);
+		m_addElementButton.onClick.RemoveListener (AddVideoToList);
+		m_removeElementButton.onClick.RemoveListener (RemoveVideoFromList);
+		m_videoPicker.OnVideoSelected -= VideoSelectedEventHandler;
 	}
 
-
-	private void Start () 
+	private void VideoSelectedEventHandler(string a_videoPath)
 	{
-		m_typeSelect.AddOptions (new List<string> (m_serviceTypes));
+		m_videoPathsList.Add (a_videoPath);
+		RefreshVideoListDisplay ();
+	}
+
+	private void AddVideoToList()
+	{
+		m_videoPicker.ShowVideoPicker ();
+	}
+
+	private void RemoveVideoFromList()
+	{
+		m_videoPathsList.RemoveAt (m_videoPathsList.Count-1);
+		RefreshVideoListDisplay ();
+	}
+
+	private void RefreshVideoListDisplay()
+	{
+		StringBuilder stringList = new StringBuilder();
+		stringList.Append (DisplayPrefix);
+		for (int i = 0; i < m_videoPathsList.Count; i++)
+		{
+			stringList.Append (m_videoPathsList [i]);
+			if (i != m_videoPathsList.Count - 1)
+			{
+				stringList.Append (",");
+			}
+		}
+		stringList.Append (DisplaySuffix);
+		m_listDisplay.text = stringList.ToString ();
 	}
 
 	private void OnSubmitButton()
@@ -56,13 +111,12 @@ public class ServiceInputPanel : MonoBehaviour
 		servData.ServiceName = m_serviceTypes [m_typeSelect.value];
 		servData.ServiceWeighting = m_weightingVal.value;
 		servData.ServiceIntroText = m_introText.text;
-		servData.ServiceVideoPaths = new string[] {};
+		servData.ServiceVideoPaths = m_videoPathsList.ToArray ();
 
 		if (OnSubmitService != null)
 		{
 			OnSubmitService (servData);
 		}
-
 		OnCloseButton ();
 	}
 

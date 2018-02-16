@@ -116,8 +116,6 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 				break;
 			case 2:
 				Debug.Log (name + " Game Object Double Clicked!");
-				CameraInputManager.Phase curPhase = CameraInputManager.Instance.m_CurrentPhase;
-
 				if (CameraInputManager.Instance.m_CurrentPhase == CameraInputManager.Phase.MainCellPhase)
 				{
 					CameraInputManager.Instance.FocusOnSubCell (this);

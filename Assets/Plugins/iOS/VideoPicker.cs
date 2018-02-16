@@ -6,19 +6,38 @@ using System;
 
 //source: https://gist.github.com/naojitaniguchi/7d71267814ccd0ca719e
 
-public class VideoPicker : MonoBehaviour {
-
-	public Texture2D shareButtonImage; // Use this for initialization
+public class VideoPicker : MonoBehaviour 
+{
+	public delegate void VideoPickerInputAction(string a_videoPath);
+	public VideoPickerInputAction OnVideoSelected;
 
 	[DllImport("__Internal")]
 	private static extern void OpenVideoPicker(string game_object_name, string function_name);
 
+	public void ShowVideoPicker()
+	{
+		OpenVideoPicker( this.gameObject.name, "VideoSelected" );
+	}
+
+	private void VideoSelected(string a_selectedVideoPath)
+	{
+		Debug.Log ("Video Selected");
+		if (OnVideoSelected != null)
+		{
+			OnVideoSelected (a_selectedVideoPath);
+		}
+	}
+
+
+	//public Texture2D shareButtonImage;  Use this for initialization
+	/*
 	void OnGUI ()
 	{
 		if (GUILayout.Button (shareButtonImage, GUIStyle.none, GUILayout.Width (128), GUILayout.Height (128))) {
 			OpenVideoPicker( this.gameObject.name, "VideoPicked" );
 		}	
 	}
+
 
 	void VideoPicked( string path ){
 		
@@ -43,5 +62,5 @@ public class VideoPicker : MonoBehaviour {
 		videoPlayer.Play ();
 		// End of Ali's changes 6/2/18
 	}
-		
+	*/		
 }
