@@ -148,6 +148,7 @@ public class OnRailsMovement : MonoBehaviour {
             if (nodeI >= thisPath.nodeCount)
             {
                 // get out, we are done.
+                CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
 				CameraInputManager.Instance.ResetPosition();
 
             }

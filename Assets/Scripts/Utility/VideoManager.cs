@@ -29,76 +29,6 @@ public class VideoManager : MonoBehaviour {
 
     void Start()
     {
-        //DirectoryInfo directory = new DirectoryInfo(Resources.Load);
-
-        //DirectoryInfo[] subDirectories = directory.GetDirectories();
-
-        //List<string> allPotentialSubdirectories = new List<string>();
-
-        //foreach (DirectoryInfo dic in subDirectories)
-        //{
-        //    allPotentialSubdirectories.Add(dic.Name);
-        //}
-
-        //for (int i = 0; i < subDirectories.Length; i++)
-        //{
-        //    DirectoryInfo sInfo = subDirectories[i];
-
-        //    FileInfo[] sFiles = sInfo.GetFiles();
-
-        //    //for (int p = 0; p < sFiles.Length; p++)
-        //    //{
-
-        //        switch (subDirectories[i].Name)
-        //        {
-        //            case "AGILE":
-
-        //                break;
-        //            case "CONTENT":
-
-        //            foreach (FileInfo content in sFiles)
-        //            {
-        //                if (!content.FullName.Contains("meta") && !content.FullName.Contains(".DS_Store"))
-        //                m_ContentVideos.Add(content.FullName);
-        //            }
-        //                break;
-        //            case "DATA":
-
-        //                break;
-        //            case "FAST":
-        //            foreach (FileInfo content in sFiles)
-        //            {
-        //                if (!content.FullName.Contains("meta") && !content.FullName.Contains(".DS_Store"))
-        //                m_FastVideos.Add(content.FullName);
-        //            }
-        //                break;
-        //            case "GROWTH":
-
-        //                break;
-        //            case "LIFE":
-
-        //                break;
-        //            case "LOOP":
-
-        //                break;
-        //            case "SHOP":
-        //            foreach (FileInfo content in sFiles)
-        //            {
-        //                if (!content.FullName.Contains("meta") && !content.FullName.Contains(".DS_Store"))
-        //                m_ShopVideos.Add(content.FullName);
-        //            }
-        //                break;
-        //        //}
-        //    }
-        //}
-
-        //foreach (FileInfo file in subDirectories)
-        //{
-        //    if (!file.FullName.Contains(".meta"))
-        //    {
-        //        print(file.FullName);
-        //    }
-        //}
 
         var URLs = Resources.LoadAll("FAST");
         List<VideoClip> vids = new List<VideoClip>();
@@ -124,24 +54,9 @@ public class VideoManager : MonoBehaviour {
             print("SHOP VID " + s);
         }
 
-        // TODO I AM A PUSH CHANGE, PLEASE IGNORE ME
-
         var videoPlayer = Camera.main.gameObject.AddComponent<VideoPlayer>();
         videoPlayer.playOnAwake = false;
         videoPlayer.renderMode = UnityEngine.Video.VideoRenderMode.CameraNearPlane;
-
-        //foreach (FileInfo file in vids)
-        //{
-        //    if (!file.FullName.Contains(".meta"))
-        //    {
-        //        videoFilePaths.Add(file.FullName);
-        //    }
-        //}
-
-        //foreach (string s in videoFilePaths)
-        //{
-        //    print(s);
-        //}
     }
 
     public void PlayVideo(VideoClip vidClip)

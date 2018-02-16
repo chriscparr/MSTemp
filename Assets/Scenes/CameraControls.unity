@@ -668,7 +668,7 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -2309,7 +2309,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SynapsePrefab: {fileID: 1569196351689810, guid: 25937f31dcb384be58fd73f9707203de,
     type: 2}
-  NumberOfSynapsesToGenerate: 2
+  NumberOfSynapsesToGenerate: 10
   BoundingSphere: {fileID: 0}
   MinimumRadiusRandomisation: 1
   MaximumRadiusRandomisation: 2
