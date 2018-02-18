@@ -9,6 +9,8 @@ public class ModelManager : MonoBehaviour
 	[SerializeField]
 	private GameObject m_modelRoot;
 	[SerializeField]
+	private LightningBoltPooler m_boltPooler;
+	[SerializeField]
 	private	NamedPrefab[] m_modelPrefabDefs;
 
 	private Dictionary<string, GameObject> m_modelPrefabs = new Dictionary<string, GameObject> ();
@@ -27,6 +29,7 @@ public class ModelManager : MonoBehaviour
 
 	private Light m_highlight;
 	private bool m_highlightActive = false;
+
 
 	private Vector3[] m_placementVectors = new Vector3[] { 
 		new Vector3(-1f, 1f, -1f),
@@ -48,6 +51,7 @@ public class ModelManager : MonoBehaviour
 		{
 			m_modelPrefabs.Add (np.PrefabName, np.PrefabGameObject);
 		}
+		m_boltPooler.InitialisePool (20); 
 	}
 
 	public void ScaleSubcell(Subcell a_subcell, float a_newScale)
@@ -119,6 +123,11 @@ public class ModelManager : MonoBehaviour
 		}
 	}
 
+	public void OnSubcellCollision(GameObject a_objOne, GameObject a_objTwo)
+	{
+		m_boltPooler.UseBoltFromPool (a_objOne, a_objTwo);
+	}
+
 	public void ShakeModel()
 	{
 		if (m_isInitialised)
@@ -130,6 +139,7 @@ public class ModelManager : MonoBehaviour
 			}
 		}
 	}
+
 
 	public void ClearModel()
 	{

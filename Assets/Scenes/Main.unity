@@ -453,6 +453,7 @@ MonoBehaviour:
   m_mainContainerPrefab: {fileID: 1402283628938490, guid: 85a6ee7354a824e09844da9dc23551b6,
     type: 2}
   m_modelRoot: {fileID: 1782334244}
+  m_boltPooler: {fileID: 1782334247}
   m_modelPrefabDefs:
   - PrefabName: AGILE
     PrefabGameObject: {fileID: 1156046861805356, guid: 7037847da678a4ec8b5f0074dd62c0fc,
@@ -536,6 +537,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1782334245}
   - component: {fileID: 1782334246}
+  - component: {fileID: 1782334247}
   m_Layer: 0
   m_Name: ModelRoot
   m_TagString: Untagged
@@ -579,6 +581,19 @@ MonoBehaviour:
   shouldIEndWhereIBegin: 1
   minimumNumberOfNodes: 4
   maximumNumberOfNodes: 10
+--- !u!114 &1782334247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1782334244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bc8d2db34fea4aa69ec6018233301c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_lightningBoltPrefab: {fileID: 1095455170291982, guid: f05434c3927e54c34abcd9b123468854,
+    type: 2}
 --- !u!1 &1838350190
 GameObject:
   m_ObjectHideFlags: 0
