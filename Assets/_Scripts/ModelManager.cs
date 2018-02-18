@@ -51,7 +51,7 @@ public class ModelManager : MonoBehaviour
 		{
 			m_modelPrefabs.Add (np.PrefabName, np.PrefabGameObject);
 		}
-		m_boltPooler.InitialisePool (20); 
+		m_boltPooler.InitialisePool (10); 
 	}
 
 	public void ScaleSubcell(Subcell a_subcell, float a_newScale)
