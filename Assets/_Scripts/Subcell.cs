@@ -92,7 +92,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
     {
 		if (CameraInputManager.Instance.m_CurrentPhase == CameraInputManager.Phase.MainCellPhase)
 		{
-			VFXManager.Instance.ElectricPulse(this.transform.position, this.gameObject, collision.gameObject);
+			ModelManager.Instance.OnSubcellCollision(this.gameObject, collision.gameObject);
 		}
     }
 
