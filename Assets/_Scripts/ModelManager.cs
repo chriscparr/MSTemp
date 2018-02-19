@@ -30,6 +30,8 @@ public class ModelManager : MonoBehaviour
 	private Light m_highlight;
 	private bool m_highlightActive = false;
 
+	private Vector3 m_minSubcellScale = new Vector3 (0.1f, 0.1f, 0.1f);
+	private Vector3 m_maxSubcellScale = new Vector3 (5f, 5f, 5f);
 
 	private Vector3[] m_placementVectors = new Vector3[] { 
 		new Vector3(-1f, 1f, -1f),
@@ -56,7 +58,10 @@ public class ModelManager : MonoBehaviour
 
 	public void ScaleSubcell(Subcell a_subcell, float a_newScale)
 	{
-		a_subcell.transform.localScale = new Vector3 (a_newScale,a_newScale,a_newScale);
+		Vector3 scale = a_subcell.transform.localScale + new Vector3 (a_newScale, a_newScale, a_newScale);
+		scale = Vector3.Max (m_minSubcellScale, scale);
+		scale = Vector3.Min (m_maxSubcellScale, scale);
+		a_subcell.transform.localScale = scale;
 		RecalculateModelScale ();
 	}
 

@@ -34,11 +34,7 @@ public class CameraInputManager : MonoBehaviour {
 	private Vector3 m_CachedPosition;
 	private Subcell m_selectedCell;
 	private RailMover m_Mover;
-	private Vector3 m_SafetyScaleVector = new Vector3(3,3,3);
 
-	private Vector2 m_initialTouchPosition1;
-
-	private float m_pinchDistance;
 
 	private void Awake() 
 	{
@@ -147,15 +143,9 @@ public class CameraInputManager : MonoBehaviour {
 	{
 		if (Input.touchCount == 2 && m_CurrentPhase == Phase.FocusedSubCellPhase)
 		{
-			if (Input.GetTouch (0).phase == TouchPhase.Began || Input.GetTouch (1).phase == TouchPhase.Began)
-			{
-				Vector2 dist = Input.GetTouch (0).position - Input.GetTouch (1).position;
-				m_pinchDistance = dist.magnitude;
-			}
 			HandleTwoFingers();
 			return;
 		}
-
 		if (Input.touchCount == 1)
 		{
 			HandleOneFinger ();
@@ -189,24 +179,27 @@ public class CameraInputManager : MonoBehaviour {
 	{
 		Touch touchZero = Input.GetTouch(0);
 		Touch touchOne = Input.GetTouch(1);
-		float deltaPinchDistance;
-		if (touchZero.phase == TouchPhase.Moved || touchOne.phase == TouchPhase.Moved)
-		{
-			Vector2 dist = touchZero.position - touchOne.position;
-			deltaPinchDistance = dist.magnitude - m_pinchDistance;
-			ApplySubcellScale (deltaPinchDistance * 0.1f);
-		}
+
+		// Find the position in the previous frame of each touch.
+		Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
+		Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
+
+		// Find the magnitude of the vector (the distance) between the touches in each frame.
+		float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+		float touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
+
+		// Find the difference in the distances between each frame.
+		float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
+
+		ApplySubcellScale (deltaMagnitudeDiff * Time.deltaTime * -0.5f);
 	}
 
 	private void ApplySubcellScale(float a_newScale)
 	{
 		if (m_selectedCell != null)
 		{
-			if (a_newScale > 0f && a_newScale < 5f)
-			{
-				Debug.Log ("setting Subcell scale to: " + a_newScale.ToString ());
-				ModelManager.Instance.ScaleSubcell (m_selectedCell, a_newScale);
-			}
+			Debug.Log ("Adding " + a_newScale.ToString () + " to Subcell scale");
+			ModelManager.Instance.ScaleSubcell (m_selectedCell, a_newScale);
 		}
 	}
 
