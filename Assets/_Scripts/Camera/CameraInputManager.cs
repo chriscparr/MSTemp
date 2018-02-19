@@ -15,7 +15,7 @@ public class CameraInputManager : MonoBehaviour {
 
 	public static CameraInputManager Instance { get { return s_instance; } }
 
-	public float zAxisLimit = 0;
+	private float m_camVectorMagLowerBound = 5f;
 
 	private static CameraInputManager s_instance = null;
 
@@ -29,6 +29,10 @@ public class CameraInputManager : MonoBehaviour {
 	private GameObject m_MainCamera;
 	[SerializeField]
 	private float m_DistanceFromSubCell = 25;
+	[SerializeField]
+	private float m_touchThresholdX = 20f;
+	[SerializeField]
+	private float m_touchThresholdY = 20f;
 
 	private Transform m_CurrentTarget;
 	private Vector3 m_CachedPosition;
@@ -157,22 +161,21 @@ public class CameraInputManager : MonoBehaviour {
 		Touch touch = Input.GetTouch(0);
 		if (touch.phase == TouchPhase.Moved)
 		{
-			float angleVal = touch.deltaPosition.x * Time.deltaTime;
-			Camera.main.transform.RotateAround (Vector3.zero, Vector3.up, angleVal);
-			Camera.main.transform.LookAt (Vector3.zero);
-
-			m_MainCamera.transform.Translate (transform.forward * touch.deltaPosition.y * Time.fixedDeltaTime);
+			if (touch.deltaPosition.x < -m_touchThresholdX || touch.deltaPosition.x > m_touchThresholdX)
+			{
+				float angleVal = touch.deltaPosition.x * Time.deltaTime;
+				Camera.main.transform.RotateAround (Vector3.zero, Vector3.up, angleVal);
+				Camera.main.transform.LookAt (Vector3.zero);
+			}
+			if (touch.deltaPosition.y < -m_touchThresholdY || touch.deltaPosition.y > m_touchThresholdY)
+			{
+				float camPosMagnitude = (m_MainCamera.transform.position - Vector3.zero).magnitude;
+				if (camPosMagnitude > m_camVectorMagLowerBound || touch.deltaPosition.y < 0f)
+				{
+					m_MainCamera.transform.Translate (transform.forward * touch.deltaPosition.y * Time.fixedDeltaTime);
+				}
+			}
 		}
-		/*	still needed??
-		 
-		if (m_MainCamera.transform.position.z >= zAxisLimit)
-		{
-			m_MainCamera.transform.position = new Vector3(
-				m_MainCamera.transform.position.x,
-				m_MainCamera.transform.position.y,
-				zAxisLimit);
-		}
-		*/
 	}
 
 	private void HandleTwoFingers()
@@ -191,18 +194,14 @@ public class CameraInputManager : MonoBehaviour {
 		// Find the difference in the distances between each frame.
 		float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
 
-		ApplySubcellScale (deltaMagnitudeDiff * Time.deltaTime * -0.5f);
+		ApplySubcellScale (deltaMagnitudeDiff * Time.deltaTime * -0.5f);	//-0.5 to invert axis and reduce sensitivity
 	}
 
 	private void ApplySubcellScale(float a_newScale)
 	{
 		if (m_selectedCell != null)
 		{
-			Debug.Log ("Adding " + a_newScale.ToString () + " to Subcell scale");
 			ModelManager.Instance.ScaleSubcell (m_selectedCell, a_newScale);
 		}
 	}
-
-
-
 }
