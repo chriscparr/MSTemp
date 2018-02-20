@@ -39,7 +39,7 @@ public class OnRailsMovement : MonoBehaviour {
     public string currentServiceType;
 
 
-    CaseStudyData[] c;
+    CaseStudyDataOld[] c;
 
 	// Use this for initialization
 	void Awake() {
@@ -69,7 +69,7 @@ public class OnRailsMovement : MonoBehaviour {
             c = CaseStudyManager.Instance.allCases.ToArray();
 
             // do this a different way later, please.
-            foreach (CaseStudyData g in c)
+            foreach (CaseStudyDataOld g in c)
             {
                 caseStudyPositions.Add(g.transform.position);
             }

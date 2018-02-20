@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 
-public class CaseStudyData : MonoBehaviour 
+public class CaseStudyDataOld : MonoBehaviour 
 {
     public string ID;
     // public string[] VideoPaths;
