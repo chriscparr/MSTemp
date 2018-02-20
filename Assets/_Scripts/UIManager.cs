@@ -63,7 +63,7 @@ public class UIManager : MonoBehaviour
 		m_serviceSummaryView.SetActive (true);
 		m_serviceSummaryView.GetComponent<ServiceSummaryView> ().SetupServiceView (a_sData);
 	}
-    public void ShowCaseStudyView()
+	public void ShowCaseStudyView()
     {
         m_caseStudyView.SetActive(true);
     }
