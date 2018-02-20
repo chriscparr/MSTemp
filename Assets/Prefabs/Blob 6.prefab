@@ -212,6 +212,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_labelText: {fileID: 102288023878377728}
+  m_caseCellPrefab: {fileID: 1471753851409318, guid: e3b1aa73b91e94b799dd36ca9ee35375,
+    type: 2}
 --- !u!135 &135268602491666010
 SphereCollider:
   m_ObjectHideFlags: 1

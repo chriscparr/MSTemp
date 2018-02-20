@@ -7,6 +7,8 @@ public class UIManager : MonoBehaviour
 	public static UIManager Instance {get { return s_instance;}}
 	private static UIManager s_instance = null;
 
+	public CaseStudyView CaseViewer {get { return m_caseView;}}
+
 	[SerializeField]
 	private GameObject m_loginViewPrefab;
 	[SerializeField]
@@ -32,6 +34,8 @@ public class UIManager : MonoBehaviour
 	private GameObject m_endPresentationView;
 	private GameObject m_serviceSummaryView;
     private GameObject m_caseStudyView;
+
+	private CaseStudyView m_caseView;
 
 	public void ShowLoginView()
 	{
@@ -63,7 +67,7 @@ public class UIManager : MonoBehaviour
 		m_serviceSummaryView.SetActive (true);
 		m_serviceSummaryView.GetComponent<ServiceSummaryView> ().SetupServiceView (a_sData);
 	}
-    public void ShowCaseStudyView()
+	public void ShowCaseStudyView()
     {
         m_caseStudyView.SetActive(true);
     }
@@ -81,6 +85,8 @@ public class UIManager : MonoBehaviour
 		m_endPresentationView = Instantiate<GameObject> (m_endPresentationViewPrefab, this.gameObject.transform);
 		m_serviceSummaryView = Instantiate<GameObject> (m_serviceSummaryViewPrefab, this.gameObject.transform);
         m_caseStudyView = Instantiate<GameObject>(m_caseStudyViewPrefab, this.gameObject.transform);
+
+		m_caseView = m_caseStudyView.GetComponent<CaseStudyView> ();
 
 		m_loginView.SetActive (false);
 		m_newOrSavedView.SetActive (false);

@@ -257,6 +257,9 @@ GameObject:
   - component: {fileID: 1088703393}
   - component: {fileID: 1088703392}
   - component: {fileID: 1088703394}
+  - component: {fileID: 1088703397}
+  - component: {fileID: 1088703396}
+  - component: {fileID: 1088703395}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -374,6 +377,51 @@ MonoBehaviour:
   m_InputActionsPerSecond: 10
   m_RepeatDelay: 0.5
   m_ForceModuleActive: 0
+--- !u!114 &1088703395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1088703387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66bd201bf7f1545898513ae9f50df76c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  desiredPosition: {x: 0, y: 0, z: 0}
+  speed: 0
+  easeMethod: 0
+--- !u!114 &1088703396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1088703387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9be5349834c9343549fca099ded44b8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1088703397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1088703387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01bffa8aa898b437183cd5617f7b5303, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pathName: New Path 1
+  pathColor: {r: 0, g: 1, b: 1, a: 1}
+  nodes:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  nodeCount: 2
+  initialized: 1
+  initialName: New Path 1
+  pathVisible: 0
 --- !u!1 &1724715066
 GameObject:
   m_ObjectHideFlags: 0
@@ -489,12 +537,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 917fe0a3c35074a04a7ae575b20e0c83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zAxisLimit: 0
   m_CurrentPhase: 0
   m_RotationSpeed: 5
   m_ZoomSpeed: 5
   m_MainCamera: {fileID: 1088703387}
   m_DistanceFromSubCell: 25
+  m_touchThresholdX: 20
+  m_touchThresholdY: 20
 --- !u!114 &1724715073
 MonoBehaviour:
   m_ObjectHideFlags: 0

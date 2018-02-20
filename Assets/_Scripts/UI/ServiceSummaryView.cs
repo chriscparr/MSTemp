@@ -15,7 +15,7 @@ public class ServiceSummaryView : MonoBehaviour
 	public void SetupServiceView(ServiceData a_sData)
 	{
 		m_titleText.text = a_sData.ServiceName;
-		m_introText.text = a_sData.ServiceIntroText;
+		m_introText.text = a_sData.ServiceIntroQuestion;
 	}
 
 	private void OnEnable()

@@ -22,6 +22,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 
 	[SerializeField]
 	private TextMesh m_labelText;
+	[SerializeField]
+	private GameObject m_caseCellPrefab;
 
 	public Rigidbody RigidBody {get{ return m_rigidBody; }}
 	private Rigidbody m_rigidBody;
@@ -29,9 +31,14 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	public ServiceData ServiceDat {get{ return m_serviceData; }}
 	private ServiceData m_serviceData;
 
+	public CaseCell[] CaseCells {get{ return m_caseCells; }}
+	//private Vector3[] m_caseCellPositions;
+
+
 	private float m_doubleClickInterval = 0.25f;
 	private int m_clickCount = 0;
 
+	private CaseCell[] m_caseCells;
 	private int numberOfStudiesInService = 3;	//debug value, should come from serviceData in future!
 
 	private void Awake()
@@ -64,11 +71,12 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 			default:
 				break;
 		}
-		gameObject.transform.localScale = Vector3.one * m_serviceData.ServiceWeighting;
+		gameObject.transform.localScale = Vector3.one * m_serviceData.InitialScale;
 		m_labelText.text = m_serviceData.ServiceName.ToLowerInvariant ();
 		m_labelText.gameObject.SetActive (false);
 		gameObject.AddComponent<RailMover>();
 		CreateReversedMesh();
+		GenerateCaseCells ();
 	}
 
 	public void ToggleLabelText(bool a_isActive)
@@ -84,9 +92,22 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		Destroy(clone.GetComponent<Rigidbody>());
 		Destroy(clone.GetComponent<SphereCollider>());
 		Destroy(clone.GetComponent<Subcell>());
-
         clone.AddComponent<ReverseNormals>();
     }
+
+	private void GenerateCaseCells()
+	{
+		//m_caseCellPositions = new Vector3[m_serviceData.CaseStudies.Length];
+		m_caseCells = new CaseCell[m_serviceData.CaseStudies.Length];
+		for (int i = 0; i < m_caseCells.Length; i++)
+		{
+			GameObject caseCellObj = Instantiate<GameObject>(m_caseCellPrefab, gameObject.transform);
+			caseCellObj.transform.localPosition = Random.insideUnitSphere * 0.5f;
+			//m_caseCellPositions [i] = caseCellObj.transform.position;
+			m_caseCells [i] = caseCellObj.GetComponent<CaseCell> ();
+			m_caseCells [i].Initialise (this, m_serviceData.CaseStudies [i]);
+		}
+	}
 
     public void OnCollisionEnter(Collision collision)
     {
@@ -125,7 +146,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 				if (CameraInputManager.Instance.m_CurrentPhase == CameraInputManager.Phase.FocusedSubCellPhase)
 				{
 						Debug.Log(ServiceDat.ServiceName);
-						CameraInputManager.Instance.EnterSubCell(numberOfStudiesInService);
+					CameraInputManager.Instance.EnterSelectedSubCell ();
 						CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.InsideSubCellPhase);
 				}
 				break;

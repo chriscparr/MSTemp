@@ -88,9 +88,10 @@ public class ModelManager : MonoBehaviour
 		if (!m_isInitialised)
 		{
 			float containerScale = 0f;
+			//TODO - check for edited scale in future!
 			foreach (ServiceData serv in a_pData.Services)
 			{
-				containerScale += serv.ServiceWeighting;
+				containerScale += serv.InitialScale;
 			}
 			containerScale = (2f * containerScale) + 2f;
 			if (containerScale < 10f)
@@ -131,6 +132,19 @@ public class ModelManager : MonoBehaviour
 	public void OnSubcellCollision(GameObject a_objOne, GameObject a_objTwo)
 	{
 		m_boltPooler.UseBoltFromPool (a_objOne, a_objTwo);
+	}
+
+	public CaseCell[] GetAllCaseCells()
+	{
+		List<CaseCell> allCaseCells = new List<CaseCell> ();
+		if (m_isInitialised)
+		{
+			foreach (Subcell cell in m_subcells)
+			{
+				allCaseCells.AddRange (cell.CaseCells);
+			}
+		}
+		return allCaseCells.ToArray ();
 	}
 
 	public void ShakeModel()

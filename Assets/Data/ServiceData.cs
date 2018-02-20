@@ -4,7 +4,9 @@
 public class ServiceData
 {
 	public string ServiceName;
-	public float ServiceWeighting;
-	public string ServiceIntroText;
-	public string[] ServiceVideoPaths;
+	public float InitialScale;
+	public float EditedScale;
+	public bool Edited;
+	public string ServiceIntroQuestion;
+	public CaseStudyData[] CaseStudies;
 }

@@ -130,17 +130,16 @@ public class CameraInputManager : MonoBehaviour {
 		// UIManager.Instance.ShowServiceSummaryView (selectedCell.ServiceDat);
 	}
 
-	public void EnterSubCell(int numberOfStudiesToInstantiate)
+	public void EnterSelectedSubCell()
 	{
-        m_CachedPosition = m_MainCamera.transform.position;
-
+		Camera.main.GetComponent<OnRailsMovement> ().Init (ModelManager.Instance.GetAllCaseCells ());
+		m_CachedPosition = m_MainCamera.transform.position;
 		Vector3 desiredPosition = m_selectedCell.transform.position;
 		Camera.main.GetComponent<RailMover>().TweenToPosition(desiredPosition, m_ZoomSpeed, false, iTween.EaseType.easeInElastic);
 		SynapseGenerator.Instance.GenerateSynapses(desiredPosition, m_selectedCell.gameObject);
-		CaseStudyManager.Instance.GenerateCaseStudies(m_selectedCell.gameObject, numberOfStudiesToInstantiate, m_selectedCell.ServiceDat.ServiceName);
-		Camera.main.GetComponent<OnRailsMovement>().currentServiceType = m_selectedCell.ServiceDat.ServiceName;
 
-        UIManager.Instance.ShowCaseStudyView();
+		UIManager.Instance.ShowCaseStudyView();
+		Camera.main.GetComponent<OnRailsMovement> ().GoToNextPoint ();
 	}
 
 	private void Update()
