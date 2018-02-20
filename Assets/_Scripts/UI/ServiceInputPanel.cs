@@ -109,9 +109,9 @@ public class ServiceInputPanel : MonoBehaviour
 	{
 		ServiceData servData = new ServiceData ();
 		servData.ServiceName = m_serviceTypes [m_typeSelect.value];
-		servData.ServiceWeighting = m_weightingVal.value;
-		servData.ServiceIntroText = m_introText.text;
-		servData.ServiceVideoPaths = m_videoPathsList.ToArray ();
+		servData.InitialScale = m_weightingVal.value;
+		servData.ServiceIntroQuestion = m_introText.text;
+		//servData.ServiceVideoPaths = m_videoPathsList.ToArray ();
 
 		if (OnSubmitService != null)
 		{

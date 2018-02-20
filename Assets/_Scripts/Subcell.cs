@@ -32,6 +32,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	private float m_doubleClickInterval = 0.25f;
 	private int m_clickCount = 0;
 
+	private Vector3[] m_caseCellPositions;
+
 	private int numberOfStudiesInService = 3;	//debug value, should come from serviceData in future!
 
 	private void Awake()
@@ -64,11 +66,12 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 			default:
 				break;
 		}
-		gameObject.transform.localScale = Vector3.one * m_serviceData.ServiceWeighting;
+		gameObject.transform.localScale = Vector3.one * m_serviceData.InitialScale;
 		m_labelText.text = m_serviceData.ServiceName.ToLowerInvariant ();
 		m_labelText.gameObject.SetActive (false);
 		gameObject.AddComponent<RailMover>();
 		CreateReversedMesh();
+		GenerateCaseCells ();
 	}
 
 	public void ToggleLabelText(bool a_isActive)
@@ -84,9 +87,15 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		Destroy(clone.GetComponent<Rigidbody>());
 		Destroy(clone.GetComponent<SphereCollider>());
 		Destroy(clone.GetComponent<Subcell>());
-
         clone.AddComponent<ReverseNormals>();
     }
+
+	private void GenerateCaseCells()
+	{
+		//m_caseCellPositions = new Vector3[]
+		//generate vector3 points 
+		//instanciate caseCells and place on points
+	}
 
     public void OnCollisionEnter(Collision collision)
     {
