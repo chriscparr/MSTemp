@@ -64,6 +64,7 @@ public class OnRailsMovement : MonoBehaviour {
             i = 0;
             nodeI = 0;
             thisPath = GetComponent<iTweenPath>();
+			/*
             // after we have created our path positions (aka, locations of the case studies)
 
             c = CaseStudyManager.Instance.allCases.ToArray();
@@ -76,8 +77,16 @@ public class OnRailsMovement : MonoBehaviour {
 
             arr = caseStudyPositions.ToArray();
 
-            thisPath.nodeCount = caseStudyPositions.Count;
-            thisPath.nodes = caseStudyPositions;
+
+			thisPath.nodeCount = caseStudyPositions.Count;
+			thisPath.nodes = caseStudyPositions;
+
+			*/
+			arr = ModelManager.Instance.GetAllCaseCellPositions ();
+			List<Vector3> csPositions = new List<Vector3> (arr);
+			thisPath.nodeCount = csPositions.Count;
+			thisPath.nodes = csPositions;
+
 
             MoveTo();
         }

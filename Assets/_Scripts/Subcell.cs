@@ -22,6 +22,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 
 	[SerializeField]
 	private TextMesh m_labelText;
+	[SerializeField]
+	private GameObject m_caseCellPrefab;
 
 	public Rigidbody RigidBody {get{ return m_rigidBody; }}
 	private Rigidbody m_rigidBody;
@@ -29,11 +31,14 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	public ServiceData ServiceDat {get{ return m_serviceData; }}
 	private ServiceData m_serviceData;
 
+	public Vector3[] CellPositions {get{ return m_caseCellPositions; }}
+	private Vector3[] m_caseCellPositions;
+
+
 	private float m_doubleClickInterval = 0.25f;
 	private int m_clickCount = 0;
 
-	private Vector3[] m_caseCellPositions;
-
+	private CaseCell[] m_caseCells;
 	private int numberOfStudiesInService = 3;	//debug value, should come from serviceData in future!
 
 	private void Awake()
@@ -70,6 +75,16 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		m_labelText.text = m_serviceData.ServiceName.ToLowerInvariant ();
 		m_labelText.gameObject.SetActive (false);
 		gameObject.AddComponent<RailMover>();
+
+		//Calculate positions nice and early in case we get quizzed by some rail movement script.
+		m_caseCellPositions = new Vector3[m_serviceData.CaseStudies.Length];
+		m_caseCells = new CaseCell[m_serviceData.CaseStudies.Length];
+		for (int i = 0; i < m_caseCellPositions.Length; i++)
+		{
+			m_caseCellPositions [i] = Random.insideUnitSphere;
+		}
+		m_caseCellPositions [0] = gameObject.transform.position + new Vector3 (0f,0f,2f);
+
 		CreateReversedMesh();
 		GenerateCaseCells ();
 	}
@@ -92,9 +107,18 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 
 	private void GenerateCaseCells()
 	{
-		//m_caseCellPositions = new Vector3[]
-		//generate vector3 points 
-		//instanciate caseCells and place on points
+		m_caseCellPositions = new Vector3[m_serviceData.CaseStudies.Length];
+		m_caseCells = new CaseCell[m_serviceData.CaseStudies.Length];
+		for (int i = 0; i < m_caseCellPositions.Length; i++)
+		{
+			GameObject caseCellObj = Instantiate<GameObject>(m_caseCellPrefab, gameObject.transform);
+			caseCellObj.transform.localPosition = Random.insideUnitSphere;
+			m_caseCellPositions [i] = caseCellObj.transform.position;
+			m_caseCells [i] = caseCellObj.GetComponent<CaseCell> ();
+			m_caseCells [i].Initialise (this, m_serviceData.CaseStudies [i]);
+		}
+		m_caseCells [0].transform.localPosition = new Vector3 (0f,0f,2f);
+		m_caseCellPositions [0] = m_caseCells [0].transform.position;
 	}
 
     public void OnCollisionEnter(Collision collision)

@@ -134,6 +134,19 @@ public class ModelManager : MonoBehaviour
 		m_boltPooler.UseBoltFromPool (a_objOne, a_objTwo);
 	}
 
+	public Vector3[] GetAllCaseCellPositions()
+	{
+		List<Vector3> positions = new List<Vector3> ();
+		if (m_isInitialised)
+		{
+			foreach (Subcell cell in m_subcells)
+			{
+				positions.AddRange (cell.CellPositions);
+			}
+		}
+		return positions.ToArray ();
+	}
+
 	public void ShakeModel()
 	{
 		if (m_isInitialised)
