@@ -134,17 +134,17 @@ public class ModelManager : MonoBehaviour
 		m_boltPooler.UseBoltFromPool (a_objOne, a_objTwo);
 	}
 
-	public Vector3[] GetAllCaseCellPositions()
+	public CaseCell[] GetAllCaseCells()
 	{
-		List<Vector3> positions = new List<Vector3> ();
+		List<CaseCell> allCaseCells = new List<CaseCell> ();
 		if (m_isInitialised)
 		{
 			foreach (Subcell cell in m_subcells)
 			{
-				positions.AddRange (cell.CellPositions);
+				allCaseCells.AddRange (cell.CaseCells);
 			}
 		}
-		return positions.ToArray ();
+		return allCaseCells.ToArray ();
 	}
 
 	public void ShakeModel()

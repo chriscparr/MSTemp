@@ -31,8 +31,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	public ServiceData ServiceDat {get{ return m_serviceData; }}
 	private ServiceData m_serviceData;
 
-	public Vector3[] CellPositions {get{ return m_caseCellPositions; }}
-	private Vector3[] m_caseCellPositions;
+	public CaseCell[] CaseCells {get{ return m_caseCells; }}
+	//private Vector3[] m_caseCellPositions;
 
 
 	private float m_doubleClickInterval = 0.25f;
@@ -97,13 +97,13 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 
 	private void GenerateCaseCells()
 	{
-		m_caseCellPositions = new Vector3[m_serviceData.CaseStudies.Length];
+		//m_caseCellPositions = new Vector3[m_serviceData.CaseStudies.Length];
 		m_caseCells = new CaseCell[m_serviceData.CaseStudies.Length];
-		for (int i = 0; i < m_caseCellPositions.Length; i++)
+		for (int i = 0; i < m_caseCells.Length; i++)
 		{
 			GameObject caseCellObj = Instantiate<GameObject>(m_caseCellPrefab, gameObject.transform);
 			caseCellObj.transform.localPosition = Random.insideUnitSphere * 0.5f;
-			m_caseCellPositions [i] = caseCellObj.transform.position;
+			//m_caseCellPositions [i] = caseCellObj.transform.position;
 			m_caseCells [i] = caseCellObj.GetComponent<CaseCell> ();
 			m_caseCells [i].Initialise (this, m_serviceData.CaseStudies [i]);
 		}
@@ -146,7 +146,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 				if (CameraInputManager.Instance.m_CurrentPhase == CameraInputManager.Phase.FocusedSubCellPhase)
 				{
 						Debug.Log(ServiceDat.ServiceName);
-						CameraInputManager.Instance.EnterSubCell(numberOfStudiesInService);
+					CameraInputManager.Instance.EnterSelectedSubCell ();
 						CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.InsideSubCellPhase);
 				}
 				break;
