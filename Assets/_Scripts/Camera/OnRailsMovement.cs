@@ -13,6 +13,8 @@ public class OnRailsMovement : MonoBehaviour
 	private List<CaseCell> m_allCases = new List<CaseCell>();
 	private int m_pathPointIndex = 0;
 
+	private bool m_isTracking = false;
+
 	// Use this for initialization
 	private void Awake() 
 	{
@@ -34,18 +36,22 @@ public class OnRailsMovement : MonoBehaviour
 
 	private void MoveTo(int a_pathIndex)
 	{
-		m_thisPath.nodes [a_pathIndex] = m_allCases [a_pathIndex].transform.position + new Vector3 (0f, 0f, -2f);
+		m_thisPath.nodes [a_pathIndex] = m_allCases [a_pathIndex].transform.position + new Vector3 (0f, 0f, -1f);
 		iTween.MoveTo(this.gameObject, iTween.Hash("position", m_thisPath.nodes[a_pathIndex], "time", 2f, "easetype", m_easeType, "orienttopath", true, "lookTime", 5, "oncomplete", "ReachedPathPoint"));
 	}
 
 	private void ReachedPathPoint() 
 	{
+		m_pathPointIndex++;
 		m_allCases [m_pathPointIndex - 1].PlayCaseStudy ();
+		m_isTracking = true;
 		StartCoroutine("PlayAndWait");
+		StartCoroutine("TrackCaseCell");
 	}
 
 	public void GoToNextPoint()
 	{
+		m_isTracking = false;
 		//stop any currently playing videos in the ui
 		Debug.Log("Heading to node " + m_pathPointIndex.ToString() + "/" + m_pathPoints.Count.ToString());
 		if (m_pathPointIndex >= m_thisPath.nodeCount)
@@ -57,12 +63,12 @@ public class OnRailsMovement : MonoBehaviour
 		else
 		{
 			MoveTo(m_pathPointIndex);
-			m_pathPointIndex++;
 		}
 	}
 
 	public void GoToPreviousPoint()
 	{
+		m_isTracking = false;
 		//stop any currently playing videos in the ui
 		m_pathPointIndex--;
 		Debug.Log("Heading to node " + m_pathPointIndex.ToString() + "/" + m_pathPoints.Count.ToString());
@@ -91,8 +97,22 @@ public class OnRailsMovement : MonoBehaviour
 		yield return null;
 	}
 
+	private IEnumerator TrackCaseCell()
+	{
+		if (m_isTracking)
+		{
+			Vector3 target = m_allCases [m_pathPointIndex - 1].transform.position + new Vector3 (0f, 0f, -1f);
+			gameObject.transform.Translate ((gameObject.transform.position - target));
+		} 
+		else
+		{
+			yield return null;
+		}
+	}
+
 	public void GoHome()
 	{
+		m_isTracking = false;
 		//VideoManager.Instance.StopVideo();
 		m_pathPointIndex = 0;
 		CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);

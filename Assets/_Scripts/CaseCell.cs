@@ -28,7 +28,10 @@ public class CaseCell : MonoBehaviour
 	public void PlayCaseStudy()
 	{
 		//Call some method in uimanager that displays case study in a nice panel or whatever...
-
+		if (m_isInited)
+		{
+			UIManager.Instance.CaseViewer.DisplayCaseStudy (m_caseData);
+		}
 	}
 
 }
