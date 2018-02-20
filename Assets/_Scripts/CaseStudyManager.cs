@@ -12,7 +12,7 @@ public class CaseStudyManager : MonoBehaviour {
     [SerializeField]
     private GameObject m_caseCellPrefab;
 
-    public List<CaseStudyData> allCases = new List<CaseStudyData>();
+    //public List<CaseStudyData> allCases = new List<CaseStudyData>();
 
     private void Awake()
     {
@@ -22,6 +22,7 @@ public class CaseStudyManager : MonoBehaviour {
     // Use this for initialization
     public void GenerateCaseStudies (GameObject spawnPos, int numberOfStudies, string serviceType) {
 
+		/*
         for (int i = 0; i < (numberOfStudies); i++)
         {
             GameObject cas = Instantiate<GameObject>(m_caseCellPrefab, spawnPos.transform);
@@ -45,20 +46,20 @@ public class CaseStudyManager : MonoBehaviour {
         }
 
         allCases = allCases.Distinct().ToList();
-		
+		*/
 	}
 
     void HandleContentPopulation(GameObject currentCaseCell, int index, string serviceName)
     {
-        CaseStudyData cdata = currentCaseCell.GetComponent<CaseStudyData>();
+        //CaseStudyData cdata = currentCaseCell.GetComponent<CaseStudyData>();
 
         if (index==0)
         {
             // THE FIRST CASE STUDY CELL WE CREATE WILL BE THE TEXT BLURB (CREATE SOME SORT OF UI FOR THIS MAYBE?)
             // CASE BEING, OUR FIRST CELL WILL NOT CONTAIN A VIDEO, RATHER IT WILL HAVE A BLURB ABOUT THE SERVICE
             // DEAL WITH THIS AT SOME POINT LATER? TODO
-            cdata.VideoPath = null;
-            cdata.Label.text = "Intro:"; // todo I AM AN EXAMPLE
+            //cdata.VideoPath = null;
+            //cdata.Label.text = "Intro:"; // todo I AM AN EXAMPLE
 
         }
         else
@@ -78,7 +79,7 @@ public class CaseStudyManager : MonoBehaviour {
 
                     break;
                 case "FAST":
-                    cdata.VideoPath = VideoManager.Instance.m_FastVideos[Cindex];
+                    //cdata.VideoPath = VideoManager.Instance.m_FastVideos[Cindex];
                     break;
                 case "GROWTH":
 
@@ -94,8 +95,8 @@ public class CaseStudyManager : MonoBehaviour {
                     break;
                     //}
             }
-            cdata.Label.text = "Case Study: " + index.ToString();
-            allCases.Add(cdata);
+            //cdata.Label.text = "Case Study: " + index.ToString();
+            //allCases.Add(cdata);
         }
 
 
