@@ -33,6 +33,10 @@ public class ModelManager : MonoBehaviour
 	private Vector3 m_minSubcellScale = new Vector3 (0.1f, 0.1f, 0.1f);
 	private Vector3 m_maxSubcellScale = new Vector3 (5f, 5f, 5f);
 
+    [Header("On and off mats")]
+    public Material OffStateMaterial;
+    public Material[] OnStateMaterials;
+
 	private Vector3[] m_placementVectors = new Vector3[] { 
 		new Vector3(-1f, 1f, -1f),
 		new Vector3(-1f, 1f, 1f),
@@ -103,6 +107,8 @@ public class ModelManager : MonoBehaviour
 				m_subcells.Add (sub.GetComponent<Subcell> ());
 				m_subcells [i].Initialise (a_pData.Services [i]);
 				sub.transform.localPosition = Vector3.Scale (minBounds, m_placementVectors [i]);
+                sub.GetComponent<Subcell>().myOnMaterial = OnStateMaterials[i];
+                sub.GetComponent<Renderer>().sharedMaterial = OffStateMaterial;
 			}
 			m_isInitialised = true;
 
@@ -184,12 +190,22 @@ public class ModelManager : MonoBehaviour
         // so zoom into it, get up nice and close.
         // let the camera input manager deal with the movement
 
-        acell.ToggleLabelText(true);
+        if (CameraInputManager.Instance.m_CurrentPhase != CameraInputManager.Phase.FocusedSubCellPhase)
+        {
+            foreach (Subcell cell in m_subcells)
+            {
+                cell.ToggleLabelText(true);
+            }
+
+        }
 		m_highlight.enabled = true;
         // CameraInputManager.Instance.SetLookAtTarget(m_highlightedSubcell.transform);
         // CameraInputManager.Instance.FollowTarget();
         yield return new WaitForSeconds(3);
-        acell.ToggleLabelText(false);
+        foreach (Subcell cell in m_subcells)
+        {
+            cell.ToggleLabelText(false);
+        }
 		m_highlightActive = false;
 		m_highlight.enabled = false;
 

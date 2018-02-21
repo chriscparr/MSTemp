@@ -125,7 +125,6 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_Materials:
   - {fileID: 2100000, guid: 87e905f2717e14d949af01f12d4a28eb, type: 2}
-  - {fileID: 2100000, guid: 5be3328f6bcdf46458657e4c12c85903, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -159,7 +158,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1999673112281984}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 1.5
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 0
@@ -214,6 +213,9 @@ MonoBehaviour:
   m_labelText: {fileID: 102288023878377728}
   m_caseCellPrefab: {fileID: 1471753851409318, guid: e3b1aa73b91e94b799dd36ca9ee35375,
     type: 2}
+  allowScaling: 1
+  myOnMaterial: {fileID: 0}
+  doIAlreadyHaveReversedNormals: 0
 --- !u!135 &135268602491666010
 SphereCollider:
   m_ObjectHideFlags: 1

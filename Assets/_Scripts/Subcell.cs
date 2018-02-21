@@ -41,6 +41,13 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	private CaseCell[] m_caseCells;
 	private int numberOfStudiesInService = 3;	//debug value, should come from serviceData in future!
 
+    [HideInInspector]
+    public bool allowScaling = true;
+    [HideInInspector]
+    public Material myOnMaterial;
+    [HideInInspector]
+    public bool doIAlreadyHaveReversedNormals = false;
+
 	private void Awake()
 	{
 		m_rigidBody = GetComponent<Rigidbody> ();
@@ -75,7 +82,6 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		m_labelText.text = m_serviceData.ServiceName.ToLowerInvariant ();
 		m_labelText.gameObject.SetActive (false);
 		gameObject.AddComponent<RailMover>();
-		CreateReversedMesh();
 		GenerateCaseCells ();
 	}
 
@@ -84,8 +90,9 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		m_labelText.gameObject.SetActive (a_isActive);
 	}
 
-    private void CreateReversedMesh()
+    public void CreateReversedMesh()
     {
+        doIAlreadyHaveReversedNormals = true;
         GameObject clone = Instantiate(this.gameObject, transform.position, Quaternion.identity) as GameObject;        
 		Destroy (clone.transform.GetChild(0).gameObject);
 		clone.transform.parent = this.transform;
@@ -146,8 +153,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 				if (CameraInputManager.Instance.m_CurrentPhase == CameraInputManager.Phase.FocusedSubCellPhase)
 				{
 						Debug.Log(ServiceDat.ServiceName);
-					CameraInputManager.Instance.EnterSelectedSubCell ();
-						CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.InsideSubCellPhase);
+					//CameraInputManager.Instance.EnterSelectedSubCell ();
+						//CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.InsideSubCellPhase);
 				}
 				break;
 			default:

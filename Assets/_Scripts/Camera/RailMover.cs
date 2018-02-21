@@ -11,10 +11,15 @@ public class RailMover : MonoBehaviour {
     // or just make a manager for it or something like that?
 
     // Use this for initialization
-    public void TweenToPosition(Vector3 pos, float speed, bool orientToPath = true, iTween.EaseType easeMethod = iTween.EaseType.easeInOutSine)
+    public void TweenToPosition(Vector3 pos, float speed, bool orientToPath = true, iTween.EaseType easeMethod = iTween.EaseType.easeInOutSine, string onFinishFunction = "EndMovement")
     {
         Debug.Log("WE TWEEENIN BOIS" + this.gameObject.name + " AT TGHE SPEED OF " + speed);
-        iTween.MoveTo(this.gameObject, iTween.Hash("position", pos, "time", speed, "easetype", easeMethod, "orienttopath", orientToPath));
+        iTween.MoveTo(this.gameObject, iTween.Hash("position", pos, "time", speed, "easetype", easeMethod, "orienttopath", orientToPath, "oncomplete", onFinishFunction));
+    }
+
+    void EndMovement()
+    {
+        CameraInputManager.Instance.isCameraDoingPredeterminedTween = false;
     }
 
 }
