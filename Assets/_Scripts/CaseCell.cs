@@ -8,10 +8,14 @@ public class CaseCell : MonoBehaviour
 	private TextMesh m_labelText;
 	[SerializeField]
 	private Renderer m_cellRend;
+	[SerializeField]
+	private Transform m_camPosPoint;
 
 	private bool m_isInited = false;
 	private CaseStudyData m_caseData;
 	private Subcell m_parentSubcell;
+
+	public Transform CameraPositioningPoint {get{ return m_camPosPoint;}}
 
 	public void Initialise(Subcell a_parentSubcell, CaseStudyData a_caseData)
 	{

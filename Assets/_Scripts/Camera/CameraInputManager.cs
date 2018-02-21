@@ -47,7 +47,6 @@ public class CameraInputManager : MonoBehaviour {
 		m_CachedPosition = m_MainCamera.transform.position;
 		SetPhase(Phase.SetupPhase);
 
-
 		if (m_MainCamera.GetComponent<RailMover>() == null)
 		{
 			m_Mover = m_MainCamera.AddComponent<RailMover>();
@@ -74,6 +73,10 @@ public class CameraInputManager : MonoBehaviour {
 				if (GameObject.Find("SynapseGenerator"))
 				{
 					FindObjectOfType<SynapseGenerator>().enabled = true;
+				}
+				if (m_selectedCell != null)
+				{
+					FocusReset ();
 				}
 				// allow rotation and pinch and zoom to move in? google earth controls
 				// dont forget to use the actual f'n event handlers
@@ -103,18 +106,35 @@ public class CameraInputManager : MonoBehaviour {
             m_MainCamera.GetComponent<RailMover>().TweenToPosition(m_CachedPosition, 5, false, iTween.EaseType.easeOutSine);
             Camera.main.transform.eulerAngles = Vector3.zero;
         }
+		if (m_selectedCell != null)
+		{
+			FocusReset ();
+		}
+	}
+
+	public void FocusReset()
+	{
+		m_selectedCell.RigidBody.isKinematic = false;
+		Destroy (m_selectedCell.GetComponent<RailMover> ());
+		m_selectedCell = null;
+		ModelManager.Instance.ShakeModel();
+		SetPhase (Phase.MainCellPhase);
 	}
 
 	public void FocusOnSubCell(Subcell selectedCell)
 	{
+		if (m_selectedCell != null)
+		{
+			FocusReset ();
+		}
 		m_selectedCell = selectedCell;
 		m_CurrentTarget = selectedCell.transform;
 
 		Vector3 desiredPosition = Vector3.zero;	//m_mainContainer is always at zero, lets keep it private if we can...
 
 
-		selectedCell.RigidBody.isKinematic = true;
-		selectedCell.gameObject.AddComponent<RailMover>();
+		m_selectedCell.RigidBody.isKinematic = true;
+		m_selectedCell.gameObject.AddComponent<RailMover>();
 		m_Mover = selectedCell.GetComponent<RailMover>();
 
 		m_Mover.TweenToPosition(desiredPosition, 3f, false, iTween.EaseType.easeInOutSine);
@@ -132,14 +152,20 @@ public class CameraInputManager : MonoBehaviour {
 
 	public void EnterSelectedSubCell()
 	{
-		Camera.main.GetComponent<OnRailsMovement> ().Init (ModelManager.Instance.GetAllCaseCells ());
+		//ModelManager.Instance.HaltSubcells ();
+
+		Camera.main.GetComponent<OnRailsMovement> ().Init (m_selectedCell.CaseCells);
 		m_CachedPosition = m_MainCamera.transform.position;
 		Vector3 desiredPosition = m_selectedCell.transform.position;
-		Camera.main.GetComponent<RailMover>().TweenToPosition(desiredPosition, m_ZoomSpeed, false, iTween.EaseType.easeInElastic);
-		SynapseGenerator.Instance.GenerateSynapses(desiredPosition, m_selectedCell.gameObject);
+		Camera.main.GetComponent<RailMover>().TweenToPosition(desiredPosition, m_ZoomSpeed, gameObject, "AfterSubCellEntry");
 
+		SynapseGenerator.Instance.GenerateSynapses(desiredPosition, m_selectedCell.gameObject);
+	}
+
+	public void AfterSubCellEntry()
+	{
 		UIManager.Instance.ShowCaseStudyView();
-		Camera.main.GetComponent<OnRailsMovement> ().GoToNextPoint ();
+		Camera.main.GetComponent<OnRailsMovement> ().BeginCases ();
 	}
 
 	private void Update()

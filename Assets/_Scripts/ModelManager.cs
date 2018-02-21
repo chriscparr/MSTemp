@@ -75,7 +75,6 @@ public class ModelManager : MonoBehaviour
 				containerScale += subcell.transform.localScale.x;
 			}
 			containerScale = (1.25f * containerScale);
-			//containerScale = (2f * containerScale) + 2f;
 			m_mainContainer.transform.localScale = new Vector3 (containerScale, containerScale, containerScale);
 		}
 	}
@@ -106,7 +105,6 @@ public class ModelManager : MonoBehaviour
 			}
 			m_isInitialised = true;
 
-            // CameraInputManager.Instance.SetLookAtTarget(m_mainContainer.transform);
             CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
             ShakeModel();
 		}
@@ -159,6 +157,7 @@ public class ModelManager : MonoBehaviour
 			{
 				//Halt subcells
 				cell.RigidBody.AddForce ((cell.RigidBody.velocity * -1), ForceMode.VelocityChange);
+				cell.RigidBody.AddTorque ((cell.RigidBody.angularVelocity * -1), ForceMode.VelocityChange);
 			}
 		}
 	}

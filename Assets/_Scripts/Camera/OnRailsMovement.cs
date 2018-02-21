@@ -14,6 +14,7 @@ public class OnRailsMovement : MonoBehaviour
 	private int m_pathPointIndex = 0;
 
 	private bool m_isTracking = false;
+	private CaseCell m_trackedCell;
 
 	// Use this for initialization
 	private void Awake() 
@@ -23,99 +24,110 @@ public class OnRailsMovement : MonoBehaviour
 		
 	public void Init(CaseCell[] a_allCells)
 	{
+		m_allCases.Clear ();
 		for (int i = 0; i < a_allCells.Length; i++)
 		{
 			m_allCases.Add (a_allCells [i]);
-			m_pathPoints.Add (a_allCells [i].transform.position);
 		}
-		m_thisPath = GetComponent<iTweenPath>();
-		m_thisPath.nodeCount = m_pathPoints.Count;
-		m_thisPath.nodes = m_pathPoints;
 		m_pathPointIndex = 0;
+		Debug.Log ("Case Cell list contains " + m_allCases.Count + " members!");
 	}
 
-	private void MoveTo(int a_pathIndex)
+	public void BeginCases()
 	{
-		m_thisPath.nodes [a_pathIndex] = m_allCases [a_pathIndex].transform.position + new Vector3 (0f, 0f, -1f);
-		iTween.MoveTo(this.gameObject, iTween.Hash("position", m_thisPath.nodes[a_pathIndex], "time", 2f, "easetype", m_easeType, "orienttopath", true, "lookTime", 5, "oncomplete", "ReachedPathPoint"));
+		MoveTo (m_allCases [0]);
+	}
+
+	private void MoveTo (CaseCell a_case)
+	{
+		m_trackedCell = a_case;
+		StartCoroutine("MoveCameraToTrackedCaseCell");
 	}
 
 	private void ReachedPathPoint() 
 	{
-		m_pathPointIndex++;
-		m_allCases [m_pathPointIndex - 1].PlayCaseStudy ();
-		m_isTracking = true;
 		StartCoroutine("PlayAndWait");
-		StartCoroutine("TrackCaseCell");
+		m_trackedCell.PlayCaseStudy ();
 	}
 
 	public void GoToNextPoint()
 	{
 		m_isTracking = false;
-		//stop any currently playing videos in the ui
-		Debug.Log("Heading to node " + m_pathPointIndex.ToString() + "/" + m_pathPoints.Count.ToString());
-		if (m_pathPointIndex >= m_thisPath.nodeCount)
+		Debug.Log ("GoToNextPoint() index: " + m_pathPointIndex.ToString() + " m_allCases.Count: " + m_allCases.Count.ToString());
+		if (m_pathPointIndex < m_allCases.Count -1)
 		{
-			// get out, we are done.
-			CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
-			CameraInputManager.Instance.ResetPosition();
-		}
+			//stop any currently playing videos in the ui
+			m_pathPointIndex++;
+			MoveTo (m_allCases [m_pathPointIndex]);
+		} 
 		else
 		{
-			MoveTo(m_pathPointIndex);
+			GoHome ();
 		}
 	}
 
 	public void GoToPreviousPoint()
 	{
 		m_isTracking = false;
-		//stop any currently playing videos in the ui
-		m_pathPointIndex--;
-		Debug.Log("Heading to node " + m_pathPointIndex.ToString() + "/" + m_pathPoints.Count.ToString());
-		if (m_pathPointIndex <= 0)
+		if (m_pathPointIndex > 0)
 		{
-			// get out, we are done.
-			CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
-			CameraInputManager.Instance.ResetPosition(true);
-			m_pathPointIndex = 0;
+			//stop any currently playing videos in the ui
+			m_pathPointIndex--;
+			MoveTo(m_allCases [m_pathPointIndex]);
 		}
 		else
 		{
-			MoveTo(m_pathPointIndex);
+			GoHome ();
 		}
 	}
 
 	IEnumerator PlayAndWait() 
 	{
 		yield return new WaitForSeconds (2);
+		/*
 		if (m_pathPointIndex > m_thisPath.nodeCount)
 		{
 			CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
 			CameraInputManager.Instance.ResetPosition (true);
 			m_pathPointIndex = 0;
 		}
+		*/
 		yield return null;
 	}
 
-	private IEnumerator TrackCaseCell()
+	private IEnumerator MoveCameraToTrackedCaseCell()
 	{
-		if (m_isTracking)
+		for (float percent = 0f; percent < 1f; percent += 0.01f)
 		{
-			Vector3 target = m_allCases [m_pathPointIndex - 1].transform.position + new Vector3 (0f, 0f, -1f);
-			gameObject.transform.Translate ((gameObject.transform.position - target));
-		} 
-		else
-		{
-			yield return null;
+			gameObject.transform.position = Vector3.Lerp (gameObject.transform.position, m_trackedCell.CameraPositioningPoint.position, percent);
+			gameObject.transform.LookAt (m_trackedCell.transform);
+			yield return new WaitForEndOfFrame ();
 		}
+		Debug.Log ("MoveCameraToTrackedCaseCell - Completed!");
+		m_isTracking = true;
+		ReachedPathPoint ();
+		yield return null;
+
 	}
 
 	public void GoHome()
 	{
+		Debug.Log ("Going Home!");
 		m_isTracking = false;
+		m_allCases.Clear ();
+		m_trackedCell = null;
 		//VideoManager.Instance.StopVideo();
-		m_pathPointIndex = 0;
+		UIManager.Instance.HideCaseStudyView();
 		CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
 		CameraInputManager.Instance.ResetPosition(true);
+	}
+
+	private void Update()
+	{
+		if (m_isTracking)
+		{
+			gameObject.transform.position = m_trackedCell.CameraPositioningPoint.position;
+			gameObject.transform.rotation = m_trackedCell.CameraPositioningPoint.rotation;
+		}
 	}
 }
