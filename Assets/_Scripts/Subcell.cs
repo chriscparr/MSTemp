@@ -45,8 +45,6 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
     public bool allowScaling = true;
     [HideInInspector]
     public Material myOnMaterial;
-    [HideInInspector]
-    public bool doIAlreadyHaveReversedNormals = false;
 
 	private void Awake()
 	{
@@ -82,6 +80,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		m_labelText.text = m_serviceData.ServiceName.ToLowerInvariant ();
 		m_labelText.gameObject.SetActive (false);
 		gameObject.AddComponent<RailMover>();
+		CreateReversedMesh ();
 		GenerateCaseCells ();
 	}
 
@@ -90,9 +89,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		m_labelText.gameObject.SetActive (a_isActive);
 	}
 
-    public void CreateReversedMesh()
+	private void CreateReversedMesh()
     {
-        doIAlreadyHaveReversedNormals = true;
         GameObject clone = Instantiate(this.gameObject, transform.position, Quaternion.identity) as GameObject;        
 		Destroy (clone.transform.GetChild(0).gameObject);
 		clone.transform.parent = this.transform;

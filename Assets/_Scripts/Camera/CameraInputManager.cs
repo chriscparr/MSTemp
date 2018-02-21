@@ -94,11 +94,11 @@ public class CameraInputManager : MonoBehaviour {
 				// here we pinch and zoom to scale the sub cell, so you may not need to do anything
 				break;
 			case Phase.InsideSubCellPhase:
-				if (m_selectedCell.doIAlreadyHaveReversedNormals != true)
-				{
-					m_selectedCell.CreateReversedMesh();
-				}
+
+
 				m_selectedCell = null;
+
+
 				UIManager.Instance.HideManipulationView();
 				// here we want to do case study stuff, so enable BOTH OnRailsMovement and RailMover, put buttons to move to/from paths (do that listener and event stuff)
 				// ps learn about listeners and events already. 
