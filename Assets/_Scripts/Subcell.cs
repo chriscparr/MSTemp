@@ -97,13 +97,11 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 
 	private void GenerateCaseCells()
 	{
-		//m_caseCellPositions = new Vector3[m_serviceData.CaseStudies.Length];
 		m_caseCells = new CaseCell[m_serviceData.CaseStudies.Length];
 		for (int i = 0; i < m_caseCells.Length; i++)
 		{
 			GameObject caseCellObj = Instantiate<GameObject>(m_caseCellPrefab, gameObject.transform);
 			caseCellObj.transform.localPosition = Random.insideUnitSphere * 0.5f;
-			//m_caseCellPositions [i] = caseCellObj.transform.position;
 			m_caseCells [i] = caseCellObj.GetComponent<CaseCell> ();
 			m_caseCells [i].Initialise (this, m_serviceData.CaseStudies [i]);
 		}
