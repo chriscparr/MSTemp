@@ -164,7 +164,7 @@ public class CameraInputManager : MonoBehaviour {
 
 		Vector3 desiredPosition = Vector3.zero;	//m_mainContainer is always at zero, lets keep it private if we can...
 
-		m_selectedCell.allowScaling = true;
+		m_selectedCell.CanScale = true;
 
 		selectedCell.RigidBody.isKinematic = true;
 		selectedCell.gameObject.AddComponent<RailMover>();
@@ -312,7 +312,7 @@ public class CameraInputManager : MonoBehaviour {
 
 	private void ApplySubcellScale(float a_newScale)
 	{
-		if (m_selectedCell != null && m_selectedCell.allowScaling == true)
+		if (m_selectedCell != null && m_selectedCell.CanScale == true)
 		{
 			ModelManager.Instance.ScaleSubcell (m_selectedCell, a_newScale);
 			if (m_selectedCell.GetComponent<Renderer>().sharedMaterial != m_selectedCell.myOnMaterial && m_selectedCell != null)

@@ -41,8 +41,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	private CaseCell[] m_caseCells;
 	private int numberOfStudiesInService = 3;	//debug value, should come from serviceData in future!
 
-    [HideInInspector]
-    public bool allowScaling = true;
+
+	public bool CanScale { get; set;}
     [HideInInspector]
     public Material myOnMaterial;
 
