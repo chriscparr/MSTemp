@@ -38,6 +38,11 @@ public class PDFManager : MonoBehaviour
         s_instance = this;
     }
 
+    void Start()
+    {
+        PageOne.transform.parent.GetComponent<Canvas>().enabled = false;
+    }
+
     public void CaptureEcosystem()
     {
 
@@ -78,7 +83,7 @@ public class PDFManager : MonoBehaviour
     public IEnumerator GenerateEntirePDF()
     {
         // pdfDocument doc = new pdfDocument("pdfTitle", "Mindshare");
-
+        PageOne.transform.parent.GetComponent<Canvas>().enabled = true;
 
         for (int i = 0; i <= 1; i++)
         {
@@ -144,6 +149,7 @@ public class PDFManager : MonoBehaviour
         File.WriteAllBytes(tempPath, mBytes);
         OpenPDF(tempPath, files[0], files[1]);
  
+        PageOne.transform.parent.GetComponent<Canvas>().enabled = false;
     
 
     }
