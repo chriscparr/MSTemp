@@ -46,8 +46,8 @@ public class CameraInputManager : MonoBehaviour {
 	public Vector3 homeVector = new Vector3(0, 0, -15f);
 	public Vector3 focusVector = new Vector3(0, 0, -7.5f);
 
-	[HideInInspector]
-	public bool isCameraDoingPredeterminedTween;
+
+	private bool m_isTweening = false;
 
 
 	private void Awake() 
@@ -181,8 +181,9 @@ public class CameraInputManager : MonoBehaviour {
 	{
 		UIManager.Instance.HideManipulationView();
 
-		Camera.main.GetComponent<OnRailsMovement> ().Init (ModelManager.Instance.GetAllCaseCells ());
 		m_CachedPosition = m_MainCamera.transform.position;
+		Camera.main.GetComponent<OnRailsMovement> ().Init (ModelManager.Instance.GetAllCaseCells ());
+		SetPhase (Phase.InsideSubCellPhase);
 		Vector3 desiredPosition = m_selectedCell.transform.position;
 		Camera.main.GetComponent<RailMover>().TweenToPosition(desiredPosition, m_ZoomSpeed, false, iTween.EaseType.easeInElastic);
 		SynapseGenerator.Instance.GenerateSynapses(desiredPosition, m_selectedCell.gameObject);
@@ -203,13 +204,13 @@ public class CameraInputManager : MonoBehaviour {
 		{
 			HandleOneFinger ();
 		}
-
+		/*
 		if (Input.GetKeyDown(KeyCode.T))
 		{
-			if (isCameraDoingPredeterminedTween != true)
+			if (m_isTweening != true)
 			{
 				m_Mover.TweenToPosition(homeVector, 2, true, iTween.EaseType.easeInOutSine);
-				isCameraDoingPredeterminedTween = true;
+				m_isTweening = true;
 			}
 		}
 
@@ -225,62 +226,67 @@ public class CameraInputManager : MonoBehaviour {
 			if (m_selectedCell.GetComponent<Renderer>().sharedMaterial != m_selectedCell.myOnMaterial && m_selectedCell != null)
 				m_selectedCell.GetComponent<Renderer>().sharedMaterial = m_selectedCell.myOnMaterial;
 		}
-
+		*/
 	}
 
 	private void HandleOneFinger()
 	{
+		if (m_isTweening)
+		{
+			return;
+		}
+
 		Touch touch = Input.GetTouch(0);
 		if (touch.phase == TouchPhase.Moved)
 		{
-			if (touch.deltaPosition.x < -m_touchThresholdX || touch.deltaPosition.x > m_touchThresholdX && m_CurrentPhase != Phase.InsideSubCellPhase)
+			//If we've passed the threshold for Horizontal swipe detection:
+			if (touch.deltaPosition.x < -m_touchThresholdX || touch.deltaPosition.x > m_touchThresholdX)
 			{
-				//float angleVal = touch.deltaPosition.x * Time.deltaTime;
-				//Camera.main.transform.RotateAround (Vector3.zero, Vector3.up, angleVal);
-				//Camera.main.transform.LookAt (Vector3.zero);
+				switch (m_CurrentPhase)
+				{
+					case Phase.MainCellPhase:
+						float angleVal = touch.deltaPosition.x * Time.deltaTime;
+						Camera.main.transform.RotateAround (Vector3.zero, Vector3.up, angleVal);
+						Camera.main.transform.LookAt (Vector3.zero);
+						break;
+				}
 			}
-
-			// TODO here u must accomodate for swipe ups and swipe downs depending on our phase
-			// MAIN PHASE, SWIPE UP, ZOOM TO HOME VECTOR
-			// FOCUSED SUB CELL PHASE, SWIPE DOWN, ZOOM TO HOME VECTOR
-
-			// HANG ON - THIS IS JUST FOR UPWARD SWIPING? TEST ME ON LUNCH PLEASE
+			//If we've passed the threshold for Vertical swipe detection:
 			if (touch.deltaPosition.y < -m_touchThresholdY || touch.deltaPosition.y > m_touchThresholdY)
 			{
-				float camPosMagnitude = (m_MainCamera.transform.position - Vector3.zero).magnitude;
-
+				//swipe up
 				if (touch.deltaPosition.y > 0f)
 				{
-					if (isCameraDoingPredeterminedTween != true && m_CurrentPhase == Phase.MainCellPhase)
+					switch (m_CurrentPhase)
 					{
-						Debug.Log("WE ARE MOVING TOWARDS THE MAIN CELL");
-						m_Mover.TweenToPosition(homeVector, 2, true, iTween.EaseType.easeInOutSine);
-						isCameraDoingPredeterminedTween = true;
-					}
-
-					if (isCameraDoingPredeterminedTween != true && m_CurrentPhase == Phase.FocusedSubCellPhase)
-					{
-						EnterSelectedSubCell();
-						SetPhase(Phase.InsideSubCellPhase);
-
+						case Phase.MainCellPhase:
+							Debug.Log("WE ARE MOVING TOWARDS THE MAIN CELL");
+							m_Mover.TweenToPosition(homeVector, 2, true, iTween.EaseType.easeInOutSine);
+							m_isTweening = true;
+							break;
+						case Phase.FocusedSubCellPhase:
+							Debug.Log("WE ARE MOVING TOWARDS SUBCELL: " + m_selectedCell.ServiceDat.ServiceName);
+							EnterSelectedSubCell();
+							SetPhase(Phase.InsideSubCellPhase);
+							break;
 					}
 				}
-
+				//swipe down
 				if (touch.deltaPosition.y < 0f)
 				{
-					if (isCameraDoingPredeterminedTween != true && m_CurrentPhase == Phase.FocusedSubCellPhase)
+					switch (m_CurrentPhase)
 					{
-						Debug.Log("WE ARE MOVING BACK TOWARDS THE MAIN CELL");
-						ResetPosition();
-						isCameraDoingPredeterminedTween = true;
+						case Phase.InsideSubCellPhase:
+							Debug.Log("WE ARE LEAVING SUBCELL: " + m_selectedCell.ServiceDat.ServiceName);
+							EnterSelectedSubCell();
+							SetPhase(Phase.InsideSubCellPhase);
+							break;
+						case Phase.FocusedSubCellPhase:
+							Debug.Log ("WE ARE MOVING BACK TOWARDS THE MAIN CELL");
+							ResetPosition ();
+							break;
 					}
 				}
-
-
-				//if (camPosMagnitude > m_camVectorMagLowerBound || touch.deltaPosition.y < 0f)
-				//{
-
-				//}
 			}
 		}
 	}
