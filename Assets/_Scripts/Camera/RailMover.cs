@@ -19,7 +19,8 @@ public class RailMover : MonoBehaviour {
 
     void EndMovement()
     {
-        CameraInputManager.Instance.isCameraDoingPredeterminedTween = false;
+        //CameraInputManager.Instance.isCameraDoingPredeterminedTween = false;
+		Debug.Log ("Camera movement complete");
     }
 
 
