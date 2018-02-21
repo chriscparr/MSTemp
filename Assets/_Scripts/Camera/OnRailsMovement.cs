@@ -117,7 +117,7 @@ public class OnRailsMovement : MonoBehaviour
 		m_allCases.Clear ();
 		m_trackedCell = null;
 		//VideoManager.Instance.StopVideo();
-		UIManager.Instance.HideCaseStudyView();
+		//UIManager.Instance.HideCaseStudyView();
 		CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
 		CameraInputManager.Instance.ResetPosition(true);
 	}
