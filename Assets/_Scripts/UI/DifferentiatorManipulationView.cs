@@ -10,8 +10,8 @@ public class DifferentiatorManipulationView : MonoBehaviour {
 
 	// Use this for initialization
 	void OnEnable () {
-        if (CameraInputManager.Instance.m_selectedCell!=null)
-        difName.text = CameraInputManager.Instance.m_selectedCell.ServiceDat.ServiceName;
+		if (CameraInputManager.Instance.SelectedCell!=null)
+			difName.text = CameraInputManager.Instance.SelectedCell.ServiceDat.ServiceName;
         lockTog.isOn = false;
         LockSubcell(false);
 	}
@@ -21,11 +21,11 @@ public class DifferentiatorManipulationView : MonoBehaviour {
     {
         if (val != true)
         {
-            CameraInputManager.Instance.m_selectedCell.allowScaling = true;
+			CameraInputManager.Instance.SelectedCell.allowScaling = true;
         }
         else
         {
-            CameraInputManager.Instance.m_selectedCell.allowScaling = false; 
+			CameraInputManager.Instance.SelectedCell.allowScaling = false; 
         }
        
     }

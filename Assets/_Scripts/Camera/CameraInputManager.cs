@@ -14,11 +14,13 @@ public class CameraInputManager : MonoBehaviour {
 	}
 
 	public static CameraInputManager Instance { get { return s_instance; } }
+	private static CameraInputManager s_instance = null;
 
 	private float m_camVectorMagLowerBound = 5f;
 	private float m_camVectorMagHigherBound = -5f;
 
-	private static CameraInputManager s_instance = null;
+	public Subcell SelectedCell { get { return m_selectedCell; } }
+	private Subcell m_selectedCell;
 
 	public Phase m_CurrentPhase; // so we can change phases from other scripts. could make it static?
 
@@ -46,8 +48,6 @@ public class CameraInputManager : MonoBehaviour {
 
 	[HideInInspector]
 	public bool isCameraDoingPredeterminedTween;
-	[HideInInspector]
-	public Subcell m_selectedCell;
 
 
 	private void Awake() 
