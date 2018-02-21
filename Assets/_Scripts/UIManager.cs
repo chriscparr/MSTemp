@@ -69,9 +69,14 @@ public class UIManager : MonoBehaviour
 	}
 	public void ShowCaseStudyView()
     {
+		m_presentationView.SetActive (false);
         m_caseStudyView.SetActive(true);
     }
-
+	public void HideCaseStudyView()
+	{
+		m_caseStudyView.SetActive(false);
+		m_presentationView.SetActive (true);
+	}
 
 	private void Awake()
 	{
