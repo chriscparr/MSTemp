@@ -49,7 +49,8 @@ public class GameManager : MonoBehaviour
 
 		if (Input.GetKeyDown (KeyCode.Q))
 		{
-			SaveDummyData(GenerateTestPresentation ());
+			//SaveDummyData(GenerateTestPresentation ());
+			ModelManager.Instance.HaltSubcells();
 		}
 		if (Input.GetKeyDown (KeyCode.W))
 		{

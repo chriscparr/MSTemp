@@ -74,11 +74,8 @@ public class ModelManager : MonoBehaviour
 			{
 				containerScale += subcell.transform.localScale.x;
 			}
-			containerScale = (2f * containerScale) + 2f;
-			if (containerScale < 10f)
-			{
-				containerScale = 10f;
-			}
+			containerScale = (1.25f * containerScale);
+			//containerScale = (2f * containerScale) + 2f;
 			m_mainContainer.transform.localScale = new Vector3 (containerScale, containerScale, containerScale);
 		}
 	}
@@ -93,11 +90,7 @@ public class ModelManager : MonoBehaviour
 			{
 				containerScale += serv.InitialScale;
 			}
-			containerScale = (2f * containerScale) + 2f;
-			if (containerScale < 10f)
-			{
-				containerScale = 10f;
-			}
+			containerScale = (1.25f * containerScale);
 			m_mainContainer = Instantiate<GameObject> (m_mainContainerPrefab, m_modelRoot.transform);
 			m_mainContainer.transform.localScale = new Vector3 (containerScale, containerScale, containerScale);
 
@@ -153,8 +146,19 @@ public class ModelManager : MonoBehaviour
 		{
 			foreach (Subcell cell in m_subcells)
 			{
-				//Subcells being more circular means we have to randomise a bit here
 				cell.RigidBody.AddForce ((Random.onUnitSphere * 3f), ForceMode.Impulse);
+			}
+		}
+	}
+
+	public void HaltSubcells()
+	{
+		if (m_isInitialised)
+		{
+			foreach (Subcell cell in m_subcells)
+			{
+				//Halt subcells
+				cell.RigidBody.AddForce ((cell.RigidBody.velocity * -1), ForceMode.VelocityChange);
 			}
 		}
 	}
