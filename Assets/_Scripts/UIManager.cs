@@ -25,8 +25,6 @@ public class UIManager : MonoBehaviour
 	private GameObject m_serviceSummaryViewPrefab;
     [SerializeField]
     private GameObject m_caseStudyViewPrefab;
-    [SerializeField]
-    private GameObject m_DifferentiatorManipulationPrefab;
 
 	private GameObject m_loginView;
 	private GameObject m_newOrSavedView;
@@ -36,7 +34,6 @@ public class UIManager : MonoBehaviour
 	private GameObject m_endPresentationView;
 	private GameObject m_serviceSummaryView;
     private GameObject m_caseStudyView;
-    private GameObject m_DifferentiatorManipulationView;
 
 	private CaseStudyView m_caseView;
 
@@ -59,7 +56,7 @@ public class UIManager : MonoBehaviour
 	public void ShowPresentationView()
 	{
 		m_presentationView.SetActive (true);
-		// CameraInputManager.Instance.ResetPosition ();
+		CameraInputManager.Instance.ResetPosition ();
 	}
 	public void ShowEndPresentationView()
 	{
@@ -72,19 +69,14 @@ public class UIManager : MonoBehaviour
 	}
 	public void ShowCaseStudyView()
     {
+		m_presentationView.SetActive (false);
         m_caseStudyView.SetActive(true);
     }
-    public void ShowManipulationView()
-    {
-        m_DifferentiatorManipulationView.SetActive(true);
-    }
-    public void HideManipulationView() // TODO some point, use events and listeners and that shit for handling this.
-    // why havent i done it now? 1. time sensitive and 2. still dont get 100% how to use them.
-    {
-        if (m_DifferentiatorManipulationView.activeInHierarchy)
-        m_DifferentiatorManipulationView.SetActive(false);
-    }
-
+	public void HideCaseStudyView()
+	{
+		m_caseStudyView.SetActive(false);
+		m_presentationView.SetActive (true);
+	}
 
 	private void Awake()
 	{
@@ -98,7 +90,6 @@ public class UIManager : MonoBehaviour
 		m_endPresentationView = Instantiate<GameObject> (m_endPresentationViewPrefab, this.gameObject.transform);
 		m_serviceSummaryView = Instantiate<GameObject> (m_serviceSummaryViewPrefab, this.gameObject.transform);
         m_caseStudyView = Instantiate<GameObject>(m_caseStudyViewPrefab, this.gameObject.transform);
-        m_DifferentiatorManipulationView = Instantiate <GameObject> (m_DifferentiatorManipulationPrefab, this.gameObject.transform);
 
 		m_caseView = m_caseStudyView.GetComponent<CaseStudyView> ();
 
@@ -110,7 +101,6 @@ public class UIManager : MonoBehaviour
 		m_endPresentationView.SetActive (false);
 		m_serviceSummaryView.SetActive (false);
         m_caseStudyView.SetActive(false);
-        m_DifferentiatorManipulationView.SetActive(false);
 	}
 
 }

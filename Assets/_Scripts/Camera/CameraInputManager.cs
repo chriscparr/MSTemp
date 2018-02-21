@@ -16,7 +16,6 @@ public class CameraInputManager : MonoBehaviour {
 	public static CameraInputManager Instance { get { return s_instance; } }
 
 	private float m_camVectorMagLowerBound = 5f;
-    private float m_camVectorMagHigherBound = -5f;
 
 	private static CameraInputManager s_instance = null;
 
@@ -37,17 +36,8 @@ public class CameraInputManager : MonoBehaviour {
 
 	private Transform m_CurrentTarget;
 	private Vector3 m_CachedPosition;
-	
+	private Subcell m_selectedCell;
 	private RailMover m_Mover;
-
-    [Header("Preset rail positions")]
-    public Vector3 homeVector = new Vector3(0, 0, -15f);
-    public Vector3 focusVector = new Vector3(0, 0, -7.5f);
-
-    [HideInInspector]
-    public bool isCameraDoingPredeterminedTween;
-    [HideInInspector]
-    public Subcell m_selectedCell;
 
 
 	private void Awake() 
@@ -56,7 +46,6 @@ public class CameraInputManager : MonoBehaviour {
 		m_MainCamera = Camera.main.gameObject;
 		m_CachedPosition = m_MainCamera.transform.position;
 		SetPhase(Phase.SetupPhase);
-
 
 		if (m_MainCamera.GetComponent<RailMover>() == null)
 		{
@@ -85,21 +74,18 @@ public class CameraInputManager : MonoBehaviour {
 				{
 					FindObjectOfType<SynapseGenerator>().enabled = true;
 				}
-                Debug.LogError("RETURNING TO MAIN STATE");
+				if (m_selectedCell != null)
+				{
+					FocusReset ();
+				}
 				// allow rotation and pinch and zoom to move in? google earth controls
 				// dont forget to use the actual f'n event handlers
 				break;
 			case Phase.FocusedSubCellPhase:
-                Debug.LogError("WE ARE NOW FOCUSED ON THE SUBCELL");
+
 				// here we pinch and zoom to scale the sub cell, so you may not need to do anything
 				break;
 			case Phase.InsideSubCellPhase:
-                if (m_selectedCell.doIAlreadyHaveReversedNormals != true)
-                {
-                    m_selectedCell.CreateReversedMesh();
-                }
-                m_selectedCell = null;
-                UIManager.Instance.HideManipulationView();
 				// here we want to do case study stuff, so enable BOTH OnRailsMovement and RailMover, put buttons to move to/from paths (do that listener and event stuff)
 				// ps learn about listeners and events already. 
 				break;
@@ -107,7 +93,7 @@ public class CameraInputManager : MonoBehaviour {
 		}
 	}
 
-	public void ResetPosition(bool doSmoothly = true)
+	public void ResetPosition(bool doSmoothly = false)
 	{
         // TODO make me a tween, so we gradually go back to the main phase, dont just snap it back.
         if (!doSmoothly)
@@ -117,82 +103,72 @@ public class CameraInputManager : MonoBehaviour {
         }
         else
         {
-            m_MainCamera.GetComponent<RailMover>().TweenToPosition(homeVector, 2, false, iTween.EaseType.easeInOutSine);
-
-            ReleaseSubCellFromFocus();
+            m_MainCamera.GetComponent<RailMover>().TweenToPosition(m_CachedPosition, 5, false, iTween.EaseType.easeOutSine);
             Camera.main.transform.eulerAngles = Vector3.zero;
-
-        if (m_CurrentPhase == Phase.FocusedSubCellPhase)
-            {
-                UIManager.Instance.HideManipulationView();
-            }
-
-            if (m_selectedCell != null)
-            {
-                m_selectedCell = null;
-            }
-
-            SetPhase(Phase.MainCellPhase);
         }
-
+		if (m_selectedCell != null)
+		{
+			FocusReset ();
+		}
 	}
 
-    public void ReleaseSubCellFromFocus(bool afterWeAreDoneHereShouldWeGoBack = false)
-    {
-        if (m_selectedCell != null)
-        {
-            m_selectedCell.RigidBody.isKinematic = false;
-
-            Vector3 direction = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1f,1f), 1);
-
-            m_selectedCell.RigidBody.AddForce((direction * 3f), ForceMode.Impulse);
-            m_selectedCell = null;
-        }
-
-        if (afterWeAreDoneHereShouldWeGoBack==true)
-        {
-            ResetPosition();
-        }
-
-
-    }
+	public void FocusReset()
+	{
+		m_selectedCell.RigidBody.isKinematic = false;
+		Destroy (m_selectedCell.GetComponent<RailMover> ());
+		m_selectedCell = null;
+		ModelManager.Instance.ShakeModel();
+		SetPhase (Phase.MainCellPhase);
+	}
 
 	public void FocusOnSubCell(Subcell selectedCell)
 	{
+		if (m_selectedCell != null)
+		{
+			FocusReset ();
+		}
 		m_selectedCell = selectedCell;
 		m_CurrentTarget = selectedCell.transform;
 
 		Vector3 desiredPosition = Vector3.zero;	//m_mainContainer is always at zero, lets keep it private if we can...
 
-        m_selectedCell.allowScaling = true;
 
-		selectedCell.RigidBody.isKinematic = true;
-		selectedCell.gameObject.AddComponent<RailMover>();
+		m_selectedCell.RigidBody.isKinematic = true;
+		m_selectedCell.gameObject.AddComponent<RailMover>();
 		m_Mover = selectedCell.GetComponent<RailMover>();
 
-		m_Mover.TweenToPosition(desiredPosition, 2f, false, iTween.EaseType.easeInOutSine);
+		m_Mover.TweenToPosition(desiredPosition, 3f, false, iTween.EaseType.easeInOutSine);
 
-        m_MainCamera.GetComponent<RailMover>().TweenToPosition(focusVector, 2f, false, iTween.EaseType.easeInOutSine);
-        UIManager.Instance.ShowManipulationView();
+		desiredPosition.z -= m_DistanceFromSubCell;
+
+		// as the main container scales up/down,
+		// TODO: Consider increasing/decreasing the m_DistanceFromSubcell along with it
+		// so you're always a good distance away from the subcell
+
+		m_MainCamera.GetComponent<RailMover>().TweenToPosition(desiredPosition, 3f, false, iTween.EaseType.easeInOutSine);
+
 		// UIManager.Instance.ShowServiceSummaryView (selectedCell.ServiceDat);
 	}
 
 	public void EnterSelectedSubCell()
 	{
-        UIManager.Instance.HideManipulationView();
+		//ModelManager.Instance.HaltSubcells ();
 
-		Camera.main.GetComponent<OnRailsMovement> ().Init (ModelManager.Instance.GetAllCaseCells ());
+		Camera.main.GetComponent<OnRailsMovement> ().Init (m_selectedCell.CaseCells);
 		m_CachedPosition = m_MainCamera.transform.position;
 		Vector3 desiredPosition = m_selectedCell.transform.position;
-		Camera.main.GetComponent<RailMover>().TweenToPosition(desiredPosition, m_ZoomSpeed, false, iTween.EaseType.easeInElastic);
-		SynapseGenerator.Instance.GenerateSynapses(desiredPosition, m_selectedCell.gameObject);
+		Camera.main.GetComponent<RailMover>().TweenToPosition(desiredPosition, m_ZoomSpeed, gameObject, "AfterSubCellEntry");
 
-		UIManager.Instance.ShowCaseStudyView();
-		// Camera.main.GetComponent<OnRailsMovement> ().GoToNextPoint ();
+		SynapseGenerator.Instance.GenerateSynapses(desiredPosition, m_selectedCell.gameObject);
 	}
 
+	public void AfterSubCellEntry()
+	{
+		UIManager.Instance.ShowCaseStudyView();
+		Camera.main.GetComponent<OnRailsMovement> ().BeginCases ();
+	}
 
-	private void FixedUpdate()
+	private void Update()
 	{
 		if (Input.touchCount == 2 && m_CurrentPhase == Phase.FocusedSubCellPhase)
 		{
@@ -203,29 +179,6 @@ public class CameraInputManager : MonoBehaviour {
 		{
 			HandleOneFinger ();
 		}
-
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            if (isCameraDoingPredeterminedTween != true)
-            {
-                m_Mover.TweenToPosition(homeVector, 2, true, iTween.EaseType.easeInOutSine);
-                isCameraDoingPredeterminedTween = true;
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            UIManager.Instance.HideManipulationView();
-            ResetPosition();
-      
-            }
-
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            if (m_selectedCell.GetComponent<Renderer>().sharedMaterial != m_selectedCell.myOnMaterial && m_selectedCell != null)
-                m_selectedCell.GetComponent<Renderer>().sharedMaterial = m_selectedCell.myOnMaterial;
-        }
-
 	}
 
 	private void HandleOneFinger()
@@ -233,54 +186,19 @@ public class CameraInputManager : MonoBehaviour {
 		Touch touch = Input.GetTouch(0);
 		if (touch.phase == TouchPhase.Moved)
 		{
-            if (touch.deltaPosition.x < -m_touchThresholdX || touch.deltaPosition.x > m_touchThresholdX && m_CurrentPhase != Phase.InsideSubCellPhase)
+			if (touch.deltaPosition.x < -m_touchThresholdX || touch.deltaPosition.x > m_touchThresholdX)
 			{
-				//float angleVal = touch.deltaPosition.x * Time.deltaTime;
-				//Camera.main.transform.RotateAround (Vector3.zero, Vector3.up, angleVal);
-				//Camera.main.transform.LookAt (Vector3.zero);
+				float angleVal = touch.deltaPosition.x * Time.deltaTime;
+				Camera.main.transform.RotateAround (Vector3.zero, Vector3.up, angleVal);
+				Camera.main.transform.LookAt (Vector3.zero);
 			}
-
-            // TODO here u must accomodate for swipe ups and swipe downs depending on our phase
-            // MAIN PHASE, SWIPE UP, ZOOM TO HOME VECTOR
-            // FOCUSED SUB CELL PHASE, SWIPE DOWN, ZOOM TO HOME VECTOR
-
-            // HANG ON - THIS IS JUST FOR UPWARD SWIPING? TEST ME ON LUNCH PLEASE
 			if (touch.deltaPosition.y < -m_touchThresholdY || touch.deltaPosition.y > m_touchThresholdY)
 			{
-                float camPosMagnitude = (m_MainCamera.transform.position - Vector3.zero).magnitude;
-
-                if (touch.deltaPosition.y > 0f)
-                {
-                    if (isCameraDoingPredeterminedTween != true && m_CurrentPhase == Phase.MainCellPhase)
-                    {
-                        Debug.Log("WE ARE MOVING TOWARDS THE MAIN CELL");
-                        m_Mover.TweenToPosition(homeVector, 2, true, iTween.EaseType.easeInOutSine);
-                        isCameraDoingPredeterminedTween = true;
-                    }
-
-                    if (isCameraDoingPredeterminedTween != true && m_CurrentPhase == Phase.FocusedSubCellPhase)
-                    {
-                            EnterSelectedSubCell();
-                            SetPhase(Phase.InsideSubCellPhase);
-                            
-                    }
-                }
-
-                if (touch.deltaPosition.y < 0f)
-                {
-                    if (isCameraDoingPredeterminedTween != true && m_CurrentPhase == Phase.FocusedSubCellPhase)
-                    {
-                        Debug.Log("WE ARE MOVING BACK TOWARDS THE MAIN CELL");
-                        ResetPosition();
-                        isCameraDoingPredeterminedTween = true;
-                    }
-                }
-
-
-				//if (camPosMagnitude > m_camVectorMagLowerBound || touch.deltaPosition.y < 0f)
-				//{
-                   
-				//}
+				float camPosMagnitude = (m_MainCamera.transform.position - Vector3.zero).magnitude;
+				if (camPosMagnitude > m_camVectorMagLowerBound || touch.deltaPosition.y < 0f)
+				{
+					m_MainCamera.transform.Translate (transform.forward * touch.deltaPosition.y * Time.fixedDeltaTime);
+				}
 			}
 		}
 	}
@@ -306,11 +224,9 @@ public class CameraInputManager : MonoBehaviour {
 
 	private void ApplySubcellScale(float a_newScale)
 	{
-		if (m_selectedCell != null && m_selectedCell.allowScaling == true)
+		if (m_selectedCell != null)
 		{
 			ModelManager.Instance.ScaleSubcell (m_selectedCell, a_newScale);
-            if (m_selectedCell.GetComponent<Renderer>().sharedMaterial != m_selectedCell.myOnMaterial && m_selectedCell != null)
-            m_selectedCell.GetComponent<Renderer>().sharedMaterial = m_selectedCell.myOnMaterial;
 		}
 	}
 }

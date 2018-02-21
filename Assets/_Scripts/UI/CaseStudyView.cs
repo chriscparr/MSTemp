@@ -23,6 +23,7 @@ public class CaseStudyView : MonoBehaviour
 
 	public void DisplayCaseStudy(CaseStudyData a_caseData)
 	{
+		ClearCaseStudy ();
 		m_titleText.text = a_caseData.TitleText;
 		m_typeText.text = a_caseData.CaseStudyType;
 		if (a_caseData.CaseStudyType == "TEXT")

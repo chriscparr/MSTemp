@@ -22,4 +22,11 @@ public class RailMover : MonoBehaviour {
         CameraInputManager.Instance.isCameraDoingPredeterminedTween = false;
     }
 
+
+	public void TweenToPosition(Vector3 pos, float a_time, GameObject a_callbackObject, string a_callbackMethodName)
+	{
+		bool orientToPath = true;
+		iTween.EaseType easeMethod = iTween.EaseType.easeInOutSine;
+		iTween.MoveTo(this.gameObject, iTween.Hash("position", pos, "time", a_time, "easetype", easeMethod, "orienttopath", orientToPath, "oncompletetarget", a_callbackObject, "oncomplete", a_callbackMethodName));
+	}
 }
