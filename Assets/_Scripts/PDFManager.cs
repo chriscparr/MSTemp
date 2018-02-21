@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using sharpPDF;
-using sharpPDF.Collections;
-using sharpPDF.PDFControls;
-using sharpPDF.Elements;
+
+
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Drawing;
@@ -79,7 +77,7 @@ public class PDFManager : MonoBehaviour
 
     public IEnumerator GenerateEntirePDF()
     {
-        pdfDocument doc = new pdfDocument("pdfTitle", "Mindshare");
+        // pdfDocument doc = new pdfDocument("pdfTitle", "Mindshare");
 
 
         for (int i = 0; i <= 1; i++)
@@ -96,7 +94,7 @@ public class PDFManager : MonoBehaviour
                 PageTwo.SetActive(true);
             }
 
-            pdfPage pg = doc.addPage(Screen.height, Screen.width);
+            // pdfPage pg = doc.addPage(Screen.height, Screen.width);
 
             pdfCamera.gameObject.SetActive(true);
 
@@ -128,7 +126,7 @@ public class PDFManager : MonoBehaviour
             //pdfImageReference ref = new pdfImageRenference(tempPath);
             //pg.AddImageref,0,0) - this doesnt work
 
-            pg = null;
+            // pg = null;
             System.GC.Collect();
             yield return new WaitForSeconds(0.3f);
 
