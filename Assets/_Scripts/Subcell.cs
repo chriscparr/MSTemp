@@ -57,7 +57,6 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		m_labelText.text = m_serviceData.ServiceName.ToLowerInvariant ();
 		m_labelText.gameObject.SetActive (false);
 		gameObject.AddComponent<RailMover>();
-		GenerateCaseCells ();
 	}
 
 	public void ToggleLabelText(bool a_isActive)
@@ -69,6 +68,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
     {
 		if (!m_hasReversedMesh)
 		{
+            m_hasReversedMesh = true;
 			GameObject clone = Instantiate(this.gameObject, transform.position, Quaternion.identity) as GameObject;        
 			Destroy (clone.transform.GetChild(0).gameObject);
 			clone.transform.parent = this.transform;
@@ -76,11 +76,12 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 			Destroy(clone.GetComponent<Rigidbody>());
 			Destroy(clone.GetComponent<SphereCollider>());
 			Destroy(clone.GetComponent<Subcell>());
+            clone.layer = 8; // IGNORE D.O.F
 			clone.AddComponent<ReverseNormals>();
 		}
     }
 
-	private void GenerateCaseCells()
+	public void GenerateCaseCells()
 	{
 		m_caseCells = new CaseCell[m_serviceData.CaseStudies.Length];
 		for (int i = 0; i < m_caseCells.Length; i++)

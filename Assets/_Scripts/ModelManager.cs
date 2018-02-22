@@ -109,6 +109,7 @@ public class ModelManager : MonoBehaviour
                 sub.GetComponent<Subcell>().myOnMaterial = OnStateMaterials[i];
                 sub.GetComponent<Renderer>().sharedMaterial = OffStateMaterial;
                 sub.GetComponent<Subcell>().CreateReversedMesh();
+                sub.GetComponent<Subcell>().GenerateCaseCells();
 			}
 			m_isInitialised = true;
 

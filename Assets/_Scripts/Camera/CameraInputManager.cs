@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using BeautifyEffect;
 
 public class CameraInputManager : MonoBehaviour 
 {
@@ -84,11 +85,13 @@ public class CameraInputManager : MonoBehaviour
 					FindObjectOfType<SynapseGenerator>().enabled = true;
 				}
 				Debug.Log("RETURNING TO MAIN STATE");
+                Camera.main.GetComponent<Beautify>().depthOfField = true;
 				// allow rotation and pinch and zoom to move in? google earth controls
 				// dont forget to use the actual f'n event handlers
 				break;
 			case Phase.FocusedSubCellPhase:
 				Debug.Log("WE ARE NOW FOCUSED ON THE SUBCELL");
+                Camera.main.GetComponent<Beautify>().depthOfField = true;
 				// here we pinch and zoom to scale the sub cell, so you may not need to do anything
 				break;
 			case Phase.InsideSubCellPhase:
@@ -119,6 +122,7 @@ public class CameraInputManager : MonoBehaviour
 		{
 			FocusReset ();
 		}
+
 	}
 
 	public void FocusReset()
@@ -167,13 +171,16 @@ public class CameraInputManager : MonoBehaviour
 			} 
 			else
 			{
-				ResetPosition (true);
+                ResetPosition(true);
 			}
 		}
 	}
 
+
+
 	public void AfterSubCellEntry()
 	{
+        Camera.main.GetComponent<Beautify>().depthOfField = false;
 		UIManager.Instance.ShowCaseStudyView();
 		Camera.main.GetComponent<OnRailsMovement> ().BeginCases ();
 	}

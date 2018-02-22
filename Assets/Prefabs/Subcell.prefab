@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 23376818372811490}
   - component: {fileID: 102670133084550982}
   - component: {fileID: 114893363251956528}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,8 +198,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb80f3ae235fe404e9dfa591a16ed553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  typeName: 
-  Label: {fileID: 102670133084550982}
+  m_labelText: {fileID: 0}
+  m_caseCellPrefab: {fileID: 0}
+  myOnMaterial: {fileID: 0}
 --- !u!114 &114893363251956528
 MonoBehaviour:
   m_ObjectHideFlags: 1

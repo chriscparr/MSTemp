@@ -477,7 +477,7 @@ MonoBehaviour:
   _bloom: 1
   _bloomCullingMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967263
   _bloomLayerMaskDownsampling: 1
   _bloomIntensity: 1
   _bloomMaxBrightness: 1000
@@ -517,7 +517,7 @@ MonoBehaviour:
   _depthOfFieldAutofocus: 1
   _depthOfFieldAutofocusLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4294967007
   _depthOfFieldExclusionLayerMask:
     serializedVersion: 2
     m_Bits: 0
@@ -525,16 +525,16 @@ MonoBehaviour:
   _depthOfFieldTransparencySupportDownsampling: 1
   _depthOfFieldExclusionBias: 0.99
   _depthOfFieldDistance: 1
-  _depthOfFieldFocusSpeed: 0.872
+  _depthOfFieldFocusSpeed: 0.661
   _depthOfFieldDownsampling: 2
   _depthOfFieldMaxSamples: 4
   _depthOfFieldFocalLength: 0.207
   _depthOfFieldAperture: 2.8
-  _depthOfFieldForegroundBlur: 1
+  _depthOfFieldForegroundBlur: 0
   _depthOfFieldForegroundDistance: 0.25
   _depthOfFieldBokeh: 1
   _depthOfFieldBokehThreshold: 1
-  _depthOfFieldBokehIntensity: 2
+  _depthOfFieldBokehIntensity: 0.84
   _depthOfFieldMaxBrightness: 1000
   _depthOfFieldFilterMode: 1
   _eyeAdaptation: 0
@@ -585,7 +585,7 @@ MonoBehaviour:
   _sunFlaresRotationDeadZone: 0
   _blur: 0
   _blurIntensity: 1
-  isDirty: 1
+  isDirty: 0
   bMat: {fileID: 0}
 --- !u!82 &1088703399
 AudioSource:
