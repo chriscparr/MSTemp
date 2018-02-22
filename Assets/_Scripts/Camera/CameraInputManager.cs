@@ -85,12 +85,12 @@ public class CameraInputManager : MonoBehaviour {
 				{
 					FindObjectOfType<SynapseGenerator>().enabled = true;
 				}
-				Debug.LogError("RETURNING TO MAIN STATE");
+				Debug.Log("RETURNING TO MAIN STATE");
 				// allow rotation and pinch and zoom to move in? google earth controls
 				// dont forget to use the actual f'n event handlers
 				break;
 			case Phase.FocusedSubCellPhase:
-				Debug.LogError("WE ARE NOW FOCUSED ON THE SUBCELL");
+				Debug.Log("WE ARE NOW FOCUSED ON THE SUBCELL");
 				// here we pinch and zoom to scale the sub cell, so you may not need to do anything
 				break;
 			case Phase.InsideSubCellPhase:
