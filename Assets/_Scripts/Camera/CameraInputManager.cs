@@ -113,13 +113,12 @@ public class CameraInputManager : MonoBehaviour
 
 			Camera.main.transform.eulerAngles = Vector3.zero;
 			UIManager.Instance.ShowPresentationView ();
-
-			if (m_selectedCell != null)
-			{
-				FocusReset ();
-			}
 		}
 
+		if (m_selectedCell != null)
+		{
+			FocusReset ();
+		}
 	}
 
 	public void FocusReset()
@@ -151,18 +150,25 @@ public class CameraInputManager : MonoBehaviour
 		// UIManager.Instance.ShowServiceSummaryView (selectedCell.ServiceDat);
 	}
 
-	public void EnterSelectedSubCell()
+	public void EnterSelectedSubCell(Subcell a_doubleClickedCell)
 	{
 		if (m_selectedCell != null)
 		{
-			SetPhase (Phase.InsideSubCellPhase);
-			UIManager.Instance.HideAllViews ();
-			Camera.main.GetComponent<OnRailsMovement> ().Init (m_selectedCell.CaseCells);
-			m_CachedPosition = m_MainCamera.transform.position;
-			Vector3 desiredPosition = m_selectedCell.transform.position;
-			Camera.main.GetComponent<RailMover>().TweenToPosition(desiredPosition, m_ZoomSpeed, gameObject, "AfterSubCellEntry");
-			
-			SynapseGenerator.Instance.GenerateSynapses(desiredPosition, m_selectedCell.gameObject);
+			if (a_doubleClickedCell == m_selectedCell)
+			{
+				SetPhase (Phase.InsideSubCellPhase);
+				UIManager.Instance.HideAllViews ();
+				Camera.main.GetComponent<OnRailsMovement> ().Init (m_selectedCell.CaseCells);
+				m_CachedPosition = m_MainCamera.transform.position;
+				Vector3 desiredPosition = m_selectedCell.transform.position;
+				Camera.main.GetComponent<RailMover>().TweenToPosition(desiredPosition, m_ZoomSpeed, gameObject, "AfterSubCellEntry");
+				
+				SynapseGenerator.Instance.GenerateSynapses(desiredPosition, m_selectedCell.gameObject);
+			} 
+			else
+			{
+				ResetPosition (true);
+			}
 		}
 	}
 
@@ -245,7 +251,7 @@ public class CameraInputManager : MonoBehaviour
 							break;
 						case Phase.FocusedSubCellPhase:
 							Debug.Log("WE ARE MOVING TOWARDS SUBCELL: " + m_selectedCell.ServiceDat.ServiceName);
-							EnterSelectedSubCell();
+							EnterSelectedSubCell(m_selectedCell);
 							SetPhase(Phase.InsideSubCellPhase);
 							break;
 					}
@@ -256,9 +262,8 @@ public class CameraInputManager : MonoBehaviour
 					switch (m_CurrentPhase)
 					{
 						case Phase.InsideSubCellPhase:
-							Debug.Log("WE ARE LEAVING SUBCELL: " + m_selectedCell.ServiceDat.ServiceName);
-							EnterSelectedSubCell();
-							SetPhase(Phase.InsideSubCellPhase);
+							Debug.Log ("WE ARE LEAVING SUBCELL: " + m_selectedCell.ServiceDat.ServiceName);
+							ResetPosition (true);
 							break;
 						case Phase.FocusedSubCellPhase:
 							Debug.Log ("WE ARE MOVING BACK TOWARDS THE MAIN CELL");

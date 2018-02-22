@@ -127,9 +127,9 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 				else
 				if (CameraInputManager.Instance.m_CurrentPhase == CameraInputManager.Phase.FocusedSubCellPhase)
 				{
-						Debug.Log("Entering " + ServiceDat.ServiceName);
+					Debug.Log("Entering " + ServiceDat.ServiceName);
                     CreateReversedMesh();
-					CameraInputManager.Instance.EnterSelectedSubCell ();
+					CameraInputManager.Instance.EnterSelectedSubCell (this);
 				}
 				break;
 			default:
