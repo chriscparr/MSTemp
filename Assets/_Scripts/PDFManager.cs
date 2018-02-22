@@ -105,6 +105,9 @@ public class PDFManager : MonoBehaviour
                 PageTwo.SetActive(true);
             }
 
+            // SOME POINT IN THE FUTURE, WE WILL ACTUALLY POPULATE OUR PDF CANVAS WITH STUFF
+            // HELL, DONT ACTUALLY DO ALL OF THAT HERE, DO IT AS WE DO THINGS IN THE APP :-)
+
             // pdfPage pg = doc.addPage(Screen.height, Screen.width);
 
             pdfCamera.gameObject.SetActive(true);
@@ -152,6 +155,9 @@ public class PDFManager : MonoBehaviour
         byte[] mBytes;
         mBytes = finalTexture.EncodeToPNG();
         string tempPath = Application.persistentDataPath + "/" + "OpenMind" + ".pdf";
+
+        // CONSIDER ADDING DATE AND CLIENT NAME TO THE TEMPPATH ABOVE.
+
         File.WriteAllBytes(tempPath, mBytes);
         OpenPDF(tempPath, files[0], files[1]);
  
