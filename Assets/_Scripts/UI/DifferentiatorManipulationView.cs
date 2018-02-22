@@ -39,7 +39,7 @@ public class DifferentiatorManipulationView : MonoBehaviour
 	private void GoHome()
     {
         LockSubcell(false);
-        CameraInputManager.Instance.ReleaseSubCellFromFocus(true);
+		CameraInputManager.Instance.FocusReset ();
         gameObject.SetActive(false);
     }
 
