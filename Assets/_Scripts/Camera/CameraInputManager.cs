@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CameraInputManager : MonoBehaviour {
+public class CameraInputManager : MonoBehaviour 
+{
 
 	public enum Phase
 	{
@@ -152,14 +153,17 @@ public class CameraInputManager : MonoBehaviour {
 
 	public void EnterSelectedSubCell()
 	{
-		SetPhase (Phase.InsideSubCellPhase);
-		UIManager.Instance.HideAllViews ();
-		Camera.main.GetComponent<OnRailsMovement> ().Init (m_selectedCell.CaseCells);
-		m_CachedPosition = m_MainCamera.transform.position;
-		Vector3 desiredPosition = m_selectedCell.transform.position;
-		Camera.main.GetComponent<RailMover>().TweenToPosition(desiredPosition, m_ZoomSpeed, gameObject, "AfterSubCellEntry");
-
-		SynapseGenerator.Instance.GenerateSynapses(desiredPosition, m_selectedCell.gameObject);
+		if (m_selectedCell != null)
+		{
+			SetPhase (Phase.InsideSubCellPhase);
+			UIManager.Instance.HideAllViews ();
+			Camera.main.GetComponent<OnRailsMovement> ().Init (m_selectedCell.CaseCells);
+			m_CachedPosition = m_MainCamera.transform.position;
+			Vector3 desiredPosition = m_selectedCell.transform.position;
+			Camera.main.GetComponent<RailMover>().TweenToPosition(desiredPosition, m_ZoomSpeed, gameObject, "AfterSubCellEntry");
+			
+			SynapseGenerator.Instance.GenerateSynapses(desiredPosition, m_selectedCell.gameObject);
+		}
 	}
 
 	public void AfterSubCellEntry()
@@ -227,7 +231,7 @@ public class CameraInputManager : MonoBehaviour {
 				}
 			}
 			//If we've passed the threshold for Vertical swipe detection:
-			if (touch.deltaPosition.y < -m_touchThresholdY || touch.deltaPosition.y > m_touchThresholdY)
+			else if (touch.deltaPosition.y < -m_touchThresholdY || touch.deltaPosition.y > m_touchThresholdY)
 			{
 				//swipe up
 				if (touch.deltaPosition.y > 0f)
