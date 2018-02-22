@@ -23,8 +23,10 @@ public class UIManager : MonoBehaviour
 	private GameObject m_endPresentationViewPrefab;
 	[SerializeField]
 	private GameObject m_serviceSummaryViewPrefab;
-    [SerializeField]
-    private GameObject m_caseStudyViewPrefab;
+	[SerializeField]
+	private GameObject m_caseStudyViewPrefab;
+	[SerializeField]
+	private GameObject m_DifferentiatorManipulationPrefab;
 
 	private GameObject m_loginView;
 	private GameObject m_newOrSavedView;
@@ -33,49 +35,65 @@ public class UIManager : MonoBehaviour
 	private GameObject m_presentationView;
 	private GameObject m_endPresentationView;
 	private GameObject m_serviceSummaryView;
-    private GameObject m_caseStudyView;
+	private GameObject m_caseStudyView;
+	private GameObject m_DifferentiatorManipulationView;
+
+	private GameObject[] m_allViewObjects;
 
 	private CaseStudyView m_caseView;
 
 	public void ShowLoginView()
 	{
+		HideAllViews ();
 		m_loginView.SetActive (true);
 	}
 	public void ShowNewOrSavedView()
 	{
+		HideAllViews ();
 		m_newOrSavedView.SetActive (true);
 	}
 	public void ShowNewPresentationView()
 	{
+		HideAllViews ();
 		m_newPresentationView.SetActive (true);
 	}
 	public void ShowSelectSavedView()
 	{
+		HideAllViews ();
 		m_selectSavedView.SetActive (true);
 	}
 	public void ShowPresentationView()
 	{
+		HideAllViews ();
 		m_presentationView.SetActive (true);
-		CameraInputManager.Instance.ResetPosition ();
 	}
 	public void ShowEndPresentationView()
 	{
+		HideAllViews ();
 		m_endPresentationView.SetActive (true);
 	}
 	public void ShowServiceSummaryView(ServiceData a_sData)
 	{
+		HideAllViews ();
 		m_serviceSummaryView.SetActive (true);
 		m_serviceSummaryView.GetComponent<ServiceSummaryView> ().SetupServiceView (a_sData);
 	}
 	public void ShowCaseStudyView()
-    {
-		m_presentationView.SetActive (false);
-        m_caseStudyView.SetActive(true);
-    }
-	public void HideCaseStudyView()
 	{
-		m_caseStudyView.SetActive(false);
-		m_presentationView.SetActive (true);
+		HideAllViews ();
+		m_caseStudyView.SetActive(true);
+	}
+	public void ShowManipulationView()
+	{
+		HideAllViews ();
+		m_DifferentiatorManipulationView.SetActive(true);
+	}
+	public void HideAllViews()
+	{
+		foreach (GameObject g in m_allViewObjects)
+		{
+			g.SetActive (false);
+		}
 	}
 
 	private void Awake()
@@ -89,18 +107,14 @@ public class UIManager : MonoBehaviour
 		m_presentationView = Instantiate<GameObject> (m_presentationViewPrefab, this.gameObject.transform);
 		m_endPresentationView = Instantiate<GameObject> (m_endPresentationViewPrefab, this.gameObject.transform);
 		m_serviceSummaryView = Instantiate<GameObject> (m_serviceSummaryViewPrefab, this.gameObject.transform);
-        m_caseStudyView = Instantiate<GameObject>(m_caseStudyViewPrefab, this.gameObject.transform);
+		m_caseStudyView = Instantiate<GameObject>(m_caseStudyViewPrefab, this.gameObject.transform);
+		m_DifferentiatorManipulationView = Instantiate <GameObject> (m_DifferentiatorManipulationPrefab, this.gameObject.transform);
+
+		m_allViewObjects = new GameObject[] {m_loginView, m_newOrSavedView, m_newPresentationView,
+			m_selectSavedView, m_presentationView, m_endPresentationView, m_serviceSummaryView, m_caseStudyView, m_DifferentiatorManipulationView};
 
 		m_caseView = m_caseStudyView.GetComponent<CaseStudyView> ();
 
-		m_loginView.SetActive (false);
-		m_newOrSavedView.SetActive (false);
-		m_newPresentationView.SetActive (false);
-		m_selectSavedView.SetActive (false);
-		m_presentationView.SetActive (false);
-		m_endPresentationView.SetActive (false);
-		m_serviceSummaryView.SetActive (false);
-        m_caseStudyView.SetActive(false);
+		HideAllViews ();
 	}
-
 }

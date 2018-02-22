@@ -176,8 +176,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f330efe5c14a4e348ab87abab59d530, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  difName: {fileID: 114778440719634204}
-  lockTog: {fileID: 114491864795542632}
+  m_serviceNameText: {fileID: 114778440719634204}
+  m_lockToggle: {fileID: 114491864795542632}
+  m_homeButton: {fileID: 114644193834649548}
 --- !u!114 &114345781363765632
 MonoBehaviour:
   m_ObjectHideFlags: 1
