@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 2adb3c339e595cc469bc494e5525992d, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 4fab76f3bdacf46a490179994c803a7c, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.8183788, g: 0.8160225, b: 0.80632, a: 1}
+  m_IndirectSpecularColor: {r: 0.8100187, g: 0.8221841, b: 0.8807394, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -585,7 +585,7 @@ MonoBehaviour:
   _sunFlaresRotationDeadZone: 0
   _blur: 0
   _blurIntensity: 1
-  isDirty: 0
+  isDirty: 1
   bMat: {fileID: 0}
 --- !u!82 &1088703399
 AudioSource:
@@ -596,7 +596,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 14a54d32f525b4535867253b4d9759c4, type: 3}
+  m_audioClip: {fileID: 8300000, guid: c0b6dc73f637f4675a20c703ea0c0dfb, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -1116,7 +1116,7 @@ MonoBehaviour:
   m_DistanceFromSubCell: 25
   m_touchThresholdX: 20
   m_touchThresholdY: 20
-  homeVector: {x: 0, y: 0, z: -17.5}
+  homeVector: {x: 0, y: 0, z: -10}
   focusVector: {x: 0, y: 0, z: -7.5}
 --- !u!114 &1724715072
 MonoBehaviour:
