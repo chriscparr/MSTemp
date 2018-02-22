@@ -168,6 +168,15 @@ public class ModelManager : MonoBehaviour
 		}
 	}
 
+	public void HaltSubcell(Subcell a_cell)
+	{
+		if (m_isInitialised)
+		{
+			//Halt subcell
+			a_cell.RigidBody.AddForce ((a_cell.RigidBody.velocity * -1), ForceMode.VelocityChange);
+			a_cell.RigidBody.AddTorque ((a_cell.RigidBody.angularVelocity * -1), ForceMode.VelocityChange);
+		}
+	}
 
 	public void ClearModel()
 	{
@@ -198,8 +207,6 @@ public class ModelManager : MonoBehaviour
 
         }
 		m_highlight.enabled = true;
-        // CameraInputManager.Instance.SetLookAtTarget(m_highlightedSubcell.transform);
-        // CameraInputManager.Instance.FollowTarget();
         yield return new WaitForSeconds(3);
         foreach (Subcell cell in m_subcells)
         {
