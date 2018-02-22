@@ -108,6 +108,7 @@ public class ModelManager : MonoBehaviour
 				sub.transform.localPosition = Vector3.Scale (minBounds, m_placementVectors [i]);
                 sub.GetComponent<Subcell>().myOnMaterial = OnStateMaterials[i];
                 sub.GetComponent<Renderer>().sharedMaterial = OffStateMaterial;
+                sub.GetComponent<Subcell>().CreateReversedMesh();
 			}
 			m_isInitialised = true;
 

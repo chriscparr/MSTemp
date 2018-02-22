@@ -57,7 +57,6 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		m_labelText.text = m_serviceData.ServiceName.ToLowerInvariant ();
 		m_labelText.gameObject.SetActive (false);
 		gameObject.AddComponent<RailMover>();
-		CreateReversedMesh();
 		GenerateCaseCells ();
 	}
 
