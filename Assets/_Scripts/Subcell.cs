@@ -57,6 +57,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		m_labelText.text = m_serviceData.ServiceName.ToLowerInvariant ();
 		m_labelText.gameObject.SetActive (false);
 		gameObject.AddComponent<RailMover>();
+		CreateReversedMesh();
 		GenerateCaseCells ();
 	}
 
@@ -72,6 +73,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 			GameObject clone = Instantiate(this.gameObject, transform.position, Quaternion.identity) as GameObject;        
 			Destroy (clone.transform.GetChild(0).gameObject);
 			clone.transform.parent = this.transform;
+			clone.GetComponent<Renderer> ().sharedMaterial = myOnMaterial;
 			Destroy(clone.GetComponent<Rigidbody>());
 			Destroy(clone.GetComponent<SphereCollider>());
 			Destroy(clone.GetComponent<Subcell>());
@@ -128,7 +130,6 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 				if (CameraInputManager.Instance.m_CurrentPhase == CameraInputManager.Phase.FocusedSubCellPhase)
 				{
 					Debug.Log("Entering " + ServiceDat.ServiceName);
-                    CreateReversedMesh();
 					CameraInputManager.Instance.EnterSelectedSubCell (this);
 				}
 				break;
