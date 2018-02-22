@@ -120,6 +120,7 @@ public class OnRailsMovement : MonoBehaviour
 		//UIManager.Instance.HideCaseStudyView();
 		CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
 		CameraInputManager.Instance.ResetPosition(true);
+        SynapseGenerator.Instance.DoReversal();
 	}
 
 	private void Update()

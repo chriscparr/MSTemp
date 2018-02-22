@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class SynapseGenerator : MonoBehaviour {
 
@@ -109,4 +110,10 @@ public class SynapseGenerator : MonoBehaviour {
 		Debug.Log (p.pathName);
 		p.GetComponent<SynapseMover> ().Tweener (p);
 	}
+
+    public void DoReversal()
+    {
+        SynapseMover.reversed = true;
+
+    }
 }

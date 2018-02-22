@@ -10,6 +10,12 @@ public class SynapseMover : MonoBehaviour {
 
 	public float maxTime = 30;
 
+    float elapsedTime = 0;
+    float reversalTime;
+
+    public static bool reversed = false;
+    TrailRenderer thisTrail;
+
 	// Use this for initialization
 	public void Tweener(iTweenPath p) {
 		arr = p.nodes.ToArray ();
@@ -19,6 +25,7 @@ public class SynapseMover : MonoBehaviour {
 
 	void Awake() {
 		iTween.Init (this.gameObject);
+        thisTrail = GetComponent<TrailRenderer>();
 	}
 
 	void Update() {
@@ -28,10 +35,29 @@ public class SynapseMover : MonoBehaviour {
 		iTween.PutOnPath (this.gameObject, arr, val);
 
 		if (this.val >= 0.99f) {
-			//Debug.Log ("DISABLE THE MOVER");
-			this.enabled = false;
+       
+            //Debug.Log ("DISABLE THE MOVER");
+            allowMove = false;
 		}
 
+        if (!reversed)
+        {
+            elapsedTime += Time.deltaTime;
+        }
+
+        else if (reversed==true)
+        {
+            thisTrail.time = (maxTime + elapsedTime);
+                    // val = Mathf.SmoothStep(1, 0, Mathf.PingPong(Time.time / maxTime, 1));
+            ////Debug.Log("SYNAPSE MOVING");
+            //iTween.PutOnPath(this.gameObject, arr, val);
+
+            //if (this.val <= 0.01f)
+            //{
+            //    //Debug.Log ("DISABLE THE MOVER");
+            //    Destroy(this);
+            //}
+        }
 	
 	}
 }
