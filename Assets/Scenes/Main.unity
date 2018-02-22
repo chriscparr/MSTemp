@@ -585,7 +585,7 @@ MonoBehaviour:
   _sunFlaresRotationDeadZone: 0
   _blur: 0
   _blurIntensity: 1
-  isDirty: 1
+  isDirty: 0
   bMat: {fileID: 0}
 --- !u!82 &1088703399
 AudioSource:
@@ -596,7 +596,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: fe8edd06be33243f492e8f2b1c1c7018, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 14a54d32f525b4535867253b4d9759c4, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -732,7 +732,7 @@ Prefab:
     - target: {fileID: 224876516820499914, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -75.15
+      value: -75.1499
       objectReference: {fileID: 0}
     - target: {fileID: 224876516820499914, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
@@ -757,12 +757,12 @@ Prefab:
     - target: {fileID: 224220058283687968, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 815.55
+      value: 815.55005
       objectReference: {fileID: 0}
     - target: {fileID: 224220058283687968, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -75.15
+      value: -75.1499
       objectReference: {fileID: 0}
     - target: {fileID: 224220058283687968, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
@@ -1118,8 +1118,6 @@ MonoBehaviour:
   m_touchThresholdY: 20
   homeVector: {x: 0, y: 0, z: -17.5}
   focusVector: {x: 0, y: 0, z: -7.5}
-  isCameraDoingPredeterminedTween: 0
-  m_selectedCell: {fileID: 0}
 --- !u!114 &1724715072
 MonoBehaviour:
   m_ObjectHideFlags: 0
