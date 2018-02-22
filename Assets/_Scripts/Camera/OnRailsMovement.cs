@@ -83,7 +83,7 @@ public class OnRailsMovement : MonoBehaviour
 
 	IEnumerator PlayAndWait() 
 	{
-		yield return new WaitForSeconds (2);
+		yield return new WaitForSeconds (0.2f);
 		/*
 		if (m_pathPointIndex > m_thisPath.nodeCount)
 		{
