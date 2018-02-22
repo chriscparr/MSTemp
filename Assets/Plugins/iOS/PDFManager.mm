@@ -1,3 +1,5 @@
+
+
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
@@ -32,8 +34,22 @@
     fileURL = unityURL;
 }
 
+-(UIImage*)imageWithImage:(UIImage*)image scaledToSize:(CGSize)newSize {
+    UIGraphicsBeginImageContext(newSize);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
 
+- (UIViewController *) documentInteractionControllerViewControllerForPreview: (UIDocumentInteractionController *) controller {
+    return UnityGetGLViewController();
+}
 
+- (void)prepareForPopoverPresentation:(UIPopoverPresentationController *)popoverPresentationController;
+{
+    
+}
 
 - (void)OpenIt {
     
@@ -61,7 +77,20 @@
         
         // if CGRectZero doesn't work, then try view.bounds
         UIViewController *rootViewController = UnityGetGLViewController();
-        [rootViewController presentViewController:controller animated:YES completion:Nil];
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+         
+            controller.popoverPresentationController.sourceView = controller.view;
+            controller.popoverPresentationController.sourceRect = controller.view.frame;
+            NSLog(@"I AM SETTING THE VIEW MOTHERFUCKER");
+            UIPopoverPresentationController *popup = [[UIPopoverPresentationController alloc] initWithPresentedViewController:rootViewController presentingViewController:rootViewController];
+
+        }
+        if (controller != nil)
+        {
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:controller animated:YES completion:Nil];
+        }
     });
     
     NSLog(@"OBEY ME");
@@ -70,9 +99,7 @@
 }
 
 
-- (UIViewController *) documentInteractionControllerViewControllerForPreview: (UIDocumentInteractionController *) controller {
-    return UnityGetGLViewController();
-}
+
 
 
 
@@ -109,10 +136,26 @@ extern "C" {
         NSURL *urlOne = [NSURL fileURLWithPath:imagePathOne];
         NSURL *urlTwo = [NSURL fileURLWithPath:imagePathTwo];
         
+    
+        
         NSData * image = [[NSData alloc] initWithContentsOfURL:urlOne];
         NSData * imagetwo = [[NSData alloc]initWithContentsOfURL:urlTwo];
         UIImage* imgOne = [UIImage imageWithData: image];
         UIImage* imgTwo = [UIImage imageWithData:imagetwo];
+        
+
+        // CONSIDER SETTING ME TO A SUITABLE SIZE, FOR MACS AND OTHER IPADS
+        // BECAUSE THIS SETS THE SIZE TO THE IPADS RESOLUTION
+        // APPEARS VERY BIG ON COMPUTER
+        // LOOK AT ME LATER.
+        
+        CGFloat width = imgOne.size.width;
+        CGFloat height = imgOne.size.height;
+        CGSize mSize = CGSizeMake(width, height);
+        
+        UIImage* trueOne = [docHandler imageWithImage:imgOne scaledToSize:mSize];
+        UIImage* trueTwo =[docHandler imageWithImage:imgTwo scaledToSize:mSize];
+        
         // got our two pictures as UI imageds nowm which is cool
         // we can create a pdf, add page, add our image to that page
         // then bish bash bosh
@@ -124,9 +167,10 @@ extern "C" {
         
         UIGraphicsBeginPDFContextToFile(stringPath, CGRectZero, nil);
         
-        CGFloat width = [UIScreen mainScreen].bounds.size.width;
-        CGFloat height = [UIScreen mainScreen].bounds.size.height;
+ 
         NSInteger currentPage = 0;
+        
+
         
         
         UIGraphicsBeginPDFPageWithInfo(CGRectMake(0,0,width,height), nil);

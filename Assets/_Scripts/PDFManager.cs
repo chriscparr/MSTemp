@@ -22,6 +22,8 @@ public class PDFManager : MonoBehaviour
     public GameObject PageOne;
     public GameObject PageTwo;
 
+    bool amDoing;
+
     List<Texture2D> combinedTextures = new List<Texture2D>();
     List<string> files = new List<string>();
 
@@ -76,12 +78,16 @@ public class PDFManager : MonoBehaviour
     {
         if (Input.touchCount == 3 || Input.GetKeyDown(KeyCode.N))
         {
-            StartCoroutine("GenerateEntirePDF");
+            if (amDoing != true)
+            {
+                StartCoroutine("GenerateEntirePDF");
+            }
         }
     }
 
     public IEnumerator GenerateEntirePDF()
     {
+        amDoing = true;
         // pdfDocument doc = new pdfDocument("pdfTitle", "Mindshare");
         PageOne.transform.parent.GetComponent<Canvas>().enabled = true;
 
@@ -150,6 +156,7 @@ public class PDFManager : MonoBehaviour
         OpenPDF(tempPath, files[0], files[1]);
  
         PageOne.transform.parent.GetComponent<Canvas>().enabled = false;
+        amDoing = false;
     
 
     }
