@@ -18,7 +18,7 @@ public class MindshareButton : MonoBehaviour
 	[SerializeField]
 	private Text m_labelText;
 
-	private bool m_isToggled = false;
+	private bool m_isToggled = true;
 	private string m_buttonValue;
 
 	public void SetButtonValue(string a_value)
