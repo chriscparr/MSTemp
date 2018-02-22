@@ -3,43 +3,50 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DifferentiatorManipulationView : MonoBehaviour {
+public class DifferentiatorManipulationView : MonoBehaviour 
+{
 
-    public Text difName;
-    public Toggle lockTog;
+	[SerializeField]
+	private Text m_serviceNameText;
+	[SerializeField]
+    public Toggle m_lockToggle;
+	[SerializeField]
+	private Button m_homeButton;
+
 
 	// Use this for initialization
-	void OnEnable () {
-        if (CameraInputManager.Instance.m_selectedCell!=null)
-        difName.text = CameraInputManager.Instance.m_selectedCell.ServiceDat.ServiceName;
-        lockTog.isOn = false;
-        LockSubcell(false);
+	void OnEnable () 
+	{
+		if (CameraInputManager.Instance.SelectedCell != null)
+		{
+			m_serviceNameText.text = CameraInputManager.Instance.SelectedCell.ServiceDat.ServiceName;
+		}			
+		m_lockToggle.onValueChanged.AddListener (LockSubcell);
+		m_homeButton.onClick.AddListener (GoHome);
+        m_lockToggle.isOn = false;
+		LockSubcell(m_lockToggle.isOn);
 	}
 	
-	// Update is called once per frame
-	public void LockSubcell(bool val)
+
+	private void LockSubcell(bool a_isLocked)
     {
-        if (val != true)
-        {
-            CameraInputManager.Instance.m_selectedCell.allowScaling = true;
-        }
-        else
-        {
-            CameraInputManager.Instance.m_selectedCell.allowScaling = false; 
-        }
-       
+		if (CameraInputManager.Instance.SelectedCell != null)
+		{
+			CameraInputManager.Instance.SelectedCell.CanScale = !a_isLocked;
+		}
     }
 
-    public void GoHome()
+	private void GoHome()
     {
         LockSubcell(false);
-        CameraInputManager.Instance.ReleaseSubCellFromFocus(true);
+		CameraInputManager.Instance.FocusReset ();
         gameObject.SetActive(false);
     }
 
     void OnDisable()
     {
-        Debug.LogError("DISABLING ME");
+		m_lockToggle.onValueChanged.RemoveListener (LockSubcell);
+		m_homeButton.onClick.RemoveListener (GoHome);
     }
 
 }
