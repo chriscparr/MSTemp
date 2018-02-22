@@ -42,6 +42,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
     [HideInInspector]
     public Material myOnMaterial;
 
+	private bool m_hasReversedMesh = false;
+
 	private void Awake()
 	{
 		m_rigidBody = GetComponent<Rigidbody> ();
@@ -65,13 +67,16 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 
 	public void CreateReversedMesh()
     {
-        GameObject clone = Instantiate(this.gameObject, transform.position, Quaternion.identity) as GameObject;        
-		Destroy (clone.transform.GetChild(0).gameObject);
-		clone.transform.parent = this.transform;
-		Destroy(clone.GetComponent<Rigidbody>());
-		Destroy(clone.GetComponent<SphereCollider>());
-		Destroy(clone.GetComponent<Subcell>());
-        clone.AddComponent<ReverseNormals>();
+		if (!m_hasReversedMesh)
+		{
+			GameObject clone = Instantiate(this.gameObject, transform.position, Quaternion.identity) as GameObject;        
+			Destroy (clone.transform.GetChild(0).gameObject);
+			clone.transform.parent = this.transform;
+			Destroy(clone.GetComponent<Rigidbody>());
+			Destroy(clone.GetComponent<SphereCollider>());
+			Destroy(clone.GetComponent<Subcell>());
+			clone.AddComponent<ReverseNormals>();
+		}
     }
 
 	private void GenerateCaseCells()
