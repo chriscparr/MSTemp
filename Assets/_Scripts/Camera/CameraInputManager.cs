@@ -56,8 +56,6 @@ public class CameraInputManager : MonoBehaviour {
 		m_MainCamera = Camera.main.gameObject;
 		m_CachedPosition = m_MainCamera.transform.position;
 		SetPhase(Phase.SetupPhase);
-
-
 		if (m_MainCamera.GetComponent<RailMover>() == null)
 		{
 			m_Mover = m_MainCamera.AddComponent<RailMover>();
@@ -77,7 +75,6 @@ public class CameraInputManager : MonoBehaviour {
 
 		switch (newPhase) {
 			case Phase.SetupPhase:
-				m_selectedCell = null;
 				// ban all movement here
 				break;
 			case Phase.MainCellPhase:
@@ -94,12 +91,6 @@ public class CameraInputManager : MonoBehaviour {
 				// here we pinch and zoom to scale the sub cell, so you may not need to do anything
 				break;
 			case Phase.InsideSubCellPhase:
-
-
-				m_selectedCell = null;
-
-
-				UIManager.Instance.HideManipulationView();
 				// here we want to do case study stuff, so enable BOTH OnRailsMovement and RailMover, put buttons to move to/from paths (do that listener and event stuff)
 				// ps learn about listeners and events already. 
 				break;
@@ -119,42 +110,24 @@ public class CameraInputManager : MonoBehaviour {
 		{
 			m_MainCamera.GetComponent<RailMover>().TweenToPosition(homeVector, 2, false, iTween.EaseType.easeInOutSine);
 
-			ReleaseSubCellFromFocus();
 			Camera.main.transform.eulerAngles = Vector3.zero;
-
-			if (m_CurrentPhase == Phase.FocusedSubCellPhase)
-			{
-				UIManager.Instance.HideManipulationView();
-			}
+			UIManager.Instance.ShowPresentationView ();
 
 			if (m_selectedCell != null)
 			{
-				m_selectedCell = null;
+				FocusReset ();
 			}
-
-			SetPhase(Phase.MainCellPhase);
 		}
 
 	}
 
-	public void ReleaseSubCellFromFocus(bool afterWeAreDoneHereShouldWeGoBack = false)
+	public void FocusReset()
 	{
-		if (m_selectedCell != null)
-		{
-			m_selectedCell.RigidBody.isKinematic = false;
-
-			Vector3 direction = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1f,1f), 1);
-
-			m_selectedCell.RigidBody.AddForce((direction * 3f), ForceMode.Impulse);
-			m_selectedCell = null;
-		}
-
-		if (afterWeAreDoneHereShouldWeGoBack==true)
-		{
-			ResetPosition();
-		}
-
-
+		m_selectedCell.RigidBody.isKinematic = false;
+		Destroy (m_selectedCell.GetComponent<RailMover> ());
+		m_selectedCell = null;
+		ModelManager.Instance.ShakeModel();
+		SetPhase (Phase.MainCellPhase);
 	}
 
 	public void FocusOnSubCell(Subcell selectedCell)
@@ -179,19 +152,21 @@ public class CameraInputManager : MonoBehaviour {
 
 	public void EnterSelectedSubCell()
 	{
-		UIManager.Instance.HideManipulationView();
-
-		m_CachedPosition = m_MainCamera.transform.position;
-		Camera.main.GetComponent<OnRailsMovement> ().Init (ModelManager.Instance.GetAllCaseCells ());
 		SetPhase (Phase.InsideSubCellPhase);
+		UIManager.Instance.HideAllViews ();
+		Camera.main.GetComponent<OnRailsMovement> ().Init (m_selectedCell.CaseCells);
+		m_CachedPosition = m_MainCamera.transform.position;
 		Vector3 desiredPosition = m_selectedCell.transform.position;
-		Camera.main.GetComponent<RailMover>().TweenToPosition(desiredPosition, m_ZoomSpeed, false, iTween.EaseType.easeInElastic);
-		SynapseGenerator.Instance.GenerateSynapses(desiredPosition, m_selectedCell.gameObject);
+		Camera.main.GetComponent<RailMover>().TweenToPosition(desiredPosition, m_ZoomSpeed, gameObject, "AfterSubCellEntry");
 
-		UIManager.Instance.ShowCaseStudyView();
-		// Camera.main.GetComponent<OnRailsMovement> ().GoToNextPoint ();
+		SynapseGenerator.Instance.GenerateSynapses(desiredPosition, m_selectedCell.gameObject);
 	}
 
+	public void AfterSubCellEntry()
+	{
+		UIManager.Instance.ShowCaseStudyView();
+		Camera.main.GetComponent<OnRailsMovement> ().BeginCases ();
+	}
 
 	private void FixedUpdate()
 	{

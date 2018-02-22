@@ -32,15 +32,11 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	private ServiceData m_serviceData;
 
 	public CaseCell[] CaseCells {get{ return m_caseCells; }}
-	//private Vector3[] m_caseCellPositions;
-
 
 	private float m_doubleClickInterval = 0.25f;
 	private int m_clickCount = 0;
 
 	private CaseCell[] m_caseCells;
-	private int numberOfStudiesInService = 3;	//debug value, should come from serviceData in future!
-
 
 	public bool CanScale { get; set;}
     [HideInInspector]
@@ -54,28 +50,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	public void Initialise(ServiceData a_data)
 	{
 		m_serviceData = a_data;
-		switch (m_serviceData.ServiceName)
-		{
-			case "AGILE":
-				break;
-			case "CONTENT":
-				break;
-			case "DATA":
-				break;
-			case "FAST":
-				numberOfStudiesInService = VideoManager.Instance.m_FastVideos.Count+1;
-				break;
-			case "GROWTH":
-				break;
-			case "LIFE":
-				break;
-			case "LOOP":
-				break;
-			case "SHOP":
-				break;
-			default:
-				break;
-		}
+
 		gameObject.transform.localScale = Vector3.one * m_serviceData.InitialScale;
 		m_labelText.text = m_serviceData.ServiceName.ToLowerInvariant ();
 		m_labelText.gameObject.SetActive (false);
@@ -148,9 +123,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 				else
 				if (CameraInputManager.Instance.m_CurrentPhase == CameraInputManager.Phase.FocusedSubCellPhase)
 				{
-						Debug.Log(ServiceDat.ServiceName);
-					//CameraInputManager.Instance.EnterSelectedSubCell ();
-						//CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.InsideSubCellPhase);
+						Debug.Log("Entering " + ServiceDat.ServiceName);
+					CameraInputManager.Instance.EnterSelectedSubCell ();
 				}
 				break;
 			default:

@@ -66,7 +66,6 @@ public class UIManager : MonoBehaviour
 	{
 		HideAllViews ();
 		m_presentationView.SetActive (true);
-		// CameraInputManager.Instance.ResetPosition ();
 	}
 	public void ShowEndPresentationView()
 	{
@@ -89,12 +88,7 @@ public class UIManager : MonoBehaviour
 		HideAllViews ();
 		m_DifferentiatorManipulationView.SetActive(true);
 	}
-	public void HideManipulationView()
-	{		
-		m_DifferentiatorManipulationView.SetActive(false);
-	}
-
-	private void HideAllViews()
+	public void HideAllViews()
 	{
 		foreach (GameObject g in m_allViewObjects)
 		{
