@@ -113,8 +113,7 @@ public class CameraInputManager : MonoBehaviour
 		else
 		{
 			m_MainCamera.GetComponent<RailMover>().TweenToPosition(homeVector, 2, false, iTween.EaseType.easeInOutSine);
-
-			Camera.main.transform.eulerAngles = Vector3.zero;
+			gameObject.transform.LookAt (Vector3.zero);
 			UIManager.Instance.ShowPresentationView ();
 		}
 
@@ -165,8 +164,7 @@ public class CameraInputManager : MonoBehaviour
 				Camera.main.GetComponent<OnRailsMovement> ().Init (m_selectedCell.CaseCells);
 				m_CachedPosition = m_MainCamera.transform.position;
 				Vector3 desiredPosition = m_selectedCell.transform.position;
-				Camera.main.GetComponent<RailMover>().TweenToPosition(desiredPosition, m_ZoomSpeed, gameObject, "AfterSubCellEntry");
-				
+				AfterSubCellEntry();
 				SynapseGenerator.Instance.GenerateSynapses(desiredPosition, m_selectedCell.gameObject);
 			} 
 			else

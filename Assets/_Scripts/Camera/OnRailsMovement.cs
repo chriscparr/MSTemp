@@ -100,7 +100,8 @@ public class OnRailsMovement : MonoBehaviour
 		for (float percent = 0f; percent < 1f; percent += 0.01f)
 		{
 			gameObject.transform.position = Vector3.Lerp (gameObject.transform.position, m_trackedCell.CameraPositioningPoint.position, percent);
-			gameObject.transform.LookAt (m_trackedCell.transform);
+			gameObject.transform.rotation = Quaternion.Slerp (gameObject.transform.rotation, m_trackedCell.CameraPositioningPoint.rotation, percent);
+			//gameObject.transform.LookAt (m_trackedCell.transform);
 			yield return new WaitForEndOfFrame ();
 		}
 		Debug.Log ("MoveCameraToTrackedCaseCell - Completed!");
