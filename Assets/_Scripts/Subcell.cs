@@ -23,6 +23,8 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	[SerializeField]
 	private TextMesh m_labelText;
 	[SerializeField]
+	private LineRenderer m_lineRender;
+	[SerializeField]
 	private GameObject m_caseCellPrefab;
 
 	public Rigidbody RigidBody {get{ return m_rigidBody; }}
@@ -35,6 +37,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 
 	private float m_doubleClickInterval = 0.25f;
 	private int m_clickCount = 0;
+	private bool m_isLabelActive = false;
 
 	private CaseCell[] m_caseCells;
 
@@ -54,14 +57,25 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		m_serviceData = a_data;
 
 		gameObject.transform.localScale = Vector3.one * m_serviceData.InitialScale;
-		m_labelText.text = m_serviceData.ServiceName.ToLowerInvariant ();
+		m_labelText.text = m_serviceData.ServiceName.ToUpper ();
 		m_labelText.gameObject.SetActive (false);
 		gameObject.AddComponent<RailMover>();
 	}
 
 	public void ToggleLabelText(bool a_isActive)
 	{
+		m_isLabelActive = a_isActive;
 		m_labelText.gameObject.SetActive (a_isActive);
+		m_lineRender.SetPositions (GetLabelWorldPoints());
+	}
+
+	private Vector3[] GetLabelWorldPoints()
+	{
+		Vector3[] output = new Vector3[2];
+		output [0] = gameObject.transform.position;
+		output [1] = m_labelText.gameObject.transform.position;
+		//output [1] = (output [2] - output [0]);
+		return output;
 	}
 
 	public void CreateReversedMesh()
@@ -139,6 +153,16 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		}
 		m_clickCount = 0;
 		yield return null;
+	}
+
+	private void Update()
+	{
+		if (m_isLabelActive)
+		{
+			m_lineRender.SetPositions (GetLabelWorldPoints());
+
+			m_labelText.gameObject.transform.LookAt (Camera.main.transform.position * -1f);
+		}
 	}
 
 }
