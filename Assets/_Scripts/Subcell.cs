@@ -23,8 +23,6 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	[SerializeField]
 	private TextMesh m_labelText;
 	[SerializeField]
-	private LineRenderer m_lineRender;
-	[SerializeField]
 	private GameObject m_caseCellPrefab;
 
 	public Rigidbody RigidBody {get{ return m_rigidBody; }}
@@ -50,6 +48,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	private void Awake()
 	{
 		m_rigidBody = GetComponent<Rigidbody> ();
+		m_labelText.gameObject.transform.localScale = Vector3.one * 0.5f;
 	}
 
 	public void Initialise(ServiceData a_data)
@@ -66,16 +65,6 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	{
 		m_isLabelActive = a_isActive;
 		m_labelText.gameObject.SetActive (a_isActive);
-		m_lineRender.SetPositions (GetLabelWorldPoints());
-	}
-
-	private Vector3[] GetLabelWorldPoints()
-	{
-		Vector3[] output = new Vector3[2];
-		output [0] = gameObject.transform.position;
-		output [1] = m_labelText.gameObject.transform.position;
-		//output [1] = (output [2] - output [0]);
-		return output;
 	}
 
 	public void CreateReversedMesh()
@@ -159,9 +148,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	{
 		if (m_isLabelActive)
 		{
-			m_lineRender.SetPositions (GetLabelWorldPoints());
-
-			m_labelText.gameObject.transform.LookAt (Camera.main.transform.position * -1f);
+			m_labelText.gameObject.transform.SetPositionAndRotation (gameObject.transform.position + new Vector3 (0f, -3f, 0f), Quaternion.Inverse (Camera.main.transform.rotation));
 		}
 	}
 
