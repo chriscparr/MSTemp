@@ -5,9 +5,8 @@ using UnityEngine.UI;
 
 public class MSAddStuffBox : MonoBehaviour 
 {
-	public delegate void MSAddStuffBoxAction(string a_buttonValue);
-	public MSAddStuffBoxAction OnSelected;
-	public MSAddStuffBoxAction OnUnselected;
+	public delegate void MSAddStuffBoxAction();
+	public MSAddStuffBoxAction OnPressed;
 
 	[SerializeField]
 	private Color m_msPurple;
@@ -24,43 +23,47 @@ public class MSAddStuffBox : MonoBehaviour
 	[SerializeField]
 	private Sprite m_removeIcon;
 
+	public bool IsToggled {get{ return m_isToggled;}set{ m_isToggled = value; UpdateColors ();}}
 	private bool m_isToggled = false;
+
 	private string m_buttonValue;
 
-	public void SetButtonValue(string a_value)
+	public void SetButtonValue(string a_value, bool a_isPreToggled = false)
 	{
 		m_buttonValue = a_value;
 		m_labelText.text = a_value.ToUpper ();
+		m_isToggled = a_isPreToggled;
+		UpdateColors ();
 	}
 
 	private void Start()
 	{
-		InvertColors ();
-		m_button.onClick.AddListener (InvertColors);
+		m_button.onClick.AddListener (OnButtonPressed);
+		UpdateColors ();
 	}
 
-	private void InvertColors()
+	private void OnButtonPressed()
+	{
+		if (OnPressed != null)
+		{
+			OnPressed ();
+		}
+	}
+
+	private void UpdateColors()
 	{
 		if (m_isToggled)
 		{
 			m_button.image.color = m_msPurple;
 			m_labelText.color = m_msWhite;
 			m_iconImage.sprite = m_removeIcon;
-			if (OnSelected != null)
-			{
-				OnSelected (m_buttonValue);
-			}
 		}
 		else
 		{
 			m_button.image.color = m_msWhite;
 			m_labelText.color = m_msPurple;
 			m_iconImage.sprite = m_addIcon;
-			if (OnUnselected != null)
-			{
-				OnUnselected (m_buttonValue);
-			}
 		}
-		m_isToggled = !m_isToggled;
 	}
+
 }

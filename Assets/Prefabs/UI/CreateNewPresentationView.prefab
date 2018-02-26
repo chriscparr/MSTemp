@@ -663,6 +663,9 @@ MonoBehaviour:
     type: 2}
   m_msDiffBoxPrefab: {fileID: 1248824126686674, guid: 45d4756bd3dbf4a098eab0cdc29c1d34,
     type: 2}
+  m_msAddIndustryBox: {fileID: 114453430277577562}
+  m_msAddMarketsBox: {fileID: 114388733407089890}
+  m_msAddNotesBox: {fileID: 114064774000570022}
   m_serviceButtonGrid: {fileID: 1210680124307594}
   m_closeButton: {fileID: 114624860580857972}
 --- !u!114 &114137619804156120
