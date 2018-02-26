@@ -643,7 +643,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_buttonScrollPrefab: {fileID: 1710049220471794, guid: 1cd6a0255fcb6433590529eab6290d73,
     type: 2}
-  m_msToggleBoxPrefab: {fileID: 1552928054688396, guid: f771dc73d5dbc4eb4af1331c7689a66d,
+  m_msDiffBoxPrefab: {fileID: 1248824126686674, guid: 45d4756bd3dbf4a098eab0cdc29c1d34,
     type: 2}
   m_serviceButtonGrid: {fileID: 1210680124307594}
 --- !u!114 &114137619804156120
