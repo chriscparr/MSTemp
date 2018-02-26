@@ -10,25 +10,13 @@ public class ScrollingButtonSelect : MonoBehaviour
 	[SerializeField]
 	private GameObject m_contentArea;
 
-	private float m_buttonWidth = 200f;
-
-	private List<string> m_selectedOptions = new List<string> ();
-
 	private List<MindshareButton> m_optionButtons;
 
+	private List<string> m_selectedOptions = new List<string> ();
 	public string[] SelectedOptions {get{ return m_selectedOptions.ToArray();}}
 
-
-	void Start () 
-	{
-		//m_contentArea.GetComponent<RectTransform> ().SetSizeWithCurrentAnchors (RectTransform.Axis.Horizontal, (m_selectOptions.Length * m_buttonWidth));
-	}
-	
 	public void Initialise(string[] a_selectOptions)
 	{
-		float contentWidth = (a_selectOptions.Length * m_buttonWidth);
-		m_contentArea.GetComponent<RectTransform> ().SetSizeWithCurrentAnchors (RectTransform.Axis.Horizontal, contentWidth);
-
 		m_optionButtons = new List<MindshareButton> ();
 		foreach (string opt in a_selectOptions)
 		{
