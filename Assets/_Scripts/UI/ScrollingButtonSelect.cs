@@ -5,28 +5,57 @@ using UnityEngine.UI;
 
 public class ScrollingButtonSelect : MonoBehaviour 
 {
+	public delegate void ScrollingButtonSelectAction();
+	public ScrollingButtonSelectAction OnCloseRequest;
+
 	[SerializeField]
 	private GameObject m_msButtonPrefab;
 	[SerializeField]
 	private GameObject m_contentArea;
+	[SerializeField]
+	private Button m_exitScrollSelectClickArea;
 
 	private List<MindshareButton> m_optionButtons;
 
 	private List<string> m_selectedOptions = new List<string> ();
 	public string[] SelectedOptions {get{ return m_selectedOptions.ToArray();}}
 
-	public void Initialise(string[] a_selectOptions)
+	public void Initialise(string[] a_options, string[] a_previouslySelectedOptions)
 	{
 		m_optionButtons = new List<MindshareButton> ();
-		foreach (string opt in a_selectOptions)
+		if (a_previouslySelectedOptions != null && a_previouslySelectedOptions.Length > 0)
 		{
-			GameObject btnObj = Instantiate<GameObject>(m_msButtonPrefab, m_contentArea.transform);
-			MindshareButton msBtn = btnObj.GetComponent<MindshareButton> ();
-			msBtn.SetButtonValue (opt);
-			msBtn.OnSelected += OnOptionSelected;
-			msBtn.OnUnselected += OnOptionUnselected;
-			m_optionButtons.Add (msBtn);
+			List<string> prevSelected = new List<string> (a_previouslySelectedOptions);
+			foreach (string opt in a_options)
+			{
+				GameObject btnObj = Instantiate<GameObject>(m_msButtonPrefab, m_contentArea.transform);
+				MindshareButton msBtn = btnObj.GetComponent<MindshareButton> ();
+				if (prevSelected.Contains (opt))
+				{
+					msBtn.SetButtonValue (opt, true);
+				} 
+				else
+				{
+					msBtn.SetButtonValue (opt,false);
+				}
+				msBtn.OnSelected += OnOptionSelected;
+				msBtn.OnUnselected += OnOptionUnselected;
+				m_optionButtons.Add (msBtn);
+			}
+		} 
+		else
+		{
+			foreach (string opt in a_options)
+			{
+				GameObject btnObj = Instantiate<GameObject>(m_msButtonPrefab, m_contentArea.transform);
+				MindshareButton msBtn = btnObj.GetComponent<MindshareButton> ();
+				msBtn.SetButtonValue (opt);
+				msBtn.OnSelected += OnOptionSelected;
+				msBtn.OnUnselected += OnOptionUnselected;
+				m_optionButtons.Add (msBtn);
+			}
 		}
+		m_exitScrollSelectClickArea.onClick.AddListener (CloseRequest);
 	}
 
 	private void OnOptionSelected(string a_selected)
@@ -39,8 +68,18 @@ public class ScrollingButtonSelect : MonoBehaviour
 		m_selectedOptions.Remove (a_unSelected);
 	}
 
+	private void CloseRequest()
+	{
+		//Need to request to close this panel so that the parent view can grab our selected options whilst this still exists.
+		if (OnCloseRequest != null)
+		{
+			OnCloseRequest ();
+		}
+	}
+
 	private void OnDestroy()
 	{
+		m_exitScrollSelectClickArea.onClick.RemoveListener (CloseRequest);
 		if (m_optionButtons.Count > 0)
 		{
 			foreach (MindshareButton msBtn in m_optionButtons)
