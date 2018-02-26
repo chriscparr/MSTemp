@@ -15,6 +15,8 @@ public class CreateNewPresentationView : MonoBehaviour
 
 	[SerializeField]
 	private GameObject m_serviceButtonGrid;
+	[SerializeField]
+	private Button m_closeButton;
 
 	private List<ServiceData> m_services = new List<ServiceData> ();
 
@@ -44,6 +46,12 @@ public class CreateNewPresentationView : MonoBehaviour
 			msButton.OnSelected += ServiceButtonSelectedEventHandler;
 			msButton.OnUnselected += ServiceButtonUnselectedEventHandler;
 		}
+		m_closeButton.onClick.AddListener (CloseButtonEventHandler);
+	}
+
+	private void CloseButtonEventHandler()
+	{
+		//UIManager.Instance.OpenSomeOtherView();
 	}
 
 	private void ServiceButtonSelectedEventHandler(string a_selectedOption)
