@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MindshareButton : MonoBehaviour 
+public class MSAddStuffBox : MonoBehaviour 
 {
-	public delegate void MindshareButtonAction(string a_buttonValue);
-	public MindshareButtonAction OnSelected;
-	public MindshareButtonAction OnUnselected;
+	public delegate void MSAddStuffBoxAction();
+	public MSAddStuffBoxAction OnPressed;
 
 	[SerializeField]
 	private Color m_msPurple;
@@ -17,8 +16,16 @@ public class MindshareButton : MonoBehaviour
 	private Button m_button;
 	[SerializeField]
 	private Text m_labelText;
+	[SerializeField]
+	private Image m_iconImage;
+	[SerializeField]
+	private Sprite m_addIcon;
+	[SerializeField]
+	private Sprite m_removeIcon;
 
+	public bool IsToggled {get{ return m_isToggled;}set{ m_isToggled = value; UpdateColors ();}}
 	private bool m_isToggled = false;
+
 	private string m_buttonValue;
 
 	public void SetButtonValue(string a_value, bool a_isPreToggled = false)
@@ -31,28 +38,16 @@ public class MindshareButton : MonoBehaviour
 
 	private void Start()
 	{
-		m_button.onClick.AddListener (OnToggle);
+		m_button.onClick.AddListener (OnButtonPressed);
 		UpdateColors ();
 	}
 
-	private void OnToggle()
+	private void OnButtonPressed()
 	{
-		if (!m_isToggled)
+		if (OnPressed != null)
 		{
-			if (OnSelected != null)
-			{
-				OnSelected (m_buttonValue);
-			}
+			OnPressed ();
 		}
-		else
-		{
-			if (OnUnselected != null)
-			{
-				OnUnselected (m_buttonValue);
-			}
-		}
-		m_isToggled = !m_isToggled;
-		UpdateColors ();
 	}
 
 	private void UpdateColors()
@@ -61,11 +56,14 @@ public class MindshareButton : MonoBehaviour
 		{
 			m_button.image.color = m_msPurple;
 			m_labelText.color = m_msWhite;
+			m_iconImage.sprite = m_removeIcon;
 		}
 		else
 		{
 			m_button.image.color = m_msWhite;
 			m_labelText.color = m_msPurple;
+			m_iconImage.sprite = m_addIcon;
 		}
 	}
+
 }

@@ -14,7 +14,7 @@ public class UITestManager : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		m_scrollSelect.Initialise (m_testOptions);
+		//m_scrollSelect.Initialise (m_testOptions);
 	}
 
 	private void LogSelectedOptions()
