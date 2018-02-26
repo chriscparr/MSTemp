@@ -13,6 +13,11 @@ public class CreateNewPresentationView : MonoBehaviour
 
 
 
+	[SerializeField]
+	private GameObject m_serviceButtonGrid;
+
+
+
 	private PresentationData m_presentationData;
 
 	public void SetupView(PresentationData a_pData = null)
@@ -26,17 +31,5 @@ public class CreateNewPresentationView : MonoBehaviour
 			m_presentationData = new PresentationData ();
 		}
 
-	}
-
-
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 	}
 }
