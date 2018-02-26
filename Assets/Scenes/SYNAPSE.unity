@@ -585,7 +585,7 @@ MonoBehaviour:
   _sunFlaresRotationDeadZone: 0
   _blur: 0
   _blurIntensity: 1
-  isDirty: 1
+  isDirty: 0
   bMat: {fileID: 0}
 --- !u!82 &1088703399
 AudioSource:

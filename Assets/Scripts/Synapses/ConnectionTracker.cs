@@ -195,7 +195,10 @@ public class ConnectionTracker : MonoBehaviour {
             GameObject trail = Instantiate(ConnectionGenerator.Instance.baseTrailObj, transform.position, Quaternion.identity);
             cachedTrail = trail;
             // trail.transform.parent = trailRenders.transform;
-            trail.GetComponent<Renderer>().sharedMaterial = ConnectionGenerator.Instance.baseTrailMaterial;
+            if (trail.GetComponent<Renderer>() != null)
+            {
+                trail.GetComponent<Renderer>().sharedMaterial = ConnectionGenerator.Instance.baseTrailMaterial;
+            }
             trail.AddComponent<TrailRenderer>();
             trail.GetComponent<TrailRenderer>().time = ConnectionGenerator.Instance.trailDuration;
             trail.GetComponent<TrailRenderer>().sharedMaterial = ConnectionGenerator.Instance.trailMat;

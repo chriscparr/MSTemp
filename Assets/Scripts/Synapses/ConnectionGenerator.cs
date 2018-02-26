@@ -46,6 +46,7 @@ public class ConnectionGenerator : MonoBehaviour {
 
     [Header("For Trail Renderers")]
     public bool useTrails;
+    [Header("This can be a particle system prefab if u want")]
     public GameObject baseTrailObj;
     [Header("Material for base object")]
     public Material baseTrailMaterial;
