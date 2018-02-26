@@ -24,7 +24,7 @@ public class MSAddStuffBox : MonoBehaviour
 	[SerializeField]
 	private Sprite m_removeIcon;
 
-	private bool m_isToggled = true;
+	private bool m_isToggled = false;
 	private string m_buttonValue;
 
 	public void SetButtonValue(string a_value)
@@ -35,8 +35,7 @@ public class MSAddStuffBox : MonoBehaviour
 
 	private void Start()
 	{
-		m_button.image.color = m_msWhite;
-		m_labelText.color = m_msPurple;
+		InvertColors ();
 		m_button.onClick.AddListener (InvertColors);
 	}
 
@@ -46,6 +45,7 @@ public class MSAddStuffBox : MonoBehaviour
 		{
 			m_button.image.color = m_msPurple;
 			m_labelText.color = m_msWhite;
+			m_iconImage.sprite = m_removeIcon;
 			if (OnSelected != null)
 			{
 				OnSelected (m_buttonValue);
@@ -55,6 +55,7 @@ public class MSAddStuffBox : MonoBehaviour
 		{
 			m_button.image.color = m_msWhite;
 			m_labelText.color = m_msPurple;
+			m_iconImage.sprite = m_addIcon;
 			if (OnUnselected != null)
 			{
 				OnUnselected (m_buttonValue);
