@@ -18,28 +18,27 @@ public class MindshareButton : MonoBehaviour
 	[SerializeField]
 	private Text m_labelText;
 
-	private bool m_isToggled = true;
+	private bool m_isToggled = false;
 	private string m_buttonValue;
 
-	public void SetButtonValue(string a_value)
+	public void SetButtonValue(string a_value, bool a_isPreToggled = false)
 	{
 		m_buttonValue = a_value;
 		m_labelText.text = a_value.ToUpper ();
+		m_isToggled = a_isPreToggled;
+		UpdateColors ();
 	}
 
 	private void Start()
 	{
-		m_button.image.color = m_msWhite;
-		m_labelText.color = m_msPurple;
-		m_button.onClick.AddListener (InvertColors);
+		m_button.onClick.AddListener (OnToggle);
+		UpdateColors ();
 	}
 
-	private void InvertColors()
+	private void OnToggle()
 	{
-		if (m_isToggled)
+		if (!m_isToggled)
 		{
-			m_button.image.color = m_msPurple;
-			m_labelText.color = m_msWhite;
 			if (OnSelected != null)
 			{
 				OnSelected (m_buttonValue);
@@ -47,13 +46,26 @@ public class MindshareButton : MonoBehaviour
 		}
 		else
 		{
-			m_button.image.color = m_msWhite;
-			m_labelText.color = m_msPurple;
 			if (OnUnselected != null)
 			{
 				OnUnselected (m_buttonValue);
 			}
 		}
 		m_isToggled = !m_isToggled;
+		UpdateColors ();
+	}
+
+	private void UpdateColors()
+	{
+		if (m_isToggled)
+		{
+			m_button.image.color = m_msPurple;
+			m_labelText.color = m_msWhite;
+		}
+		else
+		{
+			m_button.image.color = m_msWhite;
+			m_labelText.color = m_msPurple;
+		}
 	}
 }
