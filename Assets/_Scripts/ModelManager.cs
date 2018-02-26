@@ -17,9 +17,9 @@ public class ModelManager : MonoBehaviour
 
 	public static ModelManager Instance {get { return s_instance;}}
 	private static ModelManager s_instance = null;
-
+    //
 	private GameObject m_mainContainer;
-	private List<Subcell> m_subcells = new List<Subcell>();
+	public List<Subcell> m_subcells = new List<Subcell>();
 
 	public bool IsInitialised {get { return m_isInitialised; }}
 	private bool m_isInitialised = false;
@@ -57,7 +57,7 @@ public class ModelManager : MonoBehaviour
 		{
 			m_modelPrefabs.Add (np.PrefabName, np.PrefabGameObject);
 		}
-		m_boltPooler.InitialisePool (10); 
+		m_boltPooler.InitialisePool (20); 
 	}
 
 	public void ScaleSubcell(Subcell a_subcell, float a_newScale)
@@ -107,13 +107,17 @@ public class ModelManager : MonoBehaviour
 				m_subcells [i].Initialise (a_pData.Services [i]);
 				sub.transform.localPosition = Vector3.Scale (minBounds, m_placementVectors [i]);
                 sub.GetComponent<Subcell>().myOnMaterial = OnStateMaterials[i];
-                sub.GetComponent<Renderer>().sharedMaterial = OffStateMaterial;
+                sub.GetComponent<Renderer>().sharedMaterial = sub.GetComponent<Subcell>().myOnMaterial;
+                //TODO ALI THIS IS JUST A DEMO FOR LEONIE DONE AT 9PM, REVERT TO OFFMATERIAL LATER.
+                sub.transform.localScale = new Vector3(1.7f, 1.7f, 1.7f); //TODO I AM A BAD WAY OF DOING THIS, DO ME PROPERLY LATER PLS
                 sub.GetComponent<Subcell>().CreateReversedMesh();
                 sub.GetComponent<Subcell>().GenerateCaseCells();
 			}
 			m_isInitialised = true;
 
             CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
+
+            ConnectionGenerator.Instance.ReceiveSubCells(m_subcells);
             ShakeModel();
 		}
 	}
