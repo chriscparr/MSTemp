@@ -11,6 +11,8 @@ public class CreateNewPresentationView : MonoBehaviour
 	[SerializeField]
 	private GameObject m_msDiffBoxPrefab;
 	[SerializeField]
+	private GameObject m_msNotesPanelPrefab;
+	[SerializeField]
 	private MSAddStuffBox m_msAddIndustryBox;
 	[SerializeField]
 	private MSAddStuffBox m_msAddMarketsBox;
@@ -29,10 +31,10 @@ public class CreateNewPresentationView : MonoBehaviour
 	private Button m_closeButton;
 
 	private List<ServiceData> m_services = new List<ServiceData> ();
+	private PresentationData m_presentationData;
 
 	private ScrollingButtonSelect m_scrollSelect;
-
-	private PresentationData m_presentationData;
+	private MSNotesPanel m_notesPanel;
 
 	public void SetupView(PresentationData a_pData = null)
 	{
@@ -66,6 +68,7 @@ public class CreateNewPresentationView : MonoBehaviour
 		m_closeButton.onClick.AddListener (CloseButtonEventHandler);
 		m_msAddIndustryBox.OnPressed += OpenAddIndustryPanel;
 		m_msAddMarketsBox.OnPressed += OpenAddMarketPanel;
+		m_msAddNotesBox.OnPressed += OpenNotesPanel;
 		SetupView ();
 	}
 
@@ -122,6 +125,46 @@ public class CreateNewPresentationView : MonoBehaviour
 		}
 		Destroy (m_scrollSelect.gameObject);
 		m_serviceButtonGrid.SetActive (true);
+	}
+
+	private void OpenNotesPanel()
+	{
+		if (m_presentationData.Notes == null)
+		{
+			m_presentationData.Notes = new string[1];
+		}
+		GameObject notesObj = Instantiate(m_msNotesPanelPrefab, gameObject.transform) as GameObject;
+		m_notesPanel = notesObj.GetComponent<MSNotesPanel> ();
+		if (!string.IsNullOrEmpty (m_presentationData.Notes [0]))
+		{
+			m_notesPanel.InputText = m_presentationData.Notes[0];
+		}
+		m_notesPanel.OnCloseRequest += CloseNotesPanel;
+	}
+
+	private void CloseNotesPanel()
+	{
+		m_notesPanel.OnCloseRequest -= CloseNotesPanel;
+
+		if (string.IsNullOrEmpty (m_notesPanel.InputText))
+		{
+			m_presentationData.Notes [0] = "";
+		} 
+		else
+		{
+			m_presentationData.Notes [0] = m_notesPanel.InputText;
+		}
+			
+		if (!string.IsNullOrEmpty (m_presentationData.Notes[0]))
+		{
+			m_msAddNotesBox.IsToggled = true;
+		} 
+		else
+		{
+			m_msAddNotesBox.IsToggled = false;
+		}
+
+		Destroy (m_notesPanel.gameObject);
 	}
 
 
