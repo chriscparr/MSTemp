@@ -700,6 +700,8 @@ MonoBehaviour:
     type: 2}
   m_msNotesPanelPrefab: {fileID: 1217285948793988, guid: 58df183b2b65e46479948a6ca5b55d97,
     type: 2}
+  m_serviceConfigPanelPrefab: {fileID: 1486436973416702, guid: 298b82636cea04d78b45b787926657de,
+    type: 2}
   m_msAddIndustryBox: {fileID: 114453430277577562}
   m_msAddMarketsBox: {fileID: 114388733407089890}
   m_msAddNotesBox: {fileID: 114064774000570022}

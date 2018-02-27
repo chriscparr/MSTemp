@@ -13,6 +13,8 @@ public class CreateNewPresentationView : MonoBehaviour
 	[SerializeField]
 	private GameObject m_msNotesPanelPrefab;
 	[SerializeField]
+	private GameObject m_serviceConfigPanelPrefab;
+	[SerializeField]
 	private MSAddStuffBox m_msAddIndustryBox;
 	[SerializeField]
 	private MSAddStuffBox m_msAddMarketsBox;
@@ -37,6 +39,8 @@ public class CreateNewPresentationView : MonoBehaviour
 
 	private ScrollingButtonSelect m_scrollSelect;
 	private MSNotesPanel m_notesPanel;
+	private ServiceConfigPanel m_servicePanel;
+
 
 	public void SetupView(PresentationData a_pData = null)
 	{
@@ -173,8 +177,32 @@ public class CreateNewPresentationView : MonoBehaviour
 	private void ServiceButtonSelectedEventHandler(string a_selectedOption)
 	{
 		Debug.Log ("You have selected " + a_selectedOption);
-		//spawn service config panel or whatever
+		GameObject servPanelObj = Instantiate(m_serviceConfigPanelPrefab, gameObject.transform) as GameObject;
+		m_servicePanel = servPanelObj.GetComponent<ServiceConfigPanel> ();
+		int indx = GetIndexByServiceName (a_selectedOption);
+		if (indx > 0)
+		{
+			m_servicePanel.Initialise (m_services [indx]);
+		}
+		else
+		{
+			m_servicePanel.Initialise (a_selectedOption);
+		}
+		m_servicePanel.OnSaveService += SaveServiceDataEventHandler;
+	}
 
+	private int GetIndexByServiceName(string a_serviceName)
+	{
+		int servIndex = -1;
+		for (int i = 0; i < m_services.Count; i++)
+		{
+			if (m_services [i].ServiceName == a_serviceName)
+			{
+				servIndex = i;
+				break;
+			}
+		}
+		return servIndex;
 	}
 
 	private void ServiceButtonUnselectedEventHandler(string a_unSelectedOption)
@@ -190,5 +218,18 @@ public class CreateNewPresentationView : MonoBehaviour
 			}
 		}
 		*/
+	}
+
+	private void SaveServiceDataEventHandler(ServiceData a_servData)
+	{
+		int indx = GetIndexByServiceName (a_servData.ServiceName);
+		if (indx > 0)
+		{
+			m_services [indx] = a_servData;
+		}
+		else
+		{
+			m_services.Add (a_servData);
+		}
 	}
 }
