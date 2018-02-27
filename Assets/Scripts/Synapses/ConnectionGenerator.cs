@@ -42,7 +42,9 @@ public class ConnectionGenerator : MonoBehaviour {
 
     [HideInInspector]
     public List<Subcell> allCells = new List<Subcell>();
-    private GameObject par;
+
+    [HideInInspector]
+    public GameObject baseParent;
 
     [Header("For Trail Renderers")]
     public bool useTrails;
@@ -73,8 +75,8 @@ public class ConnectionGenerator : MonoBehaviour {
 
     IEnumerator Creation() {
 
-        par = new GameObject();
-        par.name = "Connections";
+        baseParent = new GameObject();
+        baseParent.name = "Connections";
 
         for (int i = 0; i < allCells.Count; i++)
         {
@@ -82,7 +84,7 @@ public class ConnectionGenerator : MonoBehaviour {
             b++;
 
                 GameObject line = new GameObject();
-                line.transform.parent = par.transform;
+                line.transform.parent = baseParent.transform;
                 line.AddComponent<LineRenderer>();
                 line.transform.position = allCells[i].transform.position;
 
@@ -110,6 +112,12 @@ public class ConnectionGenerator : MonoBehaviour {
 
   
 
+    }
+
+    public void DestroyAll()
+    {
+        if (baseParent != null)
+        Destroy(baseParent);
     }
 
 

@@ -117,7 +117,10 @@ public class ModelManager : MonoBehaviour
 
             CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.MainCellPhase);
 
-            ConnectionGenerator.Instance.ReceiveSubCells(m_subcells);
+            if (ConnectionGenerator.Instance != null)
+            {
+                ConnectionGenerator.Instance.ReceiveSubCells(m_subcells);
+            }
             ShakeModel();
 		}
 	}

@@ -44,6 +44,8 @@ public class ConnectionTracker : MonoBehaviour {
     private GameObject extraConnections;
     private GameObject trailRenders;
 
+    private Transform parenter;
+
     // Use this for initialization
 
     private void OnEnable()
@@ -59,6 +61,9 @@ public class ConnectionTracker : MonoBehaviour {
         existingConnections = GetComponentsInChildren<ConnectionTracker>();
         existingConnectionsAmount = existingConnections.Length;
         Debug.Log("NUmber of existing connections = " + existingConnections.Length);
+
+        parenter = ConnectionGenerator.Instance.baseParent.transform;
+        this.transform.parent = parenter.transform;
 
         InvokeRepeating("FindClosest", 0.5f, ConnectionGenerator.Instance.ConnectionRefreshRate);
 
@@ -144,6 +149,7 @@ public class ConnectionTracker : MonoBehaviour {
     {
         secondLink = new GameObject();
         secondLink.AddComponent<LineRenderer>();
+        secondLink.transform.parent = parenter.transform;
 
         secondLink.GetComponent<LineRenderer>().material = ConnectionGenerator.Instance.StartingMaterial;
         secondLink.GetComponent<LineRenderer>().startWidth = ConnectionGenerator.Instance.StartingWidth;
@@ -160,7 +166,7 @@ public class ConnectionTracker : MonoBehaviour {
 
     private void GenerateThirdLink() {
         thirdLink = new GameObject();
-        // thirdLink.transform.parent = extraConnections.transform;
+        thirdLink.transform.parent = parenter.transform;
         thirdLink.AddComponent<LineRenderer>();
 
         thirdLink.GetComponent<LineRenderer>().material = ConnectionGenerator.Instance.StartingMaterial;
@@ -181,6 +187,7 @@ public class ConnectionTracker : MonoBehaviour {
     {
         GameObject trail = Instantiate(ConnectionGenerator.Instance.baseTrailObj, transform.position, Quaternion.identity);
         cachedTrail = trail;
+        trail.transform.parent = parenter.transform;
 
         if (trail.GetComponent<Renderer>() != null)
         {
