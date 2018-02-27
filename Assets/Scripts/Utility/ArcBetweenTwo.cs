@@ -77,9 +77,6 @@ public class ArcBetweenTwo : MonoBehaviour {
             }
         }
 
-       // waypoints = Curver.MakeSmoothCurve(curvePoints.ToArray(), 5);
-       
-
 	}
 
     Vector3 GetRandomDirection()

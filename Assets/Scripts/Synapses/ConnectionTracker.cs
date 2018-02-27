@@ -98,20 +98,7 @@ public class ConnectionTracker : MonoBehaviour {
 
                 if (secondLink == null)
                 {
-                    secondLink = new GameObject();
-                    secondLink.AddComponent<LineRenderer>();
-
-                    secondLink.GetComponent<LineRenderer>().material = ConnectionGenerator.Instance.StartingMaterial;
-                    secondLink.GetComponent<LineRenderer>().startWidth = ConnectionGenerator.Instance.StartingWidth;
-                    secondLink.GetComponent<LineRenderer>().endWidth = ConnectionGenerator.Instance.EndingWidth;
-                    secondLink.GetComponent<LineRenderer>().positionCount = 2;
-
-                    secondLink.AddComponent<ConnectionFadeAndTrack>();
-                    secondLink.GetComponent<ConnectionFadeAndTrack>().fadeOnDistance = ConnectionGenerator.Instance.MinimumDetectionDistance;
-                    secondLink.GetComponent<ConnectionFadeAndTrack>().disappearOnDistance = ConnectionGenerator.Instance.MaximumDetectionDistance;
-                    secondLink.GetComponent<ConnectionFadeAndTrack>().fadeDivider = ConnectionGenerator.Instance.FadeDivisionRate;
-                    secondLink.AddComponent<LavaMoving>();
-                    secondLink.GetComponent<LavaMoving>().uvAnimationRate = ConnectionGenerator.Instance.BasicAnimationDirections;
+                    GenerateSecondLink();
                 }
 
                 secondLink.GetComponent<ConnectionFadeAndTrack>().Assign(trackCell, secondClosestCell);
@@ -126,41 +113,13 @@ public class ConnectionTracker : MonoBehaviour {
 
                 if (secondLink == null)
                 {
-                secondLink = new GameObject();
-                secondLink.AddComponent<LineRenderer>();
-
-                secondLink.GetComponent<LineRenderer>().material = ConnectionGenerator.Instance.StartingMaterial;
-                secondLink.GetComponent<LineRenderer>().startWidth = ConnectionGenerator.Instance.StartingWidth;
-                secondLink.GetComponent<LineRenderer>().endWidth = ConnectionGenerator.Instance.EndingWidth;
-                secondLink.GetComponent<LineRenderer>().positionCount = 2;
-
-                secondLink.AddComponent<ConnectionFadeAndTrack>();
-                secondLink.GetComponent<ConnectionFadeAndTrack>().fadeOnDistance = ConnectionGenerator.Instance.MinimumDetectionDistance;
-                    secondLink.GetComponent<ConnectionFadeAndTrack>().disappearOnDistance = ConnectionGenerator.Instance.MaximumDetectionDistance;
-                    secondLink.GetComponent<ConnectionFadeAndTrack>().fadeDivider = ConnectionGenerator.Instance.FadeDivisionRate;
-                    secondLink.AddComponent<LavaMoving>();
-                secondLink.GetComponent<LavaMoving>().uvAnimationRate = ConnectionGenerator.Instance.BasicAnimationDirections;
-        }
+                    GenerateSecondLink();
+                }       
                 secondLink.GetComponent<ConnectionFadeAndTrack>().Assign(secondClosestCell, thirdClosestCell);
 
                 if (thirdLink == null)
                 {
-                    thirdLink = new GameObject();
-                    // thirdLink.transform.parent = extraConnections.transform;
-                    thirdLink.AddComponent<LineRenderer>();
-
-                    thirdLink.GetComponent<LineRenderer>().material = ConnectionGenerator.Instance.StartingMaterial;
-                    thirdLink.GetComponent<LineRenderer>().startWidth = ConnectionGenerator.Instance.StartingWidth;
-                    thirdLink.GetComponent<LineRenderer>().endWidth = ConnectionGenerator.Instance.EndingWidth;
-                    thirdLink.GetComponent<LineRenderer>().positionCount = 2;
-
-                    thirdLink.AddComponent<ConnectionFadeAndTrack>();
-                    thirdLink.GetComponent<ConnectionFadeAndTrack>();
-                    thirdLink.GetComponent<ConnectionFadeAndTrack>().fadeOnDistance = ConnectionGenerator.Instance.MinimumDetectionDistance;
-                    thirdLink.GetComponent<ConnectionFadeAndTrack>().disappearOnDistance = ConnectionGenerator.Instance.MaximumDetectionDistance;
-                    thirdLink.GetComponent<ConnectionFadeAndTrack>().fadeDivider = ConnectionGenerator.Instance.FadeDivisionRate;
-                    thirdLink.AddComponent<LavaMoving>();
-                    thirdLink.GetComponent<LavaMoving>().uvAnimationRate = ConnectionGenerator.Instance.BasicAnimationDirections;
+                    GenerateThirdLink();
                 }
                 thirdLink.GetComponent<ConnectionFadeAndTrack>().Assign(thirdClosestCell, fourthClosestCell);
 
@@ -180,6 +139,43 @@ public class ConnectionTracker : MonoBehaviour {
         }
 
 	}
+
+    private void GenerateSecondLink()
+    {
+        secondLink = new GameObject();
+        secondLink.AddComponent<LineRenderer>();
+
+        secondLink.GetComponent<LineRenderer>().material = ConnectionGenerator.Instance.StartingMaterial;
+        secondLink.GetComponent<LineRenderer>().startWidth = ConnectionGenerator.Instance.StartingWidth;
+        secondLink.GetComponent<LineRenderer>().endWidth = ConnectionGenerator.Instance.EndingWidth;
+        secondLink.GetComponent<LineRenderer>().positionCount = 2;
+
+        secondLink.AddComponent<ConnectionFadeAndTrack>();
+        secondLink.GetComponent<ConnectionFadeAndTrack>().fadeOnDistance = ConnectionGenerator.Instance.MinimumDetectionDistance;
+        secondLink.GetComponent<ConnectionFadeAndTrack>().disappearOnDistance = ConnectionGenerator.Instance.MaximumDetectionDistance;
+        secondLink.GetComponent<ConnectionFadeAndTrack>().fadeDivider = ConnectionGenerator.Instance.FadeDivisionRate;
+        secondLink.AddComponent<LavaMoving>();
+        secondLink.GetComponent<LavaMoving>().uvAnimationRate = ConnectionGenerator.Instance.BasicAnimationDirections;
+    }
+
+    private void GenerateThirdLink() {
+        thirdLink = new GameObject();
+        // thirdLink.transform.parent = extraConnections.transform;
+        thirdLink.AddComponent<LineRenderer>();
+
+        thirdLink.GetComponent<LineRenderer>().material = ConnectionGenerator.Instance.StartingMaterial;
+        thirdLink.GetComponent<LineRenderer>().startWidth = ConnectionGenerator.Instance.StartingWidth;
+        thirdLink.GetComponent<LineRenderer>().endWidth = ConnectionGenerator.Instance.EndingWidth;
+        thirdLink.GetComponent<LineRenderer>().positionCount = 2;
+
+        thirdLink.AddComponent<ConnectionFadeAndTrack>();
+        thirdLink.GetComponent<ConnectionFadeAndTrack>();
+        thirdLink.GetComponent<ConnectionFadeAndTrack>().fadeOnDistance = ConnectionGenerator.Instance.MinimumDetectionDistance;
+        thirdLink.GetComponent<ConnectionFadeAndTrack>().disappearOnDistance = ConnectionGenerator.Instance.MaximumDetectionDistance;
+        thirdLink.GetComponent<ConnectionFadeAndTrack>().fadeDivider = ConnectionGenerator.Instance.FadeDivisionRate;
+        thirdLink.AddComponent<LavaMoving>();
+        thirdLink.GetComponent<LavaMoving>().uvAnimationRate = ConnectionGenerator.Instance.BasicAnimationDirections;
+    }
 
     private void TrailGeneration()
     {
@@ -212,7 +208,6 @@ public class ConnectionTracker : MonoBehaviour {
                 if (c != originCell)
                 {
                     distances.Add(d);
-
                 }
          }
 

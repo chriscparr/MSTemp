@@ -585,7 +585,7 @@ MonoBehaviour:
   _sunFlaresRotationDeadZone: 0
   _blur: 0
   _blurIntensity: 1
-  isDirty: 0
+  isDirty: 1
   bMat: {fileID: 0}
 --- !u!82 &1088703399
 AudioSource:
@@ -732,7 +732,7 @@ Prefab:
     - target: {fileID: 224876516820499914, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -75.1499
+      value: -75.15039
       objectReference: {fileID: 0}
     - target: {fileID: 224876516820499914, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
@@ -757,12 +757,12 @@ Prefab:
     - target: {fileID: 224220058283687968, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 815.55005
+      value: 815.5508
       objectReference: {fileID: 0}
     - target: {fileID: 224220058283687968, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -75.1499
+      value: -75.15039
       objectReference: {fileID: 0}
     - target: {fileID: 224220058283687968, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
@@ -792,7 +792,7 @@ Prefab:
     - target: {fileID: 224502786736164188, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -346.65
+      value: -346.6504
       objectReference: {fileID: 0}
     - target: {fileID: 224502786736164188, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
@@ -817,12 +817,12 @@ Prefab:
     - target: {fileID: 224612279632134032, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 815.55
+      value: 815.5508
       objectReference: {fileID: 0}
     - target: {fileID: 224612279632134032, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -346.65
+      value: -346.6504
       objectReference: {fileID: 0}
     - target: {fileID: 224612279632134032, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
@@ -877,12 +877,12 @@ Prefab:
     - target: {fileID: 224284520778973566, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 815.55
+      value: 815.5508
       objectReference: {fileID: 0}
     - target: {fileID: 224284520778973566, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -618.15
+      value: -618.1504
       objectReference: {fileID: 0}
     - target: {fileID: 224284520778973566, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
@@ -937,12 +937,12 @@ Prefab:
     - target: {fileID: 224541616591133884, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 815.55
+      value: 815.5508
       objectReference: {fileID: 0}
     - target: {fileID: 224541616591133884, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -889.65
+      value: -889.6504
       objectReference: {fileID: 0}
     - target: {fileID: 224541616591133884, guid: de39a3d9ef8366240b69a6689875429d,
         type: 2}
@@ -1233,14 +1233,14 @@ MonoBehaviour:
   useLineRenderers: 1
   MaximumNumberOfConnections: 4
   MinimumDetectionDistance: 6
-  MaximumDetectionDistance: 15
-  FadeDivisionRate: 5
+  MaximumDetectionDistance: 12
+  FadeDivisionRate: 4
   ConnectionRefreshRate: 1
   MinimumLineAlpha: 0
   MaximumLineAlpha: 255
   StartingMaterial: {fileID: 2100000, guid: 14f1e49e7a7e44601b45254b65a292e1, type: 2}
-  StartingWidth: 1
-  EndingWidth: 1
+  StartingWidth: 1.2
+  EndingWidth: 1.2
   ShouldWeDoBasicAnimation: 1
   BasicAnimationDirections: {x: 1, y: 0}
   allCells: []
