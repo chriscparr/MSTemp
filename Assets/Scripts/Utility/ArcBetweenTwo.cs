@@ -18,10 +18,6 @@ public class ArcBetweenTwo : MonoBehaviour {
 
     private float speed = 50;
 
-    string RNG = "";
-    const string glyphs = "abcdefghijklmnopqrstuvwxyz0123456789";
-    string sString = "";
-
     float Velocity = 0;
     public float smoothTime = 0.3f;
     private float increment = 0;
@@ -34,28 +30,17 @@ public class ArcBetweenTwo : MonoBehaviour {
         origin = orig;
         destination = dest;
 
-        for (int i = 0; i < 5; i++)
-        {
-            RNG += glyphs[Random.Range(0, glyphs.Length)];
-        }
-
         MaximumDistanceRandomisation = Vector3.Distance(origin.transform.position, destination.transform.position) / 2;
         MinimumDistanceRandomisation = (MaximumDistanceRandomisation / 5);
-
-       // curvePoints.Add((origin.transform.position + destination.transform.position) / 2);
-
-        // got our points here
-        // now make them an itween path, using whatever type u want
-        // then oncomplete, re-randomize the MIDPOINT
-        // update the fuckin, start and end point on update.
-        // in fact, no, dont use an itween path
-        // use Curver.
  
         curvePoints.Add(origin.transform.position);
         curvePoints.Add(destination.transform.position);
         waypoints = Curver.MakeSmoothCurve(curvePoints.ToArray(), 5);
 
-
+        if (destination == origin)
+        {
+            destination = ModelManager.Instance.m_subcells[Random.Range(0, 7)];
+        }
 
         MidpointGeneration();
 	}
@@ -111,9 +96,6 @@ public class ArcBetweenTwo : MonoBehaviour {
 
     void MidpointGeneration()
     {
-        // consider getting my true destination cell from either Tracker or Fade and Track
-        // if u always want it to hit its closest cell
-        // otherwise, just fuck it, looks good as it is.
         waypoints[0] = origin.transform.position;
         waypoints[waypoints.Length-1] = destination.transform.position;
 

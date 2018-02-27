@@ -56,13 +56,11 @@ public class ConnectionTracker : MonoBehaviour {
 
         alsoUsingTrails = ConnectionGenerator.Instance.useTrails;
        
-
         existingConnections = GetComponentsInChildren<ConnectionTracker>();
         existingConnectionsAmount = existingConnections.Length;
         Debug.Log("NUmber of existing connections = " + existingConnections.Length);
 
-
-            InvokeRepeating("FindClosest", 0.5f, ConnectionGenerator.Instance.ConnectionRefreshRate);
+        InvokeRepeating("FindClosest", 0.5f, ConnectionGenerator.Instance.ConnectionRefreshRate);
 
     }
 
@@ -72,18 +70,12 @@ public class ConnectionTracker : MonoBehaviour {
         line.SetPosition(1, trackCell.transform.position);
     }
 
-    // Update is called once per frame
+
     void FinalizeConnections () {
         Debug.Log(line.positionCount);
         switch (line.positionCount)
         {
-            //case 0:
-            //line.SetPosition(0, originCell.transform.position);
-            //break;
-            //case 1:
-            //line.SetPosition(0, originCell.transform.position);
-            //line.SetPosition(1, trackCell.transform.position);
-            //break;
+
             case 2:
                 line.SetPosition(0, originCell.transform.position);
                 line.SetPosition(1, trackCell.transform.position);
@@ -92,7 +84,6 @@ public class ConnectionTracker : MonoBehaviour {
                 {
                     line.gameObject.AddComponent<ConnectionFadeAndTrack>();
                     line.gameObject.GetComponent<ConnectionFadeAndTrack>().fadeOnDistance = ConnectionGenerator.Instance.MinimumDetectionDistance;
-                    // line.gameObject.AddComponent<LavaMoving>();
                     line.gameObject.GetComponent<ConnectionFadeAndTrack>().disappearOnDistance = ConnectionGenerator.Instance.MaximumDetectionDistance;
                     line.gameObject.GetComponent<ConnectionFadeAndTrack>().fadeDivider = ConnectionGenerator.Instance.FadeDivisionRate;
                     line.gameObject.GetComponent<LavaMoving>().uvAnimationRate = ConnectionGenerator.Instance.BasicAnimationDirections;
@@ -104,12 +95,10 @@ public class ConnectionTracker : MonoBehaviour {
             case 3:
                 line.SetPosition(0, originCell.transform.position);
                 line.SetPosition(1, trackCell.transform.position);
-                // line.SetPosition(2, secondClosestCell.transform.position);
 
                 if (secondLink == null)
                 {
                     secondLink = new GameObject();
-                    // secondLink.transform.parent = extraConnections.transform;
                     secondLink.AddComponent<LineRenderer>();
 
                     secondLink.GetComponent<LineRenderer>().material = ConnectionGenerator.Instance.StartingMaterial;
@@ -124,9 +113,8 @@ public class ConnectionTracker : MonoBehaviour {
                     secondLink.AddComponent<LavaMoving>();
                     secondLink.GetComponent<LavaMoving>().uvAnimationRate = ConnectionGenerator.Instance.BasicAnimationDirections;
                 }
-                // ConnectionFadeAndTrack cTrack = mline.GetComponent<ConnectionFadeAndTrack>();
-                secondLink.GetComponent<ConnectionFadeAndTrack>().Assign(trackCell, secondClosestCell);
 
+                secondLink.GetComponent<ConnectionFadeAndTrack>().Assign(trackCell, secondClosestCell);
 
                 break;
 
@@ -135,13 +123,10 @@ public class ConnectionTracker : MonoBehaviour {
             case 4:
                 line.SetPosition(0, originCell.transform.position);
                 line.SetPosition(1, trackCell.transform.position);
-                //line.SetPosition(2, secondClosestCell.transform.position);
-                //line.SetPosition(3, thirdClosestCell.transform.position);
 
                 if (secondLink == null)
                 {
                 secondLink = new GameObject();
-                    // secondLink.transform.parent = extraConnections.transform;
                 secondLink.AddComponent<LineRenderer>();
 
                 secondLink.GetComponent<LineRenderer>().material = ConnectionGenerator.Instance.StartingMaterial;
@@ -186,41 +171,41 @@ public class ConnectionTracker : MonoBehaviour {
                     line.SetPosition(1, trackCell.transform.position);
                     break;
             }
-        line.positionCount = 2;
-        //Debug.Log("CONNECTIONS FINALIZED");
 
+        line.positionCount = 2;
 
         if (alsoUsingTrails == true && cachedTrail == null)
         {
-            GameObject trail = Instantiate(ConnectionGenerator.Instance.baseTrailObj, transform.position, Quaternion.identity);
-            cachedTrail = trail;
-            // trail.transform.parent = trailRenders.transform;
-            if (trail.GetComponent<Renderer>() != null)
-            {
-                trail.GetComponent<Renderer>().sharedMaterial = ConnectionGenerator.Instance.baseTrailMaterial;
-            }
-            trail.AddComponent<TrailRenderer>();
-            trail.GetComponent<TrailRenderer>().time = ConnectionGenerator.Instance.trailDuration;
-            trail.GetComponent<TrailRenderer>().sharedMaterial = ConnectionGenerator.Instance.trailMat;
-            trail.GetComponent<TrailRenderer>().widthMultiplier = ConnectionGenerator.Instance.trailWidth;
-            trail.GetComponent<TrailRenderer>().textureMode = ConnectionGenerator.Instance.trailTexType;
-
-            trail.AddComponent<ArcBetweenTwo>();
-            trail.GetComponent<ArcBetweenTwo>().ReceivePoints(originCell, trackCell);
-            trail.GetComponent<ArcBetweenTwo>().smoothTime = ConnectionGenerator.Instance.trailSpeed;
+            TrailGeneration();
         }
 
 	}
 
+    private void TrailGeneration()
+    {
+        GameObject trail = Instantiate(ConnectionGenerator.Instance.baseTrailObj, transform.position, Quaternion.identity);
+        cachedTrail = trail;
 
+        if (trail.GetComponent<Renderer>() != null)
+        {
+            trail.GetComponent<Renderer>().sharedMaterial = ConnectionGenerator.Instance.baseTrailMaterial;
+        }
+        trail.AddComponent<TrailRenderer>();
+        trail.GetComponent<TrailRenderer>().time = ConnectionGenerator.Instance.trailDuration;
+        trail.GetComponent<TrailRenderer>().sharedMaterial = ConnectionGenerator.Instance.trailMat;
+        trail.GetComponent<TrailRenderer>().widthMultiplier = ConnectionGenerator.Instance.trailWidth;
+        trail.GetComponent<TrailRenderer>().textureMode = ConnectionGenerator.Instance.trailTexType;
+
+        trail.AddComponent<ArcBetweenTwo>();
+        trail.GetComponent<ArcBetweenTwo>().ReceivePoints(originCell, trackCell);
+        trail.GetComponent<ArcBetweenTwo>().smoothTime = ConnectionGenerator.Instance.trailSpeed;
+    }
 
 
     void FindClosest()
     {
         distances.Clear();
 
-        //if (existingConnectionsAmount <= 1)
-        //{
             foreach (Subcell c in allCells)
             {
                 float d = Vector3.Distance(originCell.transform.position, c.transform.position);
@@ -263,8 +248,7 @@ public class ConnectionTracker : MonoBehaviour {
     void FindSecondClosest() {
         distances.Clear();
         temps.Clear();
-        //if (existingConnectionsAmount <= 1)
-        //{
+
         foreach (Subcell c in allCells)
         {
             float d = Vector3.Distance(originCell.transform.position, c.transform.position);
@@ -310,8 +294,7 @@ public class ConnectionTracker : MonoBehaviour {
     {
         distances.Clear();
         temps.Clear();
-        //if (existingConnectionsAmount <= 1)
-        //{
+
         foreach (Subcell c in allCells)
         {
             float d = Vector3.Distance(originCell.transform.position, c.transform.position);
@@ -356,8 +339,7 @@ public class ConnectionTracker : MonoBehaviour {
     {
         distances.Clear();
         temps.Clear();
-        //if (existingConnectionsAmount <= 1)
-        //{
+
         foreach (Subcell c in allCells)
         {
             float d = Vector3.Distance(originCell.transform.position, c.transform.position);
@@ -387,15 +369,7 @@ public class ConnectionTracker : MonoBehaviour {
             }
         }
 
-//        Debug.Log(secondClosestCell.name + "/' " + thirdClosestCell.name + "/" + fourthClosestCell.name);
-
-     //   Debug.Log("FOUND FOURTH CLOSEST YES");
         FinalizeConnections();
-
-        //if (line.positionCount > 3)
-        //{
-        //    FindThirdClosest();
-        //}
 
     }
 

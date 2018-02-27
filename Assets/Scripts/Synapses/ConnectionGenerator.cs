@@ -25,7 +25,7 @@ public class ConnectionGenerator : MonoBehaviour {
     [Range(2, 6)]
     public int FadeDivisionRate;
 
-    [Header("Lower values = faster refresh but performance hits")]
+    [Header("Lower values = faster cell search/refresh")]
     [Range(1,8)]
     public int ConnectionRefreshRate;
 
@@ -65,44 +65,24 @@ public class ConnectionGenerator : MonoBehaviour {
         s_instance = this;
     }
 
-    // Use this for initialization
     public void ReceiveSubCells (List<Subcell> cells) {
         allCells = cells;
 
         StartCoroutine("Creation");
-
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 	}
 
     IEnumerator Creation() {
 
-        GameObject trail = Instantiate(baseTrailObj, transform.position, Quaternion.identity);
-        trail.name = "IM A DEBUG DELETE ME";
-        trail.GetComponent<Renderer>().sharedMaterial = baseTrailMaterial;
-        trail.AddComponent<TrailRenderer>();
-        trail.GetComponent<TrailRenderer>().time = Instance.trailDuration;
-        trail.GetComponent<TrailRenderer>().sharedMaterial = Instance.trailMat;
-        trail.GetComponent<TrailRenderer>().widthMultiplier = Instance.trailWidth;
-        trail.GetComponent<TrailRenderer>().textureMode = Instance.trailTexType;
-
-        trail.AddComponent<ArcBetweenTwo>();
-        trail.GetComponent<ArcBetweenTwo>().ReceivePoints(allCells[0], allCells[1]);
-
         par = new GameObject();
         par.name = "Connections";
+
         for (int i = 0; i < allCells.Count; i++)
         {
             int b = i;
             b++;
 
-            //for (int w = 0; w < MaximumNumberOfConnections; w++)
-            //{
                 GameObject line = new GameObject();
-            line.transform.parent = par.transform;
+                line.transform.parent = par.transform;
                 line.AddComponent<LineRenderer>();
                 line.transform.position = allCells[i].transform.position;
 
@@ -112,20 +92,12 @@ public class ConnectionGenerator : MonoBehaviour {
                 line.GetComponent<LineRenderer>().positionCount = (MaximumNumberOfConnections-1);
                 ConnectionTracker tracker = line.AddComponent<ConnectionTracker>();
 
-
-                // here you should get the distance?
-
-                // below is demo code only
-
                 if (b >= allCells.Count)
                 {
                     b = 0;
                 }
                 tracker.originCell = allCells[i];
                 tracker.trackCell = allCells[i];
-                //tracker.secondClosestCell = allCells[i];
-                //tracker.thirdClosestCell = allCells[i];
-                //tracker.fourthClosestCell = allCells[i];
 
                 if (ShouldWeDoBasicAnimation)
                 {
@@ -133,7 +105,7 @@ public class ConnectionGenerator : MonoBehaviour {
                     basicAnimator.uvAnimationRate = BasicAnimationDirections;
                 }
                 yield return new WaitForSeconds(0.02f);
-            // }
+        
         }
 
   

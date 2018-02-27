@@ -95,11 +95,8 @@ public class ConnectionFadeAndTrack : MonoBehaviour {
 
     IEnumerator OverrideReappear()
     {
-        
-
         while (alpha < 1)
         {
-
             alpha += 0.1f * Time.deltaTime;
 
             fadeColor.a = alpha;
