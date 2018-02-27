@@ -29,6 +29,8 @@ public class CreateNewPresentationView : MonoBehaviour
 	private GameObject m_serviceButtonGrid;
 	[SerializeField]
 	private Button m_closeButton;
+	[SerializeField]
+	private Button m_submitButton;
 
 	private List<ServiceData> m_services = new List<ServiceData> ();
 	private PresentationData m_presentationData;
