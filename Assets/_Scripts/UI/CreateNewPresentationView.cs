@@ -65,6 +65,7 @@ public class CreateNewPresentationView : MonoBehaviour
 		}
 		m_closeButton.onClick.AddListener (CloseButtonEventHandler);
 		m_msAddIndustryBox.OnPressed += OpenAddIndustryPanel;
+		m_msAddMarketsBox.OnPressed += OpenAddMarketPanel;
 		SetupView ();
 	}
 
@@ -93,6 +94,31 @@ public class CreateNewPresentationView : MonoBehaviour
 		else
 		{
 			m_msAddIndustryBox.IsToggled = false;
+		}
+		Destroy (m_scrollSelect.gameObject);
+		m_serviceButtonGrid.SetActive (true);
+	}
+
+	private void OpenAddMarketPanel()
+	{
+		m_serviceButtonGrid.SetActive (false);
+		GameObject scrollObj = Instantiate(m_buttonScrollPrefab, gameObject.transform) as GameObject;
+		m_scrollSelect = scrollObj.GetComponent<ScrollingButtonSelect> ();
+		m_scrollSelect.Initialise (m_marketLabels, m_presentationData.Markets);
+		m_scrollSelect.OnCloseRequest += CloseAddMarketPanel;
+	}
+
+	private void CloseAddMarketPanel()
+	{
+		m_scrollSelect.OnCloseRequest -= CloseAddMarketPanel;
+		m_presentationData.Markets = m_scrollSelect.SelectedOptions;
+		if (m_presentationData.Markets.Length > 0)
+		{
+			m_msAddMarketsBox.IsToggled = true;
+		} 
+		else
+		{
+			m_msAddMarketsBox.IsToggled = false;
 		}
 		Destroy (m_scrollSelect.gameObject);
 		m_serviceButtonGrid.SetActive (true);
