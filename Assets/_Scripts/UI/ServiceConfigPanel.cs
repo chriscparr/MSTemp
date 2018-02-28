@@ -14,6 +14,10 @@ public class ServiceConfigPanel : MonoBehaviour
 	[SerializeField]
 	private Button m_closeButton;
 	[SerializeField]
+	private Button m_saveButton;
+	[SerializeField]
+	private Button m_addCaseStudyButton;
+	[SerializeField]
 	private InputField m_introTextInput;
 	[SerializeField]
 	private Slider m_initScaleSlider;
@@ -30,6 +34,7 @@ public class ServiceConfigPanel : MonoBehaviour
 	private void Awake()
 	{
 		m_closeButton.onClick.AddListener (ClosePanel);
+		m_saveButton.onClick.AddListener (SaveButtonPressed);
 	}
 
 	public void Initialise(string a_serviceName)
@@ -105,6 +110,13 @@ public class ServiceConfigPanel : MonoBehaviour
 		m_csBoxes.Clear ();
 	}
 
+	private void SaveButtonPressed()
+	{
+		InputToServiceData ();
+		SubmitCompletedServiceData ();
+		ClosePanel ();
+	}
+
 	private void InputToServiceData()
 	{
 		m_serviceData.ServiceIntroQuestion = m_introTextInput.text;
@@ -127,6 +139,7 @@ public class ServiceConfigPanel : MonoBehaviour
 
 	private void ClosePanel()
 	{
+		m_saveButton.onClick.RemoveListener (SaveButtonPressed);
 		m_closeButton.onClick.RemoveListener (ClosePanel);
 		ClearCaseStudyDisplay ();
 		this.gameObject.SetActive (false);

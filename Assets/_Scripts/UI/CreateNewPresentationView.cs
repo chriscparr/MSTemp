@@ -224,16 +224,19 @@ public class CreateNewPresentationView : MonoBehaviour
 	{
 		if (m_services.Contains (a_servData))
 		{
+			Debug.Log ("Service already contained in list!");
 			return;
 		}
 
 		int indx = GetIndexByServiceName (a_servData.ServiceName);
 		if (indx > 0)
 		{
+			Debug.Log ("Adding service at position " + indx.ToString());
 			m_services [indx] = a_servData;
 		}
 		else
 		{
+			Debug.Log ("Appending service to list");
 			m_services.Add (a_servData);
 		}
 	}
