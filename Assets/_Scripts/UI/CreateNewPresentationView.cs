@@ -81,13 +81,22 @@ public class CreateNewPresentationView : MonoBehaviour
 			msDiffBox.OnSelected += ServiceButtonSelectedEventHandler;
 		}
 		m_closeButton.onClick.AddListener (CloseButtonEventHandler);
+		m_submitButton.onClick.AddListener (SubmitPresentationData);
 		m_msAddIndustryBox.OnPressed += OpenAddIndustryPanel;
 		m_msAddMarketsBox.OnPressed += OpenAddMarketPanel;
 		m_msAddNotesBox.OnPressed += OpenNotesPanel;
+		//for debug only
+		SetupView();
 	}
 
 	private void CloseButtonEventHandler()
 	{
+		m_closeButton.onClick.RemoveListener (CloseButtonEventHandler);
+		m_submitButton.onClick.RemoveListener (SubmitPresentationData);
+		m_msAddIndustryBox.OnPressed -= OpenAddIndustryPanel;
+		m_msAddMarketsBox.OnPressed -= OpenAddMarketPanel;
+		m_msAddNotesBox.OnPressed -= OpenNotesPanel;
+		gameObject.SetActive (false);
 		//UIManager.Instance.OpenSomeOtherView();
 	}
 
@@ -143,13 +152,11 @@ public class CreateNewPresentationView : MonoBehaviour
 
 	private void OpenNotesPanel()
 	{
-		if (m_presentationData.Notes == null)
-		{
-			m_presentationData.Notes = new string[1];
-		}
 		GameObject notesObj = Instantiate(m_msNotesPanelPrefab, gameObject.transform) as GameObject;
 		m_notesPanel = notesObj.GetComponent<MSNotesPanel> ();
-		if (!string.IsNullOrEmpty (m_presentationData.Notes [0]))
+		Debug.Log ("m_presentationData.Notes.Length = " + m_presentationData.Notes.Length.ToString ());
+
+		if (m_presentationData.Notes.Length > 0 && !string.IsNullOrEmpty (m_presentationData.Notes [0]))
 		{
 			m_notesPanel.InputText = m_presentationData.Notes[0];
 		}
@@ -159,24 +166,20 @@ public class CreateNewPresentationView : MonoBehaviour
 	private void CloseNotesPanel()
 	{
 		m_notesPanel.OnCloseRequest -= CloseNotesPanel;
-
+		string[] notes = new string[1];
 		if (string.IsNullOrEmpty (m_notesPanel.InputText))
 		{
-			m_presentationData.Notes [0] = "";
-		} 
-		else
-		{
-			m_presentationData.Notes [0] = m_notesPanel.InputText;
-		}
-			
-		if (!string.IsNullOrEmpty (m_presentationData.Notes[0]))
-		{
-			m_msAddNotesBox.IsToggled = true;
-		} 
-		else
-		{
+			notes [0] = "";
+			//m_presentationData.Notes [0] = "";
 			m_msAddNotesBox.IsToggled = false;
+		} 
+		else
+		{
+			notes [0] = m_notesPanel.InputText;
+			//m_presentationData.Notes [0] = m_notesPanel.InputText;
+			m_msAddNotesBox.IsToggled = true;
 		}
+		m_presentationData.Notes = notes;
 
 		Destroy (m_notesPanel.gameObject);
 	}
