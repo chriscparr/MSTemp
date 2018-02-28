@@ -31,9 +31,11 @@ public class CaseStudyConfigPanel : MonoBehaviour
 
 	private bool m_isVideoType = false;
 	private CaseStudyData m_caseData;
+	private VideoPicker m_videoPicker;
 
 	private void Start()
 	{
+		m_videoPicker = gameObject.GetComponent<VideoPicker> ();
 		m_textTypeButton.onClick.AddListener (TextButtonPressed);
 		m_videoTypeButton.onClick.AddListener (VideoButtonPressed);
 		m_addVideoButton.onClick.AddListener (AddVideoButtonPressed);
@@ -99,7 +101,18 @@ public class CaseStudyConfigPanel : MonoBehaviour
 
 	private void AddVideoButtonPressed()
 	{
+		#if UNITY_EDITOR
+		return;
+		#endif
+		m_videoPicker.OnVideoSelected += VideoSelectedEventHandler;
+		m_videoPicker.ShowVideoPicker();
+	}
 
+	private void VideoSelectedEventHandler(string a_videoPath)
+	{
+		m_videoPicker.OnVideoSelected -= VideoSelectedEventHandler;
+		m_caseData.VideoPath = a_videoPath;
+		m_videoPathText.text = "Video location : " + m_caseData.VideoPath;
 	}
 
 	private void OnDestroy()

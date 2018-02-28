@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 222131574429495298}
   - component: {fileID: 114214220234978256}
   - component: {fileID: 114010863025633332}
+  - component: {fileID: 114913946941300598}
   m_Layer: 5
   m_Name: CaseStudyConfigPanel
   m_TagString: Untagged
@@ -1607,6 +1608,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114913946941300598
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1147454707168296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd03d7fa2d3e445ccaf136457fb24546, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &222025140008206928
 CanvasRenderer:
   m_ObjectHideFlags: 1
