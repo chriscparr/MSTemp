@@ -222,6 +222,11 @@ public class CreateNewPresentationView : MonoBehaviour
 
 	private void SaveServiceDataEventHandler(ServiceData a_servData)
 	{
+		if (m_services.Contains (a_servData))
+		{
+			return;
+		}
+
 		int indx = GetIndexByServiceName (a_servData.ServiceName);
 		if (indx > 0)
 		{
