@@ -702,6 +702,9 @@ MonoBehaviour:
     type: 2}
   m_serviceConfigPanelPrefab: {fileID: 1486436973416702, guid: 298b82636cea04d78b45b787926657de,
     type: 2}
+  m_clientTextInput: {fileID: 114373303024665012}
+  m_contactNameTextInput: {fileID: 114905356537071400}
+  m_contactPositionTextInput: {fileID: 114837370131479906}
   m_msAddIndustryBox: {fileID: 114453430277577562}
   m_msAddMarketsBox: {fileID: 114388733407089890}
   m_msAddNotesBox: {fileID: 114064774000570022}
