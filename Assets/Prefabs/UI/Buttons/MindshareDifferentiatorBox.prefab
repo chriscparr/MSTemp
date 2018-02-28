@@ -40,8 +40,8 @@ GameObject:
   - component: {fileID: 222563777885653944}
   - component: {fileID: 114421855497447226}
   - component: {fileID: 114332611657001250}
-  - component: {fileID: 114899977764309756}
   - component: {fileID: 114708507331251544}
+  - component: {fileID: 114311955615320526}
   m_Layer: 5
   m_Name: MindshareDifferentiatorBox
   m_TagString: Untagged
@@ -99,6 +99,21 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: BUTTON
+--- !u!114 &114311955615320526
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1248824126686674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc7b94196de444b51abfc5bfc7e5a6c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_msPurple: {r: 0.16470589, g: 0.10980392, b: 0.2627451, a: 1}
+  m_msWhite: {r: 1, g: 1, b: 1, a: 0.3764706}
+  m_button: {fileID: 114332611657001250}
+  m_labelText: {fileID: 114298658069278638}
 --- !u!114 &114332611657001250
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -226,21 +241,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useRichText: 0
   m_spacing: 10
---- !u!114 &114899977764309756
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1248824126686674}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c430ae2bfc9748cdb415a7418e8a97a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_msPurple: {r: 0.16078432, g: 0.03137255, b: 0.2784314, a: 1}
-  m_msWhite: {r: 1, g: 1, b: 1, a: 0.3764706}
-  m_button: {fileID: 114332611657001250}
-  m_labelText: {fileID: 114298658069278638}
 --- !u!222 &222226996149395534
 CanvasRenderer:
   m_ObjectHideFlags: 1
