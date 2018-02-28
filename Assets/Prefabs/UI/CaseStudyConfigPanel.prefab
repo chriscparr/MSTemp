@@ -465,6 +465,7 @@ MonoBehaviour:
   m_csIntroInputText: {fileID: 114401814302727116}
   m_csBodyInputText: {fileID: 114834469732220110}
   m_videoPathText: {fileID: 114453283634436804}
+  m_msPurple: {r: 0.16470589, g: 0.10980392, b: 0.2627451, a: 1}
 --- !u!114 &114034341820309530
 MonoBehaviour:
   m_ObjectHideFlags: 1
