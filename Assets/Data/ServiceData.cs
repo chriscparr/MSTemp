@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-[System.Serializable]
+﻿[System.Serializable]
 public class ServiceData
 {
 	public ServiceData()
@@ -8,6 +6,8 @@ public class ServiceData
 		InitialScale = 1.0f;
 		EditedScale = 1.0f;
 		Edited = false;
+		ServiceIntroQuestion = "";
+		CaseStudies = new CaseStudyData[] { };
 	}
 
 	public string ServiceName;
