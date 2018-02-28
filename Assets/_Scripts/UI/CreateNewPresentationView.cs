@@ -15,18 +15,17 @@ public class CreateNewPresentationView : MonoBehaviour
 	[SerializeField]
 	private GameObject m_serviceConfigPanelPrefab;
 	[SerializeField]
+	private InputField m_clientTextInput;
+	[SerializeField]
+	private InputField m_contactNameTextInput;
+	[SerializeField]
+	private InputField m_contactPositionTextInput;
+	[SerializeField]
 	private MSAddStuffBox m_msAddIndustryBox;
 	[SerializeField]
 	private MSAddStuffBox m_msAddMarketsBox;
 	[SerializeField]
 	private MSAddStuffBox m_msAddNotesBox;
-
-
-	private string[] m_buttonServiceLabels = new string[] {"FAST","SHOP","GROWTH","DATA","LOOP","CONTENT","AGILE","LIFE"};
-	private string[] m_industryLabels = new string[] {"FASHION","CONSTRUCTION","FINANCE","ENTERTAINMENT","HEALTH","EDUCATION","LEGAL","ADVERTISING"};
-	private string[] m_marketLabels = new string[] {"EUROPE","NORTH AMERICA","ASIA","MIDDLE EAST","AFRICA","AUSTRALIA","OCEANA","SOUTH AMERICA"};
-
-
 	[SerializeField]
 	private GameObject m_serviceButtonGrid;
 	[SerializeField]
@@ -34,29 +33,39 @@ public class CreateNewPresentationView : MonoBehaviour
 	[SerializeField]
 	private Button m_submitButton;
 
-	private List<ServiceData> m_services = new List<ServiceData> ();
+	private string[] m_buttonServiceLabels = new string[] {"FAST","SHOP","GROWTH","DATA","LOOP","CONTENT","AGILE","LIFE"};
+	private string[] m_industryLabels = new string[] {"FASHION","CONSTRUCTION","FINANCE","ENTERTAINMENT","HEALTH","EDUCATION","LEGAL","ADVERTISING"};
+	private string[] m_marketLabels = new string[] {"EUROPE","NORTH AMERICA","ASIA","MIDDLE EAST","AFRICA","AUSTRALIA","OCEANA","SOUTH AMERICA"};
+
 	private PresentationData m_presentationData;
 
 	private ScrollingButtonSelect m_scrollSelect;
 	private MSNotesPanel m_notesPanel;
 	private ServiceConfigPanel m_servicePanel;
 
+	private Dictionary<string, MSDiffSelectBox> m_diffBoxDict = new Dictionary<string, MSDiffSelectBox> ();
 
 	public void SetupView(PresentationData a_pData = null)
 	{
-		m_services.Clear ();
 		if (a_pData != null)
 		{
 			m_presentationData = a_pData;
+			//populate fields
+			m_clientTextInput.text = m_presentationData.ClientName;
+			m_contactNameTextInput.text = m_presentationData.PresenterName;
+			m_contactPositionTextInput.text = m_presentationData.PresenterPosition;
+			m_msAddIndustryBox.IsToggled = m_presentationData.Industries.Length > 0 ? true : false;
+			m_msAddMarketsBox.IsToggled = m_presentationData.Markets.Length > 0 ? true : false;
+			m_msAddNotesBox.IsToggled = m_presentationData.Notes[0].Length > 0 ? true : false;
+
+			foreach (ServiceData sData in m_presentationData.Services)
+			{
+				m_diffBoxDict [sData.ServiceName].SavedServiceData = sData;
+			}
 		} 
 		else
 		{
 			m_presentationData = new PresentationData ();
-		}
-
-		if (m_presentationData.Industries != null && m_presentationData.Industries.Length > 0)
-		{
-			m_msAddIndustryBox.IsToggled = true;
 		}
 
 	}
@@ -66,20 +75,28 @@ public class CreateNewPresentationView : MonoBehaviour
 		foreach (string label in m_buttonServiceLabels)
 		{
 			GameObject btnObj = Instantiate(m_msDiffBoxPrefab, m_serviceButtonGrid.transform) as GameObject;
-			MindshareButton msButton = btnObj.GetComponent<MindshareButton> ();
-			msButton.SetButtonValue (label);
-			msButton.OnSelected += ServiceButtonSelectedEventHandler;
-			msButton.OnUnselected += ServiceButtonUnselectedEventHandler;
+			MSDiffSelectBox msDiffBox =  btnObj.GetComponent<MSDiffSelectBox> ();
+			m_diffBoxDict.Add (label, msDiffBox);
+			msDiffBox.SetButtonValue (label);
+			msDiffBox.OnSelected += ServiceButtonSelectedEventHandler;
 		}
 		m_closeButton.onClick.AddListener (CloseButtonEventHandler);
+		m_submitButton.onClick.AddListener (SubmitPresentationData);
 		m_msAddIndustryBox.OnPressed += OpenAddIndustryPanel;
 		m_msAddMarketsBox.OnPressed += OpenAddMarketPanel;
 		m_msAddNotesBox.OnPressed += OpenNotesPanel;
-		SetupView ();
+		//for debug only
+		SetupView();
 	}
 
 	private void CloseButtonEventHandler()
 	{
+		m_closeButton.onClick.RemoveListener (CloseButtonEventHandler);
+		m_submitButton.onClick.RemoveListener (SubmitPresentationData);
+		m_msAddIndustryBox.OnPressed -= OpenAddIndustryPanel;
+		m_msAddMarketsBox.OnPressed -= OpenAddMarketPanel;
+		m_msAddNotesBox.OnPressed -= OpenNotesPanel;
+		gameObject.SetActive (false);
 		//UIManager.Instance.OpenSomeOtherView();
 	}
 
@@ -135,13 +152,11 @@ public class CreateNewPresentationView : MonoBehaviour
 
 	private void OpenNotesPanel()
 	{
-		if (m_presentationData.Notes == null)
-		{
-			m_presentationData.Notes = new string[1];
-		}
 		GameObject notesObj = Instantiate(m_msNotesPanelPrefab, gameObject.transform) as GameObject;
 		m_notesPanel = notesObj.GetComponent<MSNotesPanel> ();
-		if (!string.IsNullOrEmpty (m_presentationData.Notes [0]))
+		Debug.Log ("m_presentationData.Notes.Length = " + m_presentationData.Notes.Length.ToString ());
+
+		if (m_presentationData.Notes.Length > 0 && !string.IsNullOrEmpty (m_presentationData.Notes [0]))
 		{
 			m_notesPanel.InputText = m_presentationData.Notes[0];
 		}
@@ -151,24 +166,20 @@ public class CreateNewPresentationView : MonoBehaviour
 	private void CloseNotesPanel()
 	{
 		m_notesPanel.OnCloseRequest -= CloseNotesPanel;
-
+		string[] notes = new string[1];
 		if (string.IsNullOrEmpty (m_notesPanel.InputText))
 		{
-			m_presentationData.Notes [0] = "";
-		} 
-		else
-		{
-			m_presentationData.Notes [0] = m_notesPanel.InputText;
-		}
-			
-		if (!string.IsNullOrEmpty (m_presentationData.Notes[0]))
-		{
-			m_msAddNotesBox.IsToggled = true;
-		} 
-		else
-		{
+			notes [0] = "";
+			//m_presentationData.Notes [0] = "";
 			m_msAddNotesBox.IsToggled = false;
+		} 
+		else
+		{
+			notes [0] = m_notesPanel.InputText;
+			//m_presentationData.Notes [0] = m_notesPanel.InputText;
+			m_msAddNotesBox.IsToggled = true;
 		}
+		m_presentationData.Notes = notes;
 
 		Destroy (m_notesPanel.gameObject);
 	}
@@ -179,10 +190,10 @@ public class CreateNewPresentationView : MonoBehaviour
 		Debug.Log ("You have selected " + a_selectedOption);
 		GameObject servPanelObj = Instantiate(m_serviceConfigPanelPrefab, gameObject.transform) as GameObject;
 		m_servicePanel = servPanelObj.GetComponent<ServiceConfigPanel> ();
-		int indx = GetIndexByServiceName (a_selectedOption);
-		if (indx > 0)
+
+		if (m_diffBoxDict [a_selectedOption].IsServiceDataReady)
 		{
-			m_servicePanel.Initialise (m_services [indx]);
+			m_servicePanel.Initialise (m_diffBoxDict [a_selectedOption].SavedServiceData);
 		}
 		else
 		{
@@ -191,45 +202,29 @@ public class CreateNewPresentationView : MonoBehaviour
 		m_servicePanel.OnSaveService += SaveServiceDataEventHandler;
 	}
 
-	private int GetIndexByServiceName(string a_serviceName)
-	{
-		int servIndex = -1;
-		for (int i = 0; i < m_services.Count; i++)
-		{
-			if (m_services [i].ServiceName == a_serviceName)
-			{
-				servIndex = i;
-				break;
-			}
-		}
-		return servIndex;
-	}
-
-	private void ServiceButtonUnselectedEventHandler(string a_unSelectedOption)
-	{
-		Debug.Log ("You have UNselected " + a_unSelectedOption);
-		/*
-		for (int i = 0; i < m_services.Count; i++)
-		{
-			if (m_services [i].ServiceName.ToUpper () == a_unSelectedOption.ToUpper ())
-			{
-				m_services.RemoveAt (i);
-				break;
-			}
-		}
-		*/
-	}
-
 	private void SaveServiceDataEventHandler(ServiceData a_servData)
 	{
-		int indx = GetIndexByServiceName (a_servData.ServiceName);
-		if (indx > 0)
+		m_servicePanel.OnSaveService -= SaveServiceDataEventHandler;
+		m_diffBoxDict [a_servData.ServiceName].SavedServiceData = a_servData;
+	}
+
+	private void SubmitPresentationData()
+	{
+		m_presentationData.ClientName = m_clientTextInput.text;
+		m_presentationData.PresenterName = m_contactNameTextInput.text;
+		m_presentationData.PresenterPosition = m_contactPositionTextInput.text;
+		//Markets, Industries + notes should already be present
+
+		List<ServiceData> serviceDats = new List<ServiceData> ();
+		foreach (MSDiffSelectBox box in m_diffBoxDict.Values)
 		{
-			m_services [indx] = a_servData;
+			if (box.IsServiceDataReady)
+			{
+				serviceDats.Add (box.SavedServiceData);
+			}
 		}
-		else
-		{
-			m_services.Add (a_servData);
-		}
+		m_presentationData.Services = serviceDats.ToArray ();
+		PersistentDataHandler.SaveFile<PresentationData> (m_presentationData.ID, m_presentationData);
+		CloseButtonEventHandler ();
 	}
 }

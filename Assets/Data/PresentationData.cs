@@ -6,6 +6,12 @@ public class PresentationData
 	public PresentationData()
 	{
 		ID = System.Guid.NewGuid ().ToString ();
+		PresenterName = "";
+		PresenterPosition = "";
+		ClientName = "";
+		Industries = new string[] { };
+		Markets = new string[] { };
+		Notes = new string[] { };
 	}
 
 	public string ID;

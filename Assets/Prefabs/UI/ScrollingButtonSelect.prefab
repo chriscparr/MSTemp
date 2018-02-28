@@ -329,7 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54c15d36f354d481f9f6d93777ac726d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_msButtonPrefab: {fileID: 1248824126686674, guid: 45d4756bd3dbf4a098eab0cdc29c1d34,
+  m_msButtonPrefab: {fileID: 1270452431203674, guid: dfd8ed8ff4dbd4d27a4a90c0d20c2b77,
     type: 2}
   m_contentArea: {fileID: 1265384265507510}
   m_exitScrollSelectClickArea: {fileID: 114685021253039126}
