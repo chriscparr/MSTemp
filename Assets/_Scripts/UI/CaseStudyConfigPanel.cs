@@ -39,7 +39,8 @@ public class CaseStudyConfigPanel : MonoBehaviour
 		m_textTypeButton.onClick.AddListener (TextButtonPressed);
 		m_videoTypeButton.onClick.AddListener (VideoButtonPressed);
 		m_addVideoButton.onClick.AddListener (AddVideoButtonPressed);
-		Initialise ();
+		m_saveCaseButton.onClick.AddListener (SubmitCaseStudyData);
+		m_closeButton.onClick.AddListener (ClosePanel);
 	}
 
 	public void Initialise(CaseStudyData a_csData = null)
@@ -115,10 +116,31 @@ public class CaseStudyConfigPanel : MonoBehaviour
 		m_videoPathText.text = "Video location : " + m_caseData.VideoPath;
 	}
 
+	private void ClosePanel()
+	{
+		gameObject.SetActive (false);
+		Destroy (gameObject);
+	}
+
+	private void SubmitCaseStudyData()
+	{
+		m_caseData.TitleText = m_csTitleInputText.text;
+		m_caseData.IntroText = m_csIntroInputText.text;
+		m_caseData.BodyText = m_csBodyInputText.text;
+		m_caseData.VideoPath = m_videoPathText.text;
+		if (OnSaveCaseStudy != null)
+		{
+			OnSaveCaseStudy (m_caseData);
+			ClosePanel ();
+		}
+	}
+
 	private void OnDestroy()
 	{
 		m_textTypeButton.onClick.RemoveListener (TextButtonPressed);
 		m_videoTypeButton.onClick.RemoveListener (VideoButtonPressed);
 		m_addVideoButton.onClick.RemoveListener (AddVideoButtonPressed);
+		m_saveCaseButton.onClick.RemoveListener (SubmitCaseStudyData);
+		m_closeButton.onClick.RemoveListener (ClosePanel);
 	}
 }
