@@ -17,7 +17,9 @@ public class PDFManager : MonoBehaviour
 
     // put differentiator names, descriptors and sprites here
     // then populate as needed
-    // but do this later pls
+    // but do this later pls - now!!!!
+
+    public RawImage[] cellImages; // TODO assign textures as source images at runtime, so should we use IMAGE or RAWIMAGE? (Doesnt matter either way)
 
     public GameObject PageOne;
     public GameObject PageTwo;
@@ -79,22 +81,9 @@ public class PDFManager : MonoBehaviour
         finishedEcosystem.texture = ourTexture;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.touchCount == 3 || Input.GetKeyDown(KeyCode.N))
-        {
-            if (amDoing != true)
-            {
-                StartCoroutine("GenerateEntirePDF");
-            }
-        }
-    }
-
     public IEnumerator GenerateEntirePDF()
     {
         amDoing = true;
-        // pdfDocument doc = new pdfDocument("pdfTitle", "Mindshare");
         PageOne.transform.parent.GetComponent<Canvas>().enabled = true;
 
         for (int i = 0; i <= 1; i++)
@@ -113,8 +102,7 @@ public class PDFManager : MonoBehaviour
 
             // SOME POINT IN THE FUTURE, WE WILL ACTUALLY POPULATE OUR PDF CANVAS WITH STUFF
             // HELL, DONT ACTUALLY DO ALL OF THAT HERE, DO IT AS WE DO THINGS IN THE APP :-)
-
-            // pdfPage pg = doc.addPage(Screen.height, Screen.width);
+            // WE'RE DOING IT NOW
 
             pdfCamera.gameObject.SetActive(true);
 
@@ -135,19 +123,13 @@ public class PDFManager : MonoBehaviour
             byte[] bytes;
             bytes = ourTexture.EncodeToJPG(100);
 
-           
-
             int iS = Random.Range(0, 500);
             string StempPath = Application.persistentDataPath + "/" + iS.ToString() + ".jpeg";
             File.WriteAllBytes(StempPath, bytes);
             combinedTextures.Add(ourTexture);
             files.Add(StempPath);
 
-            //pdfImageReference ref = new pdfImageRenference(tempPath);
-            //pg.AddImageref,0,0) - this doesnt work
-
-            // pg = null;
-            System.GC.Collect();
+            System.GC.Collect(); // i swear this is needed
             yield return new WaitForSeconds(0.3f);
 
         }
@@ -168,6 +150,7 @@ public class PDFManager : MonoBehaviour
 
         if (emailStrings.Length != 0)
         {
+            // crap check to determine whether we are SAVING IT (open with whatever) or EMAILING IT (prepare for mailshot)
             OpenPDFThenEmail(tempPath, files[0], files[1], emailStrings[0], emailStrings[1], emailStrings[2]);
         }
         else

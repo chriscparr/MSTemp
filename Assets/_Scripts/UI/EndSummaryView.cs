@@ -21,6 +21,7 @@ public class EndSummaryView : MonoBehaviour {
     private Button HomeButton;
 
     // look at dis Chris look ma listeners
+    // maybe i do maybe i dont
     private void OnEnable()
     {
         SaveButton.onClick.AddListener(OnSaveButtonClick);
@@ -60,6 +61,7 @@ public class EndSummaryView : MonoBehaviour {
 
     private void OnSendButtonClick()
     {
+        // lol crap check to make sure we've put in a proper email address
         if (!AddressTo.text.Contains("@"))
         {
             Debug.Log("Invalid email address! Make an actual UI popup for this error and escape");
