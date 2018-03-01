@@ -585,7 +585,7 @@ MonoBehaviour:
   _sunFlaresRotationDeadZone: 0
   _blur: 0
   _blurIntensity: 1
-  isDirty: 0
+  isDirty: 1
   bMat: {fileID: 0}
 --- !u!82 &1088703399
 AudioSource:
@@ -1088,6 +1088,7 @@ MonoBehaviour:
   - PrefabName: SHOP
     PrefabGameObject: {fileID: 1273531743002108, guid: 9c5708ad99e7946f48552bfb520c050e,
       type: 2}
+  m_subcells: []
   OffStateMaterial: {fileID: 2100000, guid: 87e905f2717e14d949af01f12d4a28eb, type: 2}
   OnStateMaterials:
   - {fileID: 2100000, guid: 6a5c10b147fbb43c286f1955105530cf, type: 2}
@@ -1200,6 +1201,10 @@ MonoBehaviour:
   shouldIEndWhereIBegin: 1
   minimumNumberOfNodes: 4
   maximumNumberOfNodes: 10
+  AreWeConnectingSubCells: 1
+  allCells: []
+  allSynapses: []
+  AreWeDoingLeoniesReferenceParticles: 0
 --- !u!114 &1782334247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1247,7 +1252,7 @@ MonoBehaviour:
     type: 2}
   m_newOrSavedViewPrefab: {fileID: 1481108821057080, guid: 1e699522f824b4ee8968accad400d0aa,
     type: 2}
-  m_newPresentationViewPrefab: {fileID: 1126668090743456, guid: bfe8f2fc47a9d421fa583fcee7051a3e,
+  m_newPresentationViewPrefab: {fileID: 1058931907538574, guid: 346b38576d831414e9dcfe8e7ff95c6c,
     type: 2}
   m_selectSavedViewPrefab: {fileID: 1357935561895060, guid: 0190f5d085a48421495a2320301086f2,
     type: 2}

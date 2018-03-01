@@ -38,7 +38,7 @@ public class MSAddStuffBox : MonoBehaviour
 
 	private void Start()
 	{
-		m_button.onClick.AddListener (OnButtonPressed);
+		//m_button.onClick.AddListener (OnButtonPressed);
 		UpdateColors ();
 	}
 
@@ -64,6 +64,16 @@ public class MSAddStuffBox : MonoBehaviour
 			m_labelText.color = m_msPurple;
 			m_iconImage.sprite = m_addIcon;
 		}
+	}
+
+	private void OnEnable()
+	{
+		m_button.onClick.AddListener (OnButtonPressed);
+	}
+
+	private void OnDisable()
+	{
+		m_button.onClick.RemoveListener (OnButtonPressed);
 	}
 
 }

@@ -25,10 +25,6 @@ public class GameManager : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		if (PersistentDataHandler.GetAllSavedPresentations ().Length == 0)
-		{
-			SaveDummyData (GenerateTestPresentation ());
-		}
 		UIManager.Instance.ShowLoginView();
 	}
 	

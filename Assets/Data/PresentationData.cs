@@ -11,7 +11,7 @@ public class PresentationData
 		ClientName = "";
 		Industries = new string[] { };
 		Markets = new string[] { };
-		Notes = new string[] { };
+		Notes = new string[1];
 	}
 
 	public string ID;
