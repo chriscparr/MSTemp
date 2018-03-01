@@ -24,11 +24,10 @@ public class ConnectionFadeAndTrack : MonoBehaviour {
 
     private bool amOverridingFade;
 
-	// Use this for initialization
 	void OnEnable () {
         myLine = GetComponent<LineRenderer>();
         mMat = GetComponent<LineRenderer>().material;
-        fadeColor = mMat.GetColor("_TintColor");
+        fadeColor = mMat.GetColor("_TintColor"); // relies on the material using Particles/Additive shader.
         fadeColor = new Color(255, 255, 255);
 	}
 
@@ -39,7 +38,6 @@ public class ConnectionFadeAndTrack : MonoBehaviour {
         amDoing = true;
     }
 	
-	// Update is called once per frame
 	void Update () {
         if (origin != null && destination != null && amDoing == true)
         {
@@ -78,7 +76,6 @@ public class ConnectionFadeAndTrack : MonoBehaviour {
         while (alpha > ConnectionGenerator.Instance.MinimumLineAlpha)
         {
             alpha -= 0.1f * Time.deltaTime;
-//            Debug.Log("OVERRIDIUNG");
             fadeColor.a = alpha;
 
             myLine.startColor = fadeColor;

@@ -30,9 +30,15 @@ public class PDFManager : MonoBehaviour
     public RawImage finishedEcosystem;
     public Camera pdfCamera;
 
+    [HideInInspector]
+    public string[] emailStrings;
+
 
     [DllImport("__Internal")]
     private static extern void OpenPDF(string path, string imageOne, string imageTwo);
+
+    [DllImport("__Internal")]
+    private static extern void OpenPDFThenEmail(string path, string imageOne, string imageTwo, string to, string cc, string subject);
 
 
     private void Awake()
@@ -159,7 +165,15 @@ public class PDFManager : MonoBehaviour
         // CONSIDER ADDING DATE AND CLIENT NAME TO THE TEMPPATH ABOVE.
 
         File.WriteAllBytes(tempPath, mBytes);
-        OpenPDF(tempPath, files[0], files[1]);
+
+        if (emailStrings.Length != 0)
+        {
+            OpenPDFThenEmail(tempPath, files[0], files[1], emailStrings[0], emailStrings[1], emailStrings[2]);
+        }
+        else
+        {
+            OpenPDF(tempPath, files[0], files[1]);
+        }
  
         PageOne.transform.parent.GetComponent<Canvas>().enabled = false;
         amDoing = false;
