@@ -50,24 +50,27 @@ public class CreateNewPresentationView : MonoBehaviour
 		if (a_pData != null)
 		{
 			m_presentationData = a_pData;
-			//populate fields
-			m_clientTextInput.text = m_presentationData.ClientName;
-			m_contactNameTextInput.text = m_presentationData.PresenterName;
-			m_contactPositionTextInput.text = m_presentationData.PresenterPosition;
-			m_msAddIndustryBox.IsToggled = m_presentationData.Industries.Length > 0 ? true : false;
-			m_msAddMarketsBox.IsToggled = m_presentationData.Markets.Length > 0 ? true : false;
-			m_msAddNotesBox.IsToggled = m_presentationData.Notes[0].Length > 0 ? true : false;
-
-			foreach (ServiceData sData in m_presentationData.Services)
+			if (m_presentationData.Services != null)
 			{
-				m_diffBoxDict [sData.ServiceName].SavedServiceData = sData;
+				foreach (ServiceData sData in m_presentationData.Services)
+				{
+					m_diffBoxDict [sData.ServiceName].SavedServiceData = sData;
+				}
 			}
 		} 
 		else
 		{
 			m_presentationData = new PresentationData ();
 		}
+		RefreshView ();
+	}
 
+	public void SaveInputTexts(string a_str)
+	{
+		Debug.Log ("<color=#ffff00>Saving Input Texts!!!</color>");
+		m_presentationData.ClientName = m_clientTextInput.text;
+		m_presentationData.PresenterName = m_contactNameTextInput.text;
+		m_presentationData.PresenterPosition = m_contactPositionTextInput.text;
 	}
 
 	private void Awake()
@@ -82,10 +85,28 @@ public class CreateNewPresentationView : MonoBehaviour
 		}
 	}
 
+	private void RefreshView()
+	{
+		//populate fields
+		m_clientTextInput.text = m_presentationData.ClientName;
+		m_contactNameTextInput.text = m_presentationData.PresenterName;
+		m_contactPositionTextInput.text = m_presentationData.PresenterPosition;
+		m_msAddIndustryBox.IsToggled = m_presentationData.Industries.Length > 0 ? true : false;
+		m_msAddMarketsBox.IsToggled = m_presentationData.Markets.Length > 0 ? true : false;
+		m_msAddNotesBox.IsToggled = false;
+		if (m_presentationData.Notes [0] != null && m_presentationData.Notes [0].Length > 0)
+		{
+			m_msAddNotesBox.IsToggled = m_presentationData.Notes [0].Length > 0 ? true : false;
+		}
+	}
+
 	private void OnEnable()
 	{
 		m_closeButton.onClick.AddListener (CloseButtonEventHandler);
 		m_submitButton.onClick.AddListener (SubmitPresentationData);
+		m_clientTextInput.onEndEdit.AddListener (SaveInputTexts);
+		m_contactNameTextInput.onEndEdit.AddListener (SaveInputTexts);
+		m_contactPositionTextInput.onEndEdit.AddListener (SaveInputTexts);
 		m_msAddIndustryBox.OnPressed += OpenAddIndustryPanel;
 		m_msAddMarketsBox.OnPressed += OpenAddMarketPanel;
 		m_msAddNotesBox.OnPressed += OpenNotesPanel;
@@ -95,6 +116,9 @@ public class CreateNewPresentationView : MonoBehaviour
 	{
 		m_closeButton.onClick.RemoveListener (CloseButtonEventHandler);
 		m_submitButton.onClick.RemoveListener (SubmitPresentationData);
+		m_clientTextInput.onEndEdit.RemoveListener (SaveInputTexts);
+		m_contactNameTextInput.onEndEdit.RemoveListener (SaveInputTexts);
+		m_contactPositionTextInput.onEndEdit.RemoveListener (SaveInputTexts);
 		m_msAddIndustryBox.OnPressed -= OpenAddIndustryPanel;
 		m_msAddMarketsBox.OnPressed -= OpenAddMarketPanel;
 		m_msAddNotesBox.OnPressed -= OpenNotesPanel;
@@ -102,6 +126,7 @@ public class CreateNewPresentationView : MonoBehaviour
 
 	private void CloseButtonEventHandler()
 	{
+		m_presentationData = new PresentationData ();
 		UIManager.Instance.ShowNewOrSavedView ();
 	}
 
@@ -118,16 +143,9 @@ public class CreateNewPresentationView : MonoBehaviour
 	{
 		m_scrollSelect.OnCloseRequest -= CloseAddIndustryPanel;
 		m_presentationData.Industries = m_scrollSelect.SelectedOptions;
-		if (m_presentationData.Industries.Length > 0)
-		{
-			m_msAddIndustryBox.IsToggled = true;
-		} 
-		else
-		{
-			m_msAddIndustryBox.IsToggled = false;
-		}
-		Destroy (m_scrollSelect.gameObject);
 		m_serviceButtonGrid.SetActive (true);
+		Destroy (m_scrollSelect.gameObject);
+		RefreshView ();
 	}
 
 	private void OpenAddMarketPanel()
@@ -143,25 +161,17 @@ public class CreateNewPresentationView : MonoBehaviour
 	{
 		m_scrollSelect.OnCloseRequest -= CloseAddMarketPanel;
 		m_presentationData.Markets = m_scrollSelect.SelectedOptions;
-		if (m_presentationData.Markets.Length > 0)
-		{
-			m_msAddMarketsBox.IsToggled = true;
-		} 
-		else
-		{
-			m_msAddMarketsBox.IsToggled = false;
-		}
-		Destroy (m_scrollSelect.gameObject);
 		m_serviceButtonGrid.SetActive (true);
+		Destroy (m_scrollSelect.gameObject);
+		RefreshView ();
 	}
 
 	private void OpenNotesPanel()
 	{
 		GameObject notesObj = Instantiate(m_msNotesPanelPrefab, gameObject.transform) as GameObject;
 		m_notesPanel = notesObj.GetComponent<MSNotesPanel> ();
-		Debug.Log ("m_presentationData.Notes.Length = " + m_presentationData.Notes.Length.ToString ());
 
-		if (m_presentationData.Notes.Length > 0 && !string.IsNullOrEmpty (m_presentationData.Notes [0]))
+		if (m_presentationData.Notes[0] != null && m_presentationData.Notes[0].Length > 0)
 		{
 			m_notesPanel.InputText = m_presentationData.Notes[0];
 		}
@@ -172,21 +182,10 @@ public class CreateNewPresentationView : MonoBehaviour
 	{
 		m_notesPanel.OnCloseRequest -= CloseNotesPanel;
 		string[] notes = new string[1];
-		if (string.IsNullOrEmpty (m_notesPanel.InputText))
-		{
-			notes [0] = "";
-			//m_presentationData.Notes [0] = "";
-			m_msAddNotesBox.IsToggled = false;
-		} 
-		else
-		{
-			notes [0] = m_notesPanel.InputText;
-			//m_presentationData.Notes [0] = m_notesPanel.InputText;
-			m_msAddNotesBox.IsToggled = true;
-		}
+		notes [0] = m_notesPanel.InputText;
 		m_presentationData.Notes = notes;
-
 		Destroy (m_notesPanel.gameObject);
+		RefreshView ();
 	}
 
 
@@ -211,14 +210,6 @@ public class CreateNewPresentationView : MonoBehaviour
 	{
 		m_servicePanel.OnSaveService -= SaveServiceDataEventHandler;
 		m_diffBoxDict [a_servData.ServiceName].SavedServiceData = a_servData;
-	}
-
-	private void SubmitPresentationData()
-	{
-		m_presentationData.ClientName = m_clientTextInput.text;
-		m_presentationData.PresenterName = m_contactNameTextInput.text;
-		m_presentationData.PresenterPosition = m_contactPositionTextInput.text;
-		//Markets, Industries + notes should already be present
 
 		List<ServiceData> serviceDats = new List<ServiceData> ();
 		foreach (MSDiffSelectBox box in m_diffBoxDict.Values)
@@ -229,6 +220,10 @@ public class CreateNewPresentationView : MonoBehaviour
 			}
 		}
 		m_presentationData.Services = serviceDats.ToArray ();
+	}
+
+	private void SubmitPresentationData()
+	{
 		PersistentDataHandler.SaveFile<PresentationData> (m_presentationData.ID, m_presentationData);
 		CloseButtonEventHandler ();
 	}
