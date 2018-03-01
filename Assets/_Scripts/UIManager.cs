@@ -52,10 +52,11 @@ public class UIManager : MonoBehaviour
 		HideAllViews ();
 		m_newOrSavedView.SetActive (true);
 	}
-	public void ShowNewPresentationView()
+	public void ShowNewPresentationView(PresentationData a_pData = null)
 	{
 		HideAllViews ();
 		m_newPresentationView.SetActive (true);
+		m_newPresentationView.GetComponent<CreateNewPresentationView> ().SetupView (a_pData);
 	}
 	public void ShowSelectSavedView()
 	{
