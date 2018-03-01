@@ -80,24 +80,29 @@ public class CreateNewPresentationView : MonoBehaviour
 			msDiffBox.SetButtonValue (label);
 			msDiffBox.OnSelected += ServiceButtonSelectedEventHandler;
 		}
+	}
+
+	private void OnEnable()
+	{
 		m_closeButton.onClick.AddListener (CloseButtonEventHandler);
 		m_submitButton.onClick.AddListener (SubmitPresentationData);
 		m_msAddIndustryBox.OnPressed += OpenAddIndustryPanel;
 		m_msAddMarketsBox.OnPressed += OpenAddMarketPanel;
 		m_msAddNotesBox.OnPressed += OpenNotesPanel;
-		//for debug only
-		SetupView();
 	}
 
-	private void CloseButtonEventHandler()
+	private void OnDisable()
 	{
 		m_closeButton.onClick.RemoveListener (CloseButtonEventHandler);
 		m_submitButton.onClick.RemoveListener (SubmitPresentationData);
 		m_msAddIndustryBox.OnPressed -= OpenAddIndustryPanel;
 		m_msAddMarketsBox.OnPressed -= OpenAddMarketPanel;
 		m_msAddNotesBox.OnPressed -= OpenNotesPanel;
-		gameObject.SetActive (false);
-		//UIManager.Instance.OpenSomeOtherView();
+	}
+
+	private void CloseButtonEventHandler()
+	{
+		UIManager.Instance.ShowNewOrSavedView ();
 	}
 
 	private void OpenAddIndustryPanel()
