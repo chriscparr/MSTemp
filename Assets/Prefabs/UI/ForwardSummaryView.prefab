@@ -160,8 +160,9 @@ GameObject:
   - component: {fileID: 222951112749237942}
   - component: {fileID: 114430356717282696}
   - component: {fileID: 114930578816440570}
+  - component: {fileID: 225289212888568848}
   m_Layer: 5
-  m_Name: EndSummaryView
+  m_Name: ForwardSummaryView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1182,11 +1183,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5ab26bd4c5d04fbeb8786f376a8211a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AddressTo: {fileID: 0}
-  AddressCC: {fileID: 0}
-  SubjectLine: {fileID: 0}
+  AddressTo: {fileID: 114076672006656152}
+  AddressCC: {fileID: 114401715526608184}
+  SubjectLine: {fileID: 114690930935595520}
+  thisCanvas: {fileID: 225289212888568848}
   SaveButton: {fileID: 114353190059778316}
   SendButton: {fileID: 114792445005927164}
+  HomeButton: {fileID: 114546078508173456}
 --- !u!114 &114956976335117476
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1876,3 +1879,14 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -0.5}
   m_SizeDelta: {x: -20, y: -13}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &225289212888568848
+CanvasGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1677703285174492}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
