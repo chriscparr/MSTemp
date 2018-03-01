@@ -7,6 +7,8 @@ public class CaseStudyConfigPanel : MonoBehaviour
 {
 	public delegate void CaseStudyConfigAction(CaseStudyData a_csData);
 	public CaseStudyConfigAction OnSaveCaseStudy;
+	public delegate void CaseStudyPanelAction();
+	public CaseStudyPanelAction OnCloseCaseStudyPanel;
 
 	[SerializeField]
 	private Button m_closeButton;
@@ -70,8 +72,7 @@ public class CaseStudyConfigPanel : MonoBehaviour
 
 	private void VideoButtonPressed()
 	{
-		if (!m_isVideoType)
-		{
+
 			m_videoTypeButton.image.color = Color.white;
 			m_videoTypeButton.GetComponentInChildren<Text> ().color = m_msPurple;
 			m_textTypeButton.image.color = m_msPurple;
@@ -81,13 +82,10 @@ public class CaseStudyConfigPanel : MonoBehaviour
 			m_addVideoButton.gameObject.SetActive (true);
 			m_caseData.CaseStudyType = "VIDEO";
 			m_isVideoType = true;
-		}
 	}
 
 	private void TextButtonPressed()
 	{
-		if (m_isVideoType)
-		{
 			m_textTypeButton.image.color = Color.white;
 			m_textTypeButton.GetComponentInChildren<Text> ().color = m_msPurple;
 			m_videoTypeButton.image.color = m_msPurple;
@@ -97,7 +95,6 @@ public class CaseStudyConfigPanel : MonoBehaviour
 			m_addVideoButton.gameObject.SetActive (false);
 			m_caseData.CaseStudyType = "TEXT";
 			m_isVideoType = false;
-		}
 	}
 
 	private void AddVideoButtonPressed()
@@ -118,8 +115,10 @@ public class CaseStudyConfigPanel : MonoBehaviour
 
 	private void ClosePanel()
 	{
-		gameObject.SetActive (false);
-		Destroy (gameObject);
+		if (OnCloseCaseStudyPanel != null)
+		{
+			OnCloseCaseStudyPanel ();
+		}
 	}
 
 	private void SubmitCaseStudyData()
@@ -131,7 +130,6 @@ public class CaseStudyConfigPanel : MonoBehaviour
 		if (OnSaveCaseStudy != null)
 		{
 			OnSaveCaseStudy (m_caseData);
-			ClosePanel ();
 		}
 	}
 

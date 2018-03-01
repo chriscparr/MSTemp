@@ -9,12 +9,6 @@ public class MSSavedCaseStudyBox : MonoBehaviour
 	public CaseStudySetupAction OnCaseEdit;
 	public CaseStudySetupAction OnCaseRemove;
 
-	/*
-	[SerializeField]
-	private Color m_msPurple;
-	[SerializeField]
-	private Color m_msWhite;
-	*/
 	[SerializeField]
 	private Text m_buttonLabelText;
 	[SerializeField]
