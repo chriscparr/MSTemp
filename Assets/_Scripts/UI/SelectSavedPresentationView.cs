@@ -9,11 +9,14 @@ public class SelectSavedPresentationView : MonoBehaviour
 	private GameObject m_savedButtonPrefab;
 	[SerializeField]
 	private GameObject m_contentArea;
+	[SerializeField]
+	private Button m_closeButton;
 
 	private List<SavedPresentationButton> m_scrollButtons = new List<SavedPresentationButton>();
 
 	private void OnEnable()
 	{
+		m_closeButton.onClick.AddListener (OnCloseButtonPressed);
 		SetupScrollView ();
 	}
 
@@ -25,6 +28,13 @@ public class SelectSavedPresentationView : MonoBehaviour
 			Destroy (btn.gameObject);
 		}
 		m_scrollButtons.Clear ();
+		m_closeButton.onClick.RemoveListener (OnCloseButtonPressed);
+	}
+
+	private void OnCloseButtonPressed()
+	{
+		UIManager.Instance.ShowNewOrSavedView ();
+		gameObject.SetActive(false);
 	}
 
 	private void SetupScrollView()
