@@ -19,7 +19,6 @@ public class PDFManager : MonoBehaviour
     // yeah probs use raw images
     public Text[] cellNames;
     public Text[] cellDescriptors;
-    public Camera cellCamera;
 
     public GameObject PageOne;
     public GameObject PageTwo;
@@ -34,6 +33,9 @@ public class PDFManager : MonoBehaviour
 
     [HideInInspector]
     public string[] emailStrings;
+
+    public Camera spriteShotCamera;
+    public GameObject defaultSubcell;
 
 
     [DllImport("__Internal")]
@@ -51,6 +53,7 @@ public class PDFManager : MonoBehaviour
     void Start()
     {
         PageOne.transform.parent.GetComponent<Canvas>().enabled = false;
+        PrePopulateCells();
     }
 
     // hey u could extend this so it uses a camera of your choice?
@@ -80,12 +83,115 @@ public class PDFManager : MonoBehaviour
         finishedEcosystem.texture = ourTexture;
     }
 
+    void PrePopulateCells()
+    {
+        spriteShotCamera.enabled = true;
+        RenderTexture rTex = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.Default, RenderTextureReadWrite.Default);
+        spriteShotCamera.targetTexture = rTex;
+        spriteShotCamera.Render();
+
+        RenderTexture.active = rTex;
+        Texture2D ourTexture = new Texture2D(Screen.width, Screen.height, TextureFormat.ARGB32, false);
+
+        ourTexture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+
+        RenderTexture.active = null;
+        spriteShotCamera.targetTexture = null;
+        spriteShotCamera.enabled = false;
+        ourTexture.Apply();
+
+        Destroy(defaultSubcell);
+        // TODO how u gonna pre-populate the names and descriptors my man? (maybe dont)
+
+        for (int i = 0; i < cellImages.Length; i++)
+        {
+            cellImages[i].texture = ourTexture;
+            // cellNames[i].text = "";
+        }
+        ourTexture = null;
+
+    }
+
     public void CaptureCell(Subcell cellToBeCaptured)
     {
+
+        // TODO think about PRE-POPULATION in case we dont alter all 8 subcells in 1 presi :-)
+
         // here right,
+        GameObject sc = Instantiate(cellToBeCaptured.gameObject, transform.position, Quaternion.identity) as GameObject;
+        sc.GetComponent<Rigidbody>().isKinematic = true;
+        Destroy(sc.GetComponent<Subcell>());
+        sc.transform.parent = spriteShotCamera.transform;
+        sc.transform.localPosition = new Vector3(0, 0, 5);
+        sc.transform.localScale = new Vector3(3.4f, 1.7f, 1.7f); // TODO DELETE ME LATER, GET THE SUBCELLS ACTUAL SCALE AND POSITION ACCORDINGLY
+        sc.GetComponent<Renderer>().sharedMaterial = cellToBeCaptured.myOnMaterial; // TODO DELETE ME LATER
         // instantiate a copy of that subcell (with no functionality on it)
         // put it somewhere out of side in front of a grey box
         // our cell camera will be looking at that box, right
+        spriteShotCamera.enabled = true;
+        RenderTexture rTex = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.Default, RenderTextureReadWrite.Default);
+        spriteShotCamera.targetTexture = rTex;
+        spriteShotCamera.Render();
+
+        RenderTexture.active = rTex;
+        Texture2D ourTexture = new Texture2D(Screen.width, Screen.height, TextureFormat.ARGB32, false);
+
+        ourTexture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+
+        RenderTexture.active = null;
+        spriteShotCamera.targetTexture = null;
+        spriteShotCamera.enabled = false;
+        ourTexture.Apply();
+
+        Destroy(sc);
+
+        switch (cellToBeCaptured.ServiceDat.ServiceName)
+        {
+            // TODO later - actually order them by importance, or something like that?
+            // TODO atm they are a pre-determined order... fix this when ur headache goes
+            case "AGILE":
+                cellImages[0].texture = ourTexture;
+                cellNames[0].text = cellToBeCaptured.ServiceDat.ServiceName;
+                // TODO do the descriptors later, because fuck knows if they're even in the app yet
+                break;
+            case "CONTENT":
+                cellImages[1].texture = ourTexture;
+                cellNames[1].text = cellToBeCaptured.ServiceDat.ServiceName;
+                // TODO do the descriptors later, because fuck knows if they're even in the app yet
+                break;
+            case "DATA":
+                cellImages[2].texture = ourTexture;
+                cellNames[2].text = cellToBeCaptured.ServiceDat.ServiceName;
+                // TODO do the descriptors later, because fuck knows if they're even in the app yet
+                break;
+            case "FAST":
+                cellImages[3].texture = ourTexture;
+                cellNames[3].text = cellToBeCaptured.ServiceDat.ServiceName;
+                // TODO do the descriptors later, because fuck knows if they're even in the app yet
+                break;
+            case "GROWTH":
+                cellImages[4].texture = ourTexture;
+                cellNames[4].text = cellToBeCaptured.ServiceDat.ServiceName;
+                // TODO do the descriptors later, because fuck knows if they're even in the app yet
+                break;
+            case "LIFE":
+                cellImages[5].texture = ourTexture;
+                cellNames[5].text = cellToBeCaptured.ServiceDat.ServiceName;
+                // TODO do the descriptors later, because fuck knows if they're even in the app yet
+                break;
+            case "LOOP":
+                cellImages[6].texture = ourTexture;
+                cellNames[6].text = cellToBeCaptured.ServiceDat.ServiceName;
+                // TODO do the descriptors later, because fuck knows if they're even in the app yet
+                break;
+            case "SHOP":
+                cellImages[7].texture = ourTexture;
+                cellNames[7].text = cellToBeCaptured.ServiceDat.ServiceName;
+                // TODO do the descriptors later, because fuck knows if they're even in the app yet
+                break;
+                //}
+        }
+        ourTexture = null;
 
         // then use the above steps and get a texture from our cell camera
         // then pass that into our raw image - corresponding to that subcell's name? 
@@ -110,10 +216,6 @@ public class PDFManager : MonoBehaviour
                 PageOne.SetActive(false);
                 PageTwo.SetActive(true);
             }
-
-            // SOME POINT IN THE FUTURE, WE WILL ACTUALLY POPULATE OUR PDF CANVAS WITH STUFF
-            // HELL, DONT ACTUALLY DO ALL OF THAT HERE, DO IT AS WE DO THINGS IN THE APP :-)
-            // WE'RE DOING IT NOW
 
             pdfCamera.gameObject.SetActive(true);
 
