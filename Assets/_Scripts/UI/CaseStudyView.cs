@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 using UnityEngine.UI;
 
 public class CaseStudyView : MonoBehaviour 
@@ -28,50 +29,59 @@ public class CaseStudyView : MonoBehaviour
 	[SerializeField]
 	private Text m_bodyText;
 	[SerializeField]
-	private Image m_videoPlaceholder;
+	private GameObject m_videoPlaceholder;
+	[SerializeField]
+	private VideoPlayer m_videoPlayer;
 
 	private OnRailsMovement m_ourMover;
 	private CanvasGroup m_introCanvas;
 	private CanvasGroup m_contentCanvas;
 
+	private CaseStudyData m_csData;
+
 	public void DisplayCaseStudy(CaseStudyData a_caseData)
 	{
+		m_csData = a_caseData;
 		ClearCaseStudy ();
-		m_titleText.text = a_caseData.TitleText;
-		m_introQuestionText.text = "Is this just an introductory question, or could it be the beginning of a new path for your business?";
+		m_titleText.text = m_csData.TitleText;
+		m_introQuestionText.text = m_csData.IntroText;
+		//m_introQuestionText.text = "Is this just an introductory question, or could it be the beginning of a new path for your business?";
 
-		if (a_caseData.CaseStudyType == "TEXT")
+		if (m_csData.CaseStudyType == "TEXT")
 		{
 			m_bodyTextBG.gameObject.SetActive (true);
 			m_bodyText.gameObject.SetActive (true);
 			m_bodyText.text = a_caseData.BodyText;
-			m_videoPlaceholder.gameObject.SetActive (false);
+			m_videoPlaceholder.SetActive (false);
 		} 
-		if (a_caseData.CaseStudyType == "VIDEO")
+		if (m_csData.CaseStudyType == "VIDEO")
 		{
 			//m_bodyText.text = a_caseData.VideoPath;
 			m_bodyText.gameObject.SetActive (false);
 			m_bodyTextBG.gameObject.SetActive (false);
-			m_videoPlaceholder.gameObject.SetActive (true);
+			m_videoPlaceholder.SetActive (true);
 		}
 		ShowIntroPanel ();
 	}
 
 	private void ShowIntroPanel()
 	{
-		//m_contentNextButton.onClick.RemoveListener (GoToNextCaseStudy);
+		m_contentPanel.SetActive (false);
 		iTween.ValueTo (gameObject, iTween.Hash ("from", 0f, "to", 1f, "time", 1f,"delay",0f, "onupdate", "ApplyIntroPanelAlpha"));
 	}
 
 	private void ShowContentPanel()
 	{
-		m_introCanvas.alpha = 0f;
-		m_contentCanvas.alpha = 1f;
+		m_contentPanel.SetActive (true);
 		Debug.Log ("ShowContentPanel()");
-		//m_introNextButton.onClick.RemoveListener (ShowContentPanel);
-		//m_contentNextButton.onClick.AddListener (GoToNextCaseStudy);
-		//iTween.ValueTo (gameObject, iTween.Hash ("from", 1f, "to", 0f, "time", 1f,"delay",0f, "onupdate", "ApplyIntroPanelAlpha"));
-		//iTween.ValueTo (gameObject, iTween.Hash ("from", 0f, "to", 1f, "time", 1f,"delay",1f, "onupdate", "ApplyContentPanelAlpha"));
+		iTween.ValueTo (gameObject, iTween.Hash ("from", 1f, "to", 0f, "time", 1f,"delay",0f, "onupdate", "ApplyIntroPanelAlpha", "oncomplete", "AfterIntroPanelTween"));
+		iTween.ValueTo (gameObject, iTween.Hash ("from", 0f, "to", 1f, "time", 1f,"delay",1f, "onupdate", "ApplyContentPanelAlpha"));
+	}
+
+	private void AfterIntroPanelTween()
+	{
+		Debug.Log ("AfterIntroPanelTween()");
+		m_introPanel.SetActive (false);
 	}
 
 	private void FinishCaseStudy()
@@ -84,8 +94,42 @@ public class CaseStudyView : MonoBehaviour
 
 	public void ClearCaseStudy()
 	{
+		m_contentPanel.SetActive (true);
+		m_introPanel.SetActive (true);
 		m_contentCanvas.alpha = 0f;
 		m_introCanvas.alpha = 0f;
+	}
+
+	public void PlayVideo()
+	{
+		Debug.Log("Attempting to play video!");
+		//VideoPlayer videoPlayer = Camera.main.gameObject.GetComponent<VideoPlayer>();
+		m_videoPlayer.source = VideoSource.Url;
+
+		//videoPlayer.url = m_csData.VideoPath;
+		m_videoPlayer.url = "file:///Users/chris.parr/Downloads/VID_20180301_234627.mp4";
+
+		AudioManager.Instance.Pause();
+		AudioManager.Instance.AddVideoAudio();
+
+		m_videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;
+
+		AudioSource tempAud = AudioManager.Instance.vidSauce;
+		m_videoPlayer.controlledAudioTrackCount = 1;
+		m_videoPlayer.EnableAudioTrack(0, true);
+
+		m_videoPlayer.SetTargetAudioSource(0, tempAud);
+		tempAud.volume = 0;
+		AudioManager.Instance.StartCoroutine("FadeIn", tempAud);
+		m_videoPlayer.Play();
+	}
+
+	private void Update()
+	{
+		if (Input.GetKeyDown (KeyCode.P))
+		{
+			PlayVideo ();
+		}
 	}
 
 	private void Start () 
@@ -93,36 +137,26 @@ public class CaseStudyView : MonoBehaviour
 		m_ourMover = Camera.main.GetComponent<OnRailsMovement>();
 		m_introCanvas = m_introPanel.GetComponent<CanvasGroup> ();
 		m_contentCanvas = m_contentPanel.GetComponent<CanvasGroup> ();
-		/*
-		m_nextButton.gameObject.SetActive (false);
-		m_previousButton.gameObject.SetActive (false);
-		m_homeButton.gameObject.SetActive (false);
-		*/
 	}
 	
 	private void OnEnable()
 	{
-		/*
 		m_nextButton.onClick.AddListener (GoToNextCaseStudy);
 		m_previousButton.onClick.AddListener (GoToPreviousCaseStudy);
 		m_homeButton.onClick.AddListener (GoHome);
-		*/
 		m_introNextButton.onClick.AddListener (ShowContentPanel);
 		m_contentNextButton.onClick.AddListener (GoToNextCaseStudy);
 	}
 	
 	private void OnDisable()
 	{
-		/*
 		m_nextButton.onClick.RemoveListener (GoToNextCaseStudy);
 		m_previousButton.onClick.RemoveListener (GoToPreviousCaseStudy);
 		m_homeButton.onClick.RemoveListener (GoHome);
-		*/
 		m_introNextButton.onClick.RemoveListener (ShowContentPanel);
 		m_contentNextButton.onClick.RemoveListener (GoToNextCaseStudy);
 	}
-
-	// Update is called once per frame
+		
 	public void GoToNextCaseStudy () 
 	{
 		ClearCaseStudy ();
