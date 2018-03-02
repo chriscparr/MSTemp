@@ -203,18 +203,14 @@ public class ModelManager : MonoBehaviour
 
 	private IEnumerator IlluminateHighlightedSubcell(Subcell acell)
 	{
-        // here, you are focusing on a sub cell
-        // so zoom into it, get up nice and close.
-        // let the camera input manager deal with the movement
-
         if (CameraInputManager.Instance.m_CurrentPhase != CameraInputManager.Phase.FocusedSubCellPhase)
         {
             foreach (Subcell cell in m_subcells)
             {
                 cell.ToggleLabelText(true);
             }
-
         }
+
 		m_highlight.enabled = true;
         yield return new WaitForSeconds(3);
         foreach (Subcell cell in m_subcells)

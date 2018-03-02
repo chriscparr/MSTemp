@@ -15,11 +15,11 @@ public class PDFManager : MonoBehaviour
     public static PDFManager Instance { get { return s_instance; } }
     private static PDFManager s_instance = null;
 
-    // put differentiator names, descriptors and sprites here
-    // then populate as needed
-    // but do this later pls - now!!!!
-
     public RawImage[] cellImages; // TODO assign textures as source images at runtime, so should we use IMAGE or RAWIMAGE? (Doesnt matter either way)
+    // yeah probs use raw images
+    public Text[] cellNames;
+    public Text[] cellDescriptors;
+    public Camera cellCamera;
 
     public GameObject PageOne;
     public GameObject PageTwo;
@@ -53,6 +53,8 @@ public class PDFManager : MonoBehaviour
         PageOne.transform.parent.GetComponent<Canvas>().enabled = false;
     }
 
+    // hey u could extend this so it uses a camera of your choice?
+    // nah maybe not actually because the textures do different tings and go diff places.
     public void CaptureEcosystem()
     {
 
@@ -73,12 +75,21 @@ public class PDFManager : MonoBehaviour
 
         byte[] bytes;
         bytes = ourTexture.EncodeToPNG();
-
-
-
         ourTexture.Apply();
 
         finishedEcosystem.texture = ourTexture;
+    }
+
+    public void CaptureCell(Subcell cellToBeCaptured)
+    {
+        // here right,
+        // instantiate a copy of that subcell (with no functionality on it)
+        // put it somewhere out of side in front of a grey box
+        // our cell camera will be looking at that box, right
+
+        // then use the above steps and get a texture from our cell camera
+        // then pass that into our raw image - corresponding to that subcell's name? 
+        // or just do it via numbers? i dont know?
     }
 
     public IEnumerator GenerateEntirePDF()

@@ -77,26 +77,14 @@ public class CameraInputManager : MonoBehaviour
 
 		switch (newPhase) {
 			case Phase.SetupPhase:
-				// ban all movement here
 				break;
 			case Phase.MainCellPhase:
-				if (GameObject.Find("SynapseGenerator"))
-				{
-					FindObjectOfType<SynapseGenerator>().enabled = true;
-				}
-				Debug.Log("RETURNING TO MAIN STATE");
                 Camera.main.GetComponent<Beautify>().depthOfField = true;
-				// allow rotation and pinch and zoom to move in? google earth controls
-				// dont forget to use the actual f'n event handlers
 				break;
 			case Phase.FocusedSubCellPhase:
-				Debug.Log("WE ARE NOW FOCUSED ON THE SUBCELL");
                 Camera.main.GetComponent<Beautify>().depthOfField = true;
-				// here we pinch and zoom to scale the sub cell, so you may not need to do anything
 				break;
 			case Phase.InsideSubCellPhase:
-				// here we want to do case study stuff, so enable BOTH OnRailsMovement and RailMover, put buttons to move to/from paths (do that listener and event stuff)
-				// ps learn about listeners and events already. 
 				break;
 
 		}
@@ -104,7 +92,6 @@ public class CameraInputManager : MonoBehaviour
 
 	public void ResetPosition(bool doSmoothly = true)
 	{
-		// TODO make me a tween, so we gradually go back to the main phase, dont just snap it back.
 		if (!doSmoothly)
 		{
 			Camera.main.transform.position = m_CachedPosition;
@@ -113,7 +100,7 @@ public class CameraInputManager : MonoBehaviour
 		else
 		{
 			m_MainCamera.GetComponent<RailMover>().TweenToPosition(homeVector, 2, false, iTween.EaseType.easeInOutSine);
-			gameObject.transform.LookAt (Vector3.zero);
+			Camera.main.transform.LookAt (Vector3.zero);
 			UIManager.Instance.ShowPresentationView ();
 		}
 
@@ -130,6 +117,7 @@ public class CameraInputManager : MonoBehaviour
 		Destroy (m_selectedCell.GetComponent<RailMover> ());
 		m_selectedCell = null;
 		ModelManager.Instance.ShakeModel();
+        Camera.main.transform.eulerAngles = Vector3.zero;
 		SetPhase (Phase.MainCellPhase);
 	}
 
@@ -165,7 +153,7 @@ public class CameraInputManager : MonoBehaviour
 				m_CachedPosition = m_MainCamera.transform.position;
 				Vector3 desiredPosition = m_selectedCell.transform.position;
 				AfterSubCellEntry();
-				SynapseGenerator.Instance.GenerateSynapses(desiredPosition, m_selectedCell.gameObject);
+				// SynapseGenerator.Instance.GenerateSynapses(desiredPosition, m_selectedCell.gameObject);
 			} 
 			else
 			{
