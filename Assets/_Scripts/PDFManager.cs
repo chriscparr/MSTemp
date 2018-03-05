@@ -22,8 +22,6 @@ public class PDFManager : MonoBehaviour
     public GameObject PageOne;
     public GameObject PageTwo;
 
-    bool amDoing;
-
     List<Texture2D> combinedTextures = new List<Texture2D>();
     List<string> files = new List<string>();
 
@@ -255,7 +253,7 @@ public class PDFManager : MonoBehaviour
 
     public IEnumerator GenerateEntirePDF()
     {
-        amDoing = true;
+        
         PageOne.transform.parent.GetComponent<Canvas>().enabled = true;
 
         for (int i = 0; i <= 1; i++)
@@ -316,6 +314,7 @@ public class PDFManager : MonoBehaviour
 
         File.WriteAllBytes(tempPath, mBytes);
 
+#if UNITY_IOS
         if (emailStrings.Length != 0)
         {
             //TODO crap check to determine whether we are SAVING IT (open with whatever) or EMAILING IT (prepare for mailshot)
@@ -325,9 +324,9 @@ public class PDFManager : MonoBehaviour
         {
             OpenPDF(tempPath, files[0], files[1]);
         }
- 
+#endif
         PageOne.transform.parent.GetComponent<Canvas>().enabled = false;
-        amDoing = false;
+
     
 
     }
