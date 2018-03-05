@@ -282,7 +282,7 @@ public class ConnectionTracker : MonoBehaviour {
 
         }
 
-        if (line.positionCount > 2)
+        if (line.positionCount > 2 && allCells.Count > 3 )
         {
             FindThirdClosest();
         }

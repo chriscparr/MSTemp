@@ -121,6 +121,10 @@ public class ModelManager : MonoBehaviour
             {
                 ConnectionGenerator.Instance.ReceiveSubCells(m_subcells);
             }
+            if (PDFManager.Instance != null)
+            {
+                PDFManager.Instance.PrePopulate();
+            }
             ShakeModel();
 		}
 	}

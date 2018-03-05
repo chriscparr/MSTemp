@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 using System.Runtime.InteropServices;
 using System.IO;
-using System.Drawing;
+
 
 
 public class PDFManager : MonoBehaviour
@@ -15,10 +15,9 @@ public class PDFManager : MonoBehaviour
     public static PDFManager Instance { get { return s_instance; } }
     private static PDFManager s_instance = null;
 
-    public RawImage[] cellImages; // TODO assign textures as source images at runtime, so should we use IMAGE or RAWIMAGE? (Doesnt matter either way)
-    // yeah probs use raw images
-    public Text[] cellNames;
-    public Text[] cellDescriptors;
+    RawImage[] cellImages; 
+    Text[] cellNames;
+    Text[] cellDescriptors;
 
     public GameObject PageOne;
     public GameObject PageTwo;
@@ -37,6 +36,10 @@ public class PDFManager : MonoBehaviour
     public Camera spriteShotCamera;
     public GameObject defaultSubcell;
 
+    public GridLayoutGroup pageTwoGrid; //TODO accomodate for less than 8 subcells :-) (and possibly more)
+    public GameObject imageCellPrefab;
+    public Transform gridLayoutParent;
+
 
     [DllImport("__Internal")]
     private static extern void OpenPDF(string path, string imageOne, string imageTwo);
@@ -45,17 +48,65 @@ public class PDFManager : MonoBehaviour
     private static extern void OpenPDFThenEmail(string path, string imageOne, string imageTwo, string to, string cc, string subject);
 
 
+    //TODO right, each time u populate a cell
+    // save that cell with a number, corresponding to a grid entry
+    // if that number HASNT already been called, then populate the next cell
+    // if it HAS, then just replace whatever is in that numbered cell
+    // TODO TODO TODO ALI COME ON TODO TODO
+
+
+
     private void Awake()
     {
         s_instance = this;
     }
 
-    void Start()
+    public void PrePopulate()
     {
         PageOne.transform.parent.GetComponent<Canvas>().enabled = false;
 
+        //TODO get name of person and company from presentation data and put it in page 1 :-)
 
+        AdjustGrid();
         PrePopulateCells();
+    }
+
+    void AdjustGrid()
+    {
+        // FUTURE PROOFED. ish.
+        List<RawImage> imgs = new List<RawImage>();
+        List<Text> titles = new List<Text>();
+        List<Text> descriptions = new List<Text>();
+
+        int numberOfSubCells = ModelManager.Instance.m_subcells.Count;
+
+        imgs.Add(imageCellPrefab.GetComponent<RawImage>());
+        titles.Add(imageCellPrefab.GetComponent<PDFCellContainer>().title);
+        descriptions.Add(imageCellPrefab.GetComponent<PDFCellContainer>().descriptor);
+
+        for (int i = 1; i < numberOfSubCells; i++)
+        {
+            GameObject c = Instantiate(imageCellPrefab, transform.position, Quaternion.identity) as GameObject;
+
+            RectTransform cachedRect = c.GetComponent<RectTransform>();
+
+            c.transform.parent = gridLayoutParent.transform;
+            c.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+            c.GetComponent<RectTransform>().localPosition = new Vector3(c.GetComponent<RectTransform>().localPosition.x,
+                                                                       c.GetComponent<RectTransform>().localPosition.y,
+                                                                        0f);
+            imgs.Add(c.GetComponent<RawImage>());
+            titles.Add(c.GetComponent<PDFCellContainer>().title);
+            descriptions.Add(c.GetComponent<PDFCellContainer>().descriptor);
+        }
+
+        cellImages = imgs.ToArray();
+        cellNames = titles.ToArray();
+        cellDescriptors = descriptions.ToArray();
+
+
+
+        Debug.Log(cellImages.Length);
     }
 
     // hey u could extend this so it uses a camera of your choice?
@@ -105,7 +156,7 @@ public class PDFManager : MonoBehaviour
         ourTexture.Apply();
 
         Destroy(defaultSubcell);
-        // TODO how u gonna pre-populate the names and descriptors my man? (maybe dont)
+        // TODO how u gonna pre-populate the names and descriptors my man? (maybe dont) - or maybe do!
 
         for (int i = 0; i < cellImages.Length; i++)
         {
@@ -120,6 +171,8 @@ public class PDFManager : MonoBehaviour
     {
 
         // TODO think about PRE-POPULATION in case we dont alter all 8 subcells in 1 presi :-)
+        // TODO there may not even be all 8 subcells in 1 presi, we may only have 5 or 6 - GET THIS FROM PRESENTATION DATA
+        // AND CHANGE THE GRID LAYOUT ACCORDINGLY - GOOD BOY TODO TODO TODO TODO TODO ALI HERE LOOK HERE TODO TODO TODO TODO TODO
 
         // here right,
         GameObject sc = Instantiate(cellToBeCaptured.gameObject, transform.position, Quaternion.identity) as GameObject;
