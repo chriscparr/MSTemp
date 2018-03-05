@@ -2,7 +2,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import <MessageUI/MessageUI.h>
+#import <MessageUI/MessageUI.h> //urgently needed.
 
 @interface DocumentHandler : NSObject <UIDocumentInteractionControllerDelegate, MFMailComposeViewControllerDelegate>
 {
@@ -75,6 +75,7 @@
     
     controller.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll, UIActivityTypeAirDrop];
     
+    // i swear this is needed
     dispatch_async(dispatch_get_main_queue(), ^{
         
         
@@ -86,10 +87,10 @@
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-         
+         // for whatever dumbfuck reason, iPad works different to iPhone and this code is needed
             controller.popoverPresentationController.sourceView = controller.view;
             controller.popoverPresentationController.sourceRect = controller.view.frame;
-            NSLog(@"I AM SETTING THE VIEW MOTHERFUCKER");
+ 
             UIPopoverPresentationController *popup = [[UIPopoverPresentationController alloc] initWithPresentedViewController:rootViewController presentingViewController:rootViewController];
 
         }
@@ -130,8 +131,7 @@
         // if CGRectZero doesn't work, then try view.bounds
         UIViewController *rootViewController = UnityGetGLViewController();
     
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
+
          if ([MFMailComposeViewController canSendMail]) {
             NSArray* mArray = [NSArray arrayWithObjects:to, nil];
             MFMailComposeViewController *mailController = [[MFMailComposeViewController alloc] init];
@@ -148,7 +148,7 @@
             
             [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:mailController animated:YES completion:nil];
          }
-        }
+    
     //});
     
     NSLog(@"OBEY ME");
@@ -179,6 +179,9 @@ NSString* CreateNSString (const char* string)
 
 
 extern "C" {
+    // lol this is like, some of the worst code imaginable but it all does work
+    // if i actually knew objective c i'd clean this up and make it modular and all sorts
+    // but im not god tier, i only know c flat and javashit
     
     void OpenPDFThenEmail (const char* path, const char* imageOne, const char* imageTwo,
                            const char* emailTo, const char* emailCC, const char* subjectLine)
@@ -228,12 +231,6 @@ extern "C" {
         // Create the PDF context using the default page size of 612 x 792.
         
         UIGraphicsBeginPDFContextToFile(stringPath, CGRectZero, nil);
-        
-        
-        NSInteger currentPage = 0;
-        
-        
-        
         
         UIGraphicsBeginPDFPageWithInfo(CGRectMake(0,0,width,height), nil);
         

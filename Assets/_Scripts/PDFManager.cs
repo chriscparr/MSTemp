@@ -36,7 +36,7 @@ public class PDFManager : MonoBehaviour
     public Camera spriteShotCamera;
     public GameObject defaultSubcell;
 
-    public GridLayoutGroup pageTwoGrid; //TODO accomodate for less than 8 subcells :-) (and possibly more)
+    public GridLayoutGroup pageTwoGrid; 
     public GameObject imageCellPrefab;
     public Transform gridLayoutParent;
 
@@ -93,7 +93,7 @@ public class PDFManager : MonoBehaviour
             c.transform.parent = gridLayoutParent.transform;
             c.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
             c.GetComponent<RectTransform>().localPosition = new Vector3(c.GetComponent<RectTransform>().localPosition.x,
-                                                                       c.GetComponent<RectTransform>().localPosition.y,
+                                                                        c.GetComponent<RectTransform>().localPosition.y,
                                                                         0f);
             imgs.Add(c.GetComponent<RawImage>());
             titles.Add(c.GetComponent<PDFCellContainer>().title);
@@ -109,8 +109,7 @@ public class PDFManager : MonoBehaviour
         Debug.Log(cellImages.Length);
     }
 
-    // hey u could extend this so it uses a camera of your choice?
-    // nah maybe not actually because the textures do different tings and go diff places.
+
     public void CaptureEcosystem()
     {
 
@@ -170,10 +169,6 @@ public class PDFManager : MonoBehaviour
     public void CaptureCell(Subcell cellToBeCaptured)
     {
 
-        // TODO think about PRE-POPULATION in case we dont alter all 8 subcells in 1 presi :-)
-        // TODO there may not even be all 8 subcells in 1 presi, we may only have 5 or 6 - GET THIS FROM PRESENTATION DATA
-        // AND CHANGE THE GRID LAYOUT ACCORDINGLY - GOOD BOY TODO TODO TODO TODO TODO ALI HERE LOOK HERE TODO TODO TODO TODO TODO
-
         // here right,
         GameObject sc = Instantiate(cellToBeCaptured.gameObject, transform.position, Quaternion.identity) as GameObject;
         sc.GetComponent<Rigidbody>().isKinematic = true;
@@ -205,6 +200,10 @@ public class PDFManager : MonoBehaviour
         {
             // TODO later - actually order them by importance, or something like that?
             // TODO atm they are a pre-determined order... fix this when ur headache goes
+
+            // TODO my man, this doesnt accomodate for LESS THAN 8 CELLS in a presentation
+            // TODO so sort it out using your numbered grid TODO system up near the top of this script!!!!!!! TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
             case "AGILE":
                 cellImages[0].texture = ourTexture;
                 cellNames[0].text = cellToBeCaptured.ServiceDat.ServiceName;
