@@ -31,7 +31,13 @@ public class CaseStudyView : MonoBehaviour
 	[SerializeField]
 	private GameObject m_videoPlaceholder;
 	[SerializeField]
+	private Button m_videoBG;
+	[SerializeField]
 	private VideoPlayer m_videoPlayer;
+	[SerializeField]
+	private CanvasGroup m_pauseIconGroup;
+	[SerializeField]
+	private CanvasGroup m_playIconGroup;
 
 	private OnRailsMovement m_ourMover;
 	private CanvasGroup m_introCanvas;
@@ -45,20 +51,20 @@ public class CaseStudyView : MonoBehaviour
 		ClearCaseStudy ();
 		m_titleText.text = m_csData.TitleText;
 		m_introQuestionText.text = m_csData.IntroText;
-		//m_introQuestionText.text = "Is this just an introductory question, or could it be the beginning of a new path for your business?";
 
 		if (m_csData.CaseStudyType == "TEXT")
 		{
 			m_bodyTextBG.gameObject.SetActive (true);
 			m_bodyText.gameObject.SetActive (true);
 			m_bodyText.text = a_caseData.BodyText;
+			m_videoBG.gameObject.SetActive (false);
 			m_videoPlaceholder.SetActive (false);
 		} 
 		if (m_csData.CaseStudyType == "VIDEO")
 		{
-			//m_bodyText.text = a_caseData.VideoPath;
 			m_bodyText.gameObject.SetActive (false);
 			m_bodyTextBG.gameObject.SetActive (false);
+			m_videoBG.gameObject.SetActive (true);
 			m_videoPlaceholder.SetActive (true);
 		}
 		ShowIntroPanel ();
@@ -75,7 +81,7 @@ public class CaseStudyView : MonoBehaviour
 		m_contentPanel.SetActive (true);
 		Debug.Log ("ShowContentPanel()");
 		iTween.ValueTo (gameObject, iTween.Hash ("from", 1f, "to", 0f, "time", 1f,"delay",0f, "onupdate", "ApplyIntroPanelAlpha", "oncomplete", "AfterIntroPanelTween"));
-		iTween.ValueTo (gameObject, iTween.Hash ("from", 0f, "to", 1f, "time", 1f,"delay",1f, "onupdate", "ApplyContentPanelAlpha"));
+		iTween.ValueTo (gameObject, iTween.Hash ("from", 0f, "to", 1f, "time", 1f,"delay",1f, "onupdate", "ApplyContentPanelAlpha", "oncomplete", "AfterMainPanelTween"));
 	}
 
 	private void AfterIntroPanelTween()
@@ -84,10 +90,27 @@ public class CaseStudyView : MonoBehaviour
 		m_introPanel.SetActive (false);
 	}
 
+	private void AfterMainPanelTween()
+	{
+		Debug.Log ("AfterMainPanelTween()");
+		if (m_csData.CaseStudyType == "VIDEO")
+		{
+			m_videoPlayer.url = m_csData.VideoPath;
+			m_videoPlayer.prepareCompleted += OnPrepareComplete;
+			m_videoPlayer.Prepare ();
+		}
+	}
+
+	private void OnPrepareComplete(VideoPlayer a_vPlayer)
+	{
+		m_videoPlayer.prepareCompleted -= OnPrepareComplete;
+		Debug.Log ("Video Prepared!");
+		//PlayVideo ();
+	}
+
 	private void FinishCaseStudy()
 	{
 		Debug.Log ("FinishCaseStudy()");
-		//iTween.ValueTo (gameObject, iTween.Hash ("from", 1f, "to", 0f, "time", 1f,"delay",0f, "onupdate", "ApplyContentPanelAlpha", "oncompletetarget", gameObject, "oncomplete", "GoToNextCaseStudy"));
 		ClearCaseStudy();
 		GoToNextCaseStudy();
 	}
@@ -103,11 +126,7 @@ public class CaseStudyView : MonoBehaviour
 	public void PlayVideo()
 	{
 		Debug.Log("Attempting to play video!");
-		//VideoPlayer videoPlayer = Camera.main.gameObject.GetComponent<VideoPlayer>();
 		m_videoPlayer.source = VideoSource.Url;
-
-		//videoPlayer.url = m_csData.VideoPath;
-		m_videoPlayer.url = "file:///Users/chris.parr/Downloads/VID_20180301_234627.mp4";
 
 		AudioManager.Instance.Pause();
 		AudioManager.Instance.AddVideoAudio();
@@ -124,11 +143,17 @@ public class CaseStudyView : MonoBehaviour
 		m_videoPlayer.Play();
 	}
 
-	private void Update()
+	private void PlayPauseVideo()
 	{
-		if (Input.GetKeyDown (KeyCode.P))
+		if (m_videoPlayer.isPlaying)
+		{
+			m_videoPlayer.Pause ();
+			iTween.ValueTo (gameObject, iTween.Hash ("from", 1f, "to", 0f, "time", 0.5f, "onupdate", "ApplyPauseIconAlpha"));
+		}
+		else
 		{
 			PlayVideo ();
+			iTween.ValueTo (gameObject, iTween.Hash ("from", 1f, "to", 0f, "time", 0.5f, "onupdate", "ApplyPlayIconAlpha"));
 		}
 	}
 
@@ -137,6 +162,7 @@ public class CaseStudyView : MonoBehaviour
 		m_ourMover = Camera.main.GetComponent<OnRailsMovement>();
 		m_introCanvas = m_introPanel.GetComponent<CanvasGroup> ();
 		m_contentCanvas = m_contentPanel.GetComponent<CanvasGroup> ();
+
 	}
 	
 	private void OnEnable()
@@ -146,6 +172,7 @@ public class CaseStudyView : MonoBehaviour
 		m_homeButton.onClick.AddListener (GoHome);
 		m_introNextButton.onClick.AddListener (ShowContentPanel);
 		m_contentNextButton.onClick.AddListener (GoToNextCaseStudy);
+		m_videoBG.onClick.AddListener (PlayPauseVideo);
 	}
 	
 	private void OnDisable()
@@ -155,6 +182,7 @@ public class CaseStudyView : MonoBehaviour
 		m_homeButton.onClick.RemoveListener (GoHome);
 		m_introNextButton.onClick.RemoveListener (ShowContentPanel);
 		m_contentNextButton.onClick.RemoveListener (GoToNextCaseStudy);
+		m_videoBG.onClick.RemoveListener (PlayPauseVideo);
 	}
 		
 	public void GoToNextCaseStudy () 
@@ -184,5 +212,15 @@ public class CaseStudyView : MonoBehaviour
 	private void ApplyContentPanelAlpha(float _alpha)
 	{
 		m_contentCanvas.alpha = _alpha;
+	}
+
+	private void ApplyPlayIconAlpha(float _alpha)
+	{
+		m_playIconGroup.alpha = _alpha;
+	}
+
+	private void ApplyPauseIconAlpha(float _alpha)
+	{
+		m_pauseIconGroup.alpha = _alpha;
 	}
 }
