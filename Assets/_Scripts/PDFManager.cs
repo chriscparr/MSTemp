@@ -53,6 +53,8 @@ public class PDFManager : MonoBehaviour
     void Start()
     {
         PageOne.transform.parent.GetComponent<Canvas>().enabled = false;
+
+
         PrePopulateCells();
     }
 
@@ -63,6 +65,8 @@ public class PDFManager : MonoBehaviour
 
         files.Clear();
         combinedTextures.Clear();
+        Vector3 posCache = Camera.main.transform.position;
+        Camera.main.transform.position = new Vector3(0, 1, -15); //TODO I AM TEMPORARY DELETE ME LATER
 
         RenderTexture rTex = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.Default, RenderTextureReadWrite.Default);
         Camera.main.targetTexture = rTex;
@@ -75,7 +79,7 @@ public class PDFManager : MonoBehaviour
 
         RenderTexture.active = null;
         Camera.main.targetTexture = null;
-
+        Camera.main.transform.position = posCache;
         byte[] bytes;
         bytes = ourTexture.EncodeToPNG();
         ourTexture.Apply();
@@ -124,10 +128,9 @@ public class PDFManager : MonoBehaviour
         sc.transform.parent = spriteShotCamera.transform;
         sc.transform.localPosition = new Vector3(0, 0, 5);
         sc.transform.localScale = new Vector3(3.4f, 1.7f, 1.7f); // TODO DELETE ME LATER, GET THE SUBCELLS ACTUAL SCALE AND POSITION ACCORDINGLY
-        sc.GetComponent<Renderer>().sharedMaterial = cellToBeCaptured.myOnMaterial; // TODO DELETE ME LATER
-        // instantiate a copy of that subcell (with no functionality on it)
-        // put it somewhere out of side in front of a grey box
-        // our cell camera will be looking at that box, right
+        sc.GetComponent<Renderer>().sharedMaterial = cellToBeCaptured.myOnMaterial; // TODO DELETE ME LATER aka
+        // TODO only call this function when a subcell has been locked!
+
         spriteShotCamera.enabled = true;
         RenderTexture rTex = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.Default, RenderTextureReadWrite.Default);
         spriteShotCamera.targetTexture = rTex;
@@ -263,7 +266,7 @@ public class PDFManager : MonoBehaviour
 
         if (emailStrings.Length != 0)
         {
-            // crap check to determine whether we are SAVING IT (open with whatever) or EMAILING IT (prepare for mailshot)
+            //TODO crap check to determine whether we are SAVING IT (open with whatever) or EMAILING IT (prepare for mailshot)
             OpenPDFThenEmail(tempPath, files[0], files[1], emailStrings[0], emailStrings[1], emailStrings[2]);
         }
         else
