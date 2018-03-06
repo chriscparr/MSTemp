@@ -73,7 +73,7 @@ public class ModelManager : MonoBehaviour
 	{
 		if (m_isInitialised)
 		{
-			float containerScale = 0f;
+			float containerScale = 2f;
 			foreach(Subcell subcell in m_subcells)
 			{
 				containerScale += subcell.transform.localScale.x;
@@ -87,13 +87,14 @@ public class ModelManager : MonoBehaviour
 	{
 		if (!m_isInitialised)
 		{
-			float containerScale = 0f;
+			float containerScale = 2f;
 			//TODO - check for edited scale in future!
 			foreach (ServiceData serv in a_pData.Services)
 			{
 				containerScale += serv.InitialScale;
 			}
 			containerScale = (1.25f * containerScale);
+
 			m_mainContainer = Instantiate<GameObject> (m_mainContainerPrefab, m_modelRoot.transform);
 			m_mainContainer.transform.localScale = new Vector3 (containerScale, containerScale, containerScale);
 
@@ -108,10 +109,11 @@ public class ModelManager : MonoBehaviour
 				sub.transform.localPosition = Vector3.Scale (minBounds, m_placementVectors [i]);
                 sub.GetComponent<Subcell>().myOnMaterial = OnStateMaterials[i];
                 sub.GetComponent<Renderer>().sharedMaterial = sub.GetComponent<Subcell>().myOnMaterial;
+
                 //TODO ALI THIS IS JUST A DEMO FOR LEONIE DONE AT 9PM, REVERT TO OFFMATERIAL LATER.
-                sub.transform.localScale = new Vector3(1.7f, 1.7f, 1.7f); //TODO I AM A BAD WAY OF DOING THIS, DO ME PROPERLY LATER PLS
-                sub.GetComponent<Subcell>().CreateReversedMesh();
-                sub.GetComponent<Subcell>().GenerateCaseCells();
+                //sub.transform.localScale = new Vector3(1.7f, 1.7f, 1.7f); //TODO I AM A BAD WAY OF DOING THIS, DO ME PROPERLY LATER PLS
+                //sub.GetComponent<Subcell>().CreateReversedMesh();
+                //sub.GetComponent<Subcell>().GenerateCaseCells();
 			}
 			m_isInitialised = true;
 
