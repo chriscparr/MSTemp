@@ -59,7 +59,7 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		m_labelText.text = m_serviceData.ServiceName.ToUpper ();
 		m_labelText.gameObject.SetActive (false);
 		gameObject.AddComponent<RailMover>();
-        transform.parent = null;
+        //transform.parent = null;
 	}
 
 	public void ToggleLabelText(bool a_isActive)
