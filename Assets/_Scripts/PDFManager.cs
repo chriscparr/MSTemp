@@ -61,7 +61,7 @@ public class PDFManager : MonoBehaviour
 
     public void PrePopulate()
     {
-        PageOne.transform.parent.GetComponent<Canvas>().enabled = false;
+        PageOne.transform.parent.GetComponent<Canvas>().enabled = false; // in case it isnt disabled already, because we never want to see this canvas!
 
         //TODO get name of person and company from presentation data and put it in page 1 :-)
 
