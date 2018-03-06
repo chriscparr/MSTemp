@@ -5,6 +5,7 @@ using System.Linq;
 
 public class SynapseGenerator : MonoBehaviour {
 
+    //TODO A LOT OF THIS IS OUTDATED NOW, SO DO WELL TO IGNORE ME.
 
     public static SynapseGenerator Instance { get { return s_instance; } }
     private static SynapseGenerator s_instance = null;
@@ -47,12 +48,8 @@ public class SynapseGenerator : MonoBehaviour {
     {
         allCells = cells;
 
-
         if (AreWeDoingLeoniesReferenceParticles == true)
             {
-            // TODO TODO TODO TODO TODO TODO
-            // simple shit mate, listen.
-            // get 2 subcells (cycle through them so they all connect to another i.e. 1 to 2, 2 to 3, 8 to 0 etc.
             int firstSubcellCount = 0;
             int secondSubcellCount = 1;
 
@@ -63,17 +60,7 @@ public class SynapseGenerator : MonoBehaviour {
                 firstSubcellCount++;
                 secondSubcellCount++;
             }
-
-            // get a trail renderer, use the iTween path logic and update them at runtime depending on the start/end cell positions
-            // uze the GetRandomDireciton and GetRandomDistance functions to create some bezier type curves
-            // on Smoothstep if the val is achieved (aka 0 or 1, or 0.1 and 0.9), ping pong between the two (or reverse the array)
-            // upon array reversal, re-randomize ALL POINTS except the last and the first (ALL POINTS except the start cell and end cell)
-            // THIS ISNT TOO DIFFICULT, ETA 2-4 HOURS?  
-            // USE A TRAIL RENDERER, AND OR A PARTICLE SYSTEM (THAT MIGHT BE NICER)... experiment long as it doesnt take too long please
-            // TODO TODO TODO TODO TODO TODO
-            // and for fuck sake get the early train in man come on, sleep is for the weak
         }
-
 
 
         if (AreWeConnectingSubCells == true)
@@ -88,21 +75,8 @@ public class SynapseGenerator : MonoBehaviour {
                 }
                   
                     MakeOneSynapseThatConnectsToASubCell(allCells[a].transform.position, allCells[a].gameObject, allCells[b], allCells[a]);
-                    // MakeOneSynapseThatConnectsToASubCell(allCells[a].transform.position, allCells[a].gameObject, allCells[b], allCells[a]);
                     Debug.Log("START BLOB = " + allCells[a].name + " / connected TO " + allCells[b].name);
 
-                //else
-                //{
-
-                //    MakeOneSynapseThatConnectsToASubCell(allCells[a].transform.position, allCells[a].gameObject, allCells[a + 1], allCells[a]);
-                //    // todo DECIDE WHETHER TO CALL THIS TWICE (FUCK PERFORMANCE FOR NOW)
-                //    // TODO
-                //    // I THINK ITS BETTER WITH AN EXTRA CALL BUT YOU KNOW, REASONS
-                //    // TODO
-                //    MakeOneSynapseThatConnectsToASubCell(allCells[a].transform.position, allCells[a].gameObject, allCells[a + 1], allCells[a]);
-                //    Debug.Log("START BLOB = " + allCells[a].name + " / connected TO " + allCells[a+1].name);
-                //}
-                //GenerateSynapses(c.transform.position, c.gameObject, false);
             }
 
             for (int i = 0; i < allSynapses.Count(); i++)
@@ -114,34 +88,6 @@ public class SynapseGenerator : MonoBehaviour {
             }
         }
     }
-
-    //public void MakeSynapse (Vector3 position, GameObject bound, bool overrideNormalFunctionality = false) {
-
-    //    // charAmount = Random.Range(5,10); // get individual names for each paths (we have to do this)
-    //    BoundingSphere = bound;
-
-    //        GameObject currentSynapse = Instantiate (SynapsePrefab, position, Quaternion.identity) as GameObject;
-    //        pathData = currentSynapse.GetComponent<iTweenPath> ();
-
-    //        pathData.nodeCount = Random.Range (minimumNumberOfNodes, maximumNumberOfNodes);
-
-    //        pathCollections.Add (pathData);
-    //        allSynapses.Add(currentSynapse);
-            
-
-    //    foreach (iTweenPath path in pathCollections)
-    //    {
-    //        if (!overrideNormalFunctionality)
-    //        {
-    //            AssignNodes(path, true);
-    //            // Cleanup (path);
-    //            StartPath(path);
-    //        }
-
-  
-    //    }
-    //    Debug.LogError("ALL SYNAPSES GENERATED");
-    //}
 
     public void MakeASynapseThatPingPongsBetweenTwoSubCells(Vector3 position, GameObject bound, Subcell endCell, Subcell startCell)
     {
@@ -158,10 +104,7 @@ public class SynapseGenerator : MonoBehaviour {
         {
 
             AssignNodes(path, true, endCell);
-            // Cleanup (path);
             StartPath(path);
-
-
         }
 
         foreach (GameObject path in allSynapses)
@@ -215,7 +158,7 @@ public class SynapseGenerator : MonoBehaviour {
     {
         if (!overrideNormalFunctionality)
         {
-            charAmount = Random.Range(5, 10); // get individual names for each paths (we have to do this)
+            charAmount = Random.Range(5, 10);
             BoundingSphere = bound;
 
             for (int i = 0; i < NumberOfSynapsesToGenerate; i++)
@@ -234,17 +177,12 @@ public class SynapseGenerator : MonoBehaviour {
                 if (!overrideNormalFunctionality)
                 {
                     AssignNodes(path, true);
-                    // Cleanup (path);
                     StartPath(path);
                 }
             }
-
-            Debug.LogError("ALL SYNAPSES GENERATED");
         }
     }
 	
-	
-	// Update is called once per frame
 	Vector3 GetRandomDirection () {
 		Vector3 direction = Random.insideUnitSphere * GetRandomDistance ();
 		return direction;

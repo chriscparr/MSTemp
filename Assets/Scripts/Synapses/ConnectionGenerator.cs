@@ -107,11 +107,7 @@ public class ConnectionGenerator : MonoBehaviour {
                     basicAnimator.uvAnimationRate = BasicAnimationDirections;
                 }
                 yield return new WaitForSeconds(0.02f);
-        
         }
-
-  
-
     }
 
     public void DestroyAll()

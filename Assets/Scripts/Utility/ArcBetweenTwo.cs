@@ -45,11 +45,8 @@ public class ArcBetweenTwo : MonoBehaviour {
         MidpointGeneration();
 	}
 
-	
-	// Update is called once per frame
 	void Update () {
-
-
+        
         if (amToing == true)
         {
             increment = Mathf.SmoothDamp(increment, 1, ref Velocity, smoothTime);

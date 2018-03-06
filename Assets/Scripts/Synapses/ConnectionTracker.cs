@@ -60,10 +60,9 @@ public class ConnectionTracker : MonoBehaviour {
        
         existingConnections = GetComponentsInChildren<ConnectionTracker>();
         existingConnectionsAmount = existingConnections.Length;
-        Debug.Log("NUmber of existing connections = " + existingConnections.Length);
-
         parenter = ConnectionGenerator.Instance.baseParent.transform;
         this.transform.parent = parenter.transform;
+        this.gameObject.name = "LineConnection";
 
         InvokeRepeating("FindClosest", 0.5f, ConnectionGenerator.Instance.ConnectionRefreshRate);
 
@@ -77,7 +76,7 @@ public class ConnectionTracker : MonoBehaviour {
 
 
     void FinalizeConnections () {
-        Debug.Log(line.positionCount);
+
         switch (line.positionCount)
         {
 
@@ -150,6 +149,7 @@ public class ConnectionTracker : MonoBehaviour {
         secondLink = new GameObject();
         secondLink.AddComponent<LineRenderer>();
         secondLink.transform.parent = parenter.transform;
+        secondLink.name = "SecondLink";
 
         secondLink.GetComponent<LineRenderer>().material = ConnectionGenerator.Instance.StartingMaterial;
         secondLink.GetComponent<LineRenderer>().startWidth = ConnectionGenerator.Instance.StartingWidth;
@@ -168,6 +168,7 @@ public class ConnectionTracker : MonoBehaviour {
         thirdLink = new GameObject();
         thirdLink.transform.parent = parenter.transform;
         thirdLink.AddComponent<LineRenderer>();
+        thirdLink.name = "ThirdLink";
 
         thirdLink.GetComponent<LineRenderer>().material = ConnectionGenerator.Instance.StartingMaterial;
         thirdLink.GetComponent<LineRenderer>().startWidth = ConnectionGenerator.Instance.StartingWidth;
@@ -281,7 +282,7 @@ public class ConnectionTracker : MonoBehaviour {
 
         }
 
-        if (line.positionCount > 2)
+        if (line.positionCount > 2 && allCells.Count > 3 )
         {
             FindThirdClosest();
         }

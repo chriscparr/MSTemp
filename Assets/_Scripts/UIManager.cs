@@ -27,6 +27,8 @@ public class UIManager : MonoBehaviour
 	private GameObject m_caseStudyViewPrefab;
 	[SerializeField]
 	private GameObject m_DifferentiatorManipulationPrefab;
+    [SerializeField]
+    private GameObject m_ForwardSummaryPrefab;
 
 	private GameObject m_loginView;
 	private GameObject m_newOrSavedView;
@@ -37,6 +39,7 @@ public class UIManager : MonoBehaviour
 	private GameObject m_serviceSummaryView;
 	private GameObject m_caseStudyView;
 	private GameObject m_DifferentiatorManipulationView;
+    private GameObject m_ForwardSummaryView;
 
 	private GameObject[] m_allViewObjects;
 
@@ -89,6 +92,11 @@ public class UIManager : MonoBehaviour
 		HideAllViews ();
 		m_DifferentiatorManipulationView.SetActive(true);
 	}
+    public void ShowForwardSummaryView()
+    {
+        HideAllViews();
+        m_ForwardSummaryView.gameObject.SetActive(true);
+    }
 	public void HideAllViews()
 	{
 		foreach (GameObject g in m_allViewObjects)
@@ -110,9 +118,13 @@ public class UIManager : MonoBehaviour
 		m_serviceSummaryView = Instantiate<GameObject> (m_serviceSummaryViewPrefab, this.gameObject.transform);
 		m_caseStudyView = Instantiate<GameObject>(m_caseStudyViewPrefab, this.gameObject.transform);
 		m_DifferentiatorManipulationView = Instantiate <GameObject> (m_DifferentiatorManipulationPrefab, this.gameObject.transform);
+        m_ForwardSummaryView = Instantiate<GameObject>(m_ForwardSummaryPrefab, this.gameObject.transform);
 
 		m_allViewObjects = new GameObject[] {m_loginView, m_newOrSavedView, m_newPresentationView,
-			m_selectSavedView, m_presentationView, m_endPresentationView, m_serviceSummaryView, m_caseStudyView, m_DifferentiatorManipulationView};
+			m_selectSavedView, m_presentationView, m_endPresentationView, m_serviceSummaryView, m_caseStudyView, m_DifferentiatorManipulationView,
+            m_ForwardSummaryView};
+
+
 
 		m_caseView = m_caseStudyView.GetComponent<CaseStudyView> ();
 
