@@ -53,6 +53,9 @@ public class PDFManager : MonoBehaviour
     // TODO TODO TODO ALI COME ON TODO TODO
 
 
+    // TODO WHY DOES THE GRID REGENERATE? MAKE SURE U CLEAR UR ARRAYS AND DESTROY SHIT ON CLEANUP
+
+
 
     private void Awake()
     {
@@ -72,9 +75,14 @@ public class PDFManager : MonoBehaviour
     void AdjustGrid()
     {
         // FUTURE PROOFED. ish.
+
         List<RawImage> imgs = new List<RawImage>();
         List<Text> titles = new List<Text>();
         List<Text> descriptions = new List<Text>();
+
+        imgs.Clear();
+        titles.Clear();
+        descriptions.Clear();
 
         int numberOfSubCells = ModelManager.Instance.m_subcells.Count;
 
