@@ -181,8 +181,7 @@ public class PDFManager : MonoBehaviour
         Destroy(sc.GetComponent<Subcell>());
         sc.transform.parent = spriteShotCamera.transform;
         sc.transform.localPosition = new Vector3(0, 0, 5);
-        sc.transform.localScale = new Vector3(3.4f, 1.7f, 1.7f); // TODO DELETE ME LATER, GET THE SUBCELLS ACTUAL SCALE AND POSITION ACCORDINGLY
-        sc.GetComponent<Renderer>().sharedMaterial = cellToBeCaptured.myOnMaterial; // TODO DELETE ME LATER aka
+
         // TODO only call this function when a subcell has been locked!
 
         spriteShotCamera.enabled = true;

@@ -24,6 +24,11 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	private TextMesh m_labelText;
 	[SerializeField]
 	private GameObject m_caseCellPrefab;
+	[SerializeField]
+	private Material m_offMaterial;
+	[SerializeField]
+	private Material m_onMaterial;
+
 
 	public Rigidbody RigidBody {get{ return m_rigidBody; }}
 	private Rigidbody m_rigidBody;
@@ -32,18 +37,16 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	private ServiceData m_serviceData;
 
 	public CaseCell[] CaseCells {get{ return m_caseCells; }}
+	private CaseCell[] m_caseCells;
 
 	private float m_doubleClickInterval = 0.25f;
 	private int m_clickCount = 0;
 	private bool m_isLabelActive = false;
 
-	private CaseCell[] m_caseCells;
-
 	public bool CanScale { get; set;}
-    [HideInInspector]
-    public Material myOnMaterial;
 
 	private bool m_hasReversedMesh = false;
+	private bool m_isUsingOnMaterial = true;
 
 	private void Awake()
 	{
@@ -59,8 +62,28 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		m_labelText.text = m_serviceData.ServiceName.ToUpper ();
 		m_labelText.gameObject.SetActive (false);
 		gameObject.AddComponent<RailMover>();
+		gameObject.GetComponent<Renderer> ().material = m_onMaterial;
 		CreateReversedMesh ();
 		GenerateCaseCells ();
+	}
+
+	public void ToggleMaterials(bool a_useOnMaterial)
+	{
+		m_isUsingOnMaterial = !a_useOnMaterial;	//prepare for switch
+		ToggleMaterials ();
+	}
+
+	public void ToggleMaterials()
+	{
+		if (m_isUsingOnMaterial)
+		{
+			gameObject.GetComponent<Renderer> ().material = m_offMaterial;
+		}
+		else
+		{
+			gameObject.GetComponent<Renderer> ().material = m_onMaterial;
+		}
+		m_isUsingOnMaterial = !m_isUsingOnMaterial;
 	}
 
 	public void ToggleLabelText(bool a_isActive)
@@ -77,12 +100,12 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 			GameObject clone = Instantiate(this.gameObject, transform.position, Quaternion.identity) as GameObject;        
 			Destroy (clone.transform.GetChild(0).gameObject);
 			clone.transform.parent = this.transform;
-			clone.GetComponent<Renderer> ().sharedMaterial = myOnMaterial;
 			Destroy(clone.GetComponent<Rigidbody>());
 			Destroy(clone.GetComponent<SphereCollider>());
 			Destroy(clone.GetComponent<Subcell>());
-            clone.layer = 8; // IGNORE D.O.F
 			clone.AddComponent<ReverseNormals>();
+			clone.GetComponent<Renderer> ().material = m_onMaterial;
+            clone.layer = 8; // IGNORE D.O.F
 		}
     }
 
