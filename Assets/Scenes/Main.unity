@@ -1159,7 +1159,6 @@ GameObject:
   - component: {fileID: 1724715067}
   - component: {fileID: 1724715070}
   - component: {fileID: 1724715071}
-  - component: {fileID: 1724715073}
   - component: {fileID: 1724715072}
   m_Layer: 0
   m_Name: Managers
@@ -1252,7 +1251,6 @@ MonoBehaviour:
   - PrefabName: SHOP
     PrefabGameObject: {fileID: 1273531743002108, guid: 9c5708ad99e7946f48552bfb520c050e,
       type: 2}
-  m_subcells: []
   OffStateMaterial: {fileID: 2100000, guid: 87e905f2717e14d949af01f12d4a28eb, type: 2}
   OnStateMaterials:
   - {fileID: 2100000, guid: 6a5c10b147fbb43c286f1955105530cf, type: 2}
@@ -1304,20 +1302,6 @@ MonoBehaviour:
   pageTwoGrid: {fileID: 1645533911}
   imageCellPrefab: {fileID: 1700155859}
   gridLayoutParent: {fileID: 1645533910}
---- !u!114 &1724715073
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1724715066}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 145d7b56080004056b073f21419973de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_FastVideos: []
-  m_ShopVideos: []
-  m_ContentVideos: []
 --- !u!1 &1782334244
 GameObject:
   m_ObjectHideFlags: 0
