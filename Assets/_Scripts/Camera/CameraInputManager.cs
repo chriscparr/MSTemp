@@ -293,8 +293,7 @@ public class CameraInputManager : MonoBehaviour
 		if (m_selectedCell != null && m_selectedCell.CanScale == true)
 		{
 			ModelManager.Instance.ScaleSubcell (m_selectedCell, a_newScale);
-			if (m_selectedCell.GetComponent<Renderer>().sharedMaterial != m_selectedCell.myOnMaterial && m_selectedCell != null)
-				m_selectedCell.GetComponent<Renderer>().sharedMaterial = m_selectedCell.myOnMaterial;
+			m_selectedCell.ToggleMaterials (true);
 		}
 	}
 }
