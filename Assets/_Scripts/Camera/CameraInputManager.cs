@@ -48,9 +48,7 @@ public class CameraInputManager : MonoBehaviour
 	public Vector3 homeVector = new Vector3(0, 0, -15f);
 	public Vector3 focusVector = new Vector3(0, 0, -7.5f);
 
-
 	private bool m_isTweening = false;
-
 
 	private void Awake() 
 	{
@@ -139,7 +137,6 @@ public class CameraInputManager : MonoBehaviour
 
 		m_MainCamera.GetComponent<RailMover>().TweenToPosition(focusVector, 2f, false, iTween.EaseType.easeInOutSine);
 		UIManager.Instance.ShowManipulationView();
-		// UIManager.Instance.ShowServiceSummaryView (selectedCell.ServiceDat);
 	}
 
 	public void EnterSelectedSubCell(Subcell a_doubleClickedCell)
@@ -183,29 +180,6 @@ public class CameraInputManager : MonoBehaviour
 		{
 			HandleOneFinger ();
 		}
-		/*
-		if (Input.GetKeyDown(KeyCode.T))
-		{
-			if (m_isTweening != true)
-			{
-				m_Mover.TweenToPosition(homeVector, 2, true, iTween.EaseType.easeInOutSine);
-				m_isTweening = true;
-			}
-		}
-
-		if (Input.GetKeyDown(KeyCode.U))
-		{
-			UIManager.Instance.HideManipulationView();
-			ResetPosition();
-
-		}
-
-		if (Input.GetKeyDown(KeyCode.Y))
-		{
-			if (m_selectedCell.GetComponent<Renderer>().sharedMaterial != m_selectedCell.myOnMaterial && m_selectedCell != null)
-				m_selectedCell.GetComponent<Renderer>().sharedMaterial = m_selectedCell.myOnMaterial;
-		}
-		*/
 	}
 
 	private void HandleOneFinger()
