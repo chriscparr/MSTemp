@@ -79,7 +79,6 @@ public class CaseStudyView : MonoBehaviour
 	private void ShowContentPanel()
 	{
 		m_contentPanel.SetActive (true);
-		Debug.Log ("ShowContentPanel()");
 		iTween.ValueTo (gameObject, iTween.Hash ("from", 1f, "to", 0f, "time", 1f,"delay",0f, "onupdate", "ApplyIntroPanelAlpha", "oncomplete", "AfterIntroPanelTween"));
 		iTween.ValueTo (gameObject, iTween.Hash ("from", 0f, "to", 1f, "time", 1f,"delay",1f, "onupdate", "ApplyContentPanelAlpha", "oncomplete", "AfterMainPanelTween"));
 	}
@@ -162,7 +161,6 @@ public class CaseStudyView : MonoBehaviour
 		m_ourMover = Camera.main.GetComponent<OnRailsMovement>();
 		m_introCanvas = m_introPanel.GetComponent<CanvasGroup> ();
 		m_contentCanvas = m_contentPanel.GetComponent<CanvasGroup> ();
-
 	}
 	
 	private void OnEnable()
