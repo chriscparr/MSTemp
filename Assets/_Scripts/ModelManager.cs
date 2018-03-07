@@ -107,13 +107,6 @@ public class ModelManager : MonoBehaviour
 				m_subcells.Add (sub.GetComponent<Subcell> ());
 				m_subcells [i].Initialise (a_pData.Services [i]);
 				sub.transform.localPosition = Vector3.Scale (minBounds, m_placementVectors [i]);
-                sub.GetComponent<Subcell>().myOnMaterial = OnStateMaterials[i];
-                sub.GetComponent<Renderer>().sharedMaterial = sub.GetComponent<Subcell>().myOnMaterial;
-
-                //TODO ALI THIS IS JUST A DEMO FOR LEONIE DONE AT 9PM, REVERT TO OFFMATERIAL LATER.
-                //sub.transform.localScale = new Vector3(1.7f, 1.7f, 1.7f); //TODO I AM A BAD WAY OF DOING THIS, DO ME PROPERLY LATER PLS
-                //sub.GetComponent<Subcell>().CreateReversedMesh();
-                //sub.GetComponent<Subcell>().GenerateCaseCells();
 			}
 			m_isInitialised = true;
 
