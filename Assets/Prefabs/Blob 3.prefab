@@ -200,6 +200,8 @@ MonoBehaviour:
   m_labelText: {fileID: 102265378629679048}
   m_caseCellPrefab: {fileID: 1471753851409318, guid: e3b1aa73b91e94b799dd36ca9ee35375,
     type: 2}
+  m_offMaterial: {fileID: 2100000, guid: 87e905f2717e14d949af01f12d4a28eb, type: 2}
+  m_onMaterial: {fileID: 2100000, guid: 6a5c10b147fbb43c286f1955105530cf, type: 2}
   myOnMaterial: {fileID: 0}
 --- !u!135 &135402006490910776
 SphereCollider:
