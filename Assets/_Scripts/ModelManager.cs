@@ -19,7 +19,7 @@ public class ModelManager : MonoBehaviour
 	private static ModelManager s_instance = null;
     //
 	private GameObject m_mainContainer;
-	public List<Subcell> m_subcells = new List<Subcell>();
+	private List<Subcell> m_subcells = new List<Subcell>();
 
 	public bool IsInitialised {get { return m_isInitialised; }}
 	private bool m_isInitialised = false;
@@ -157,6 +157,11 @@ public class ModelManager : MonoBehaviour
 			}
 		}
 		return allCaseCells.ToArray ();
+	}
+
+	public Subcell[] GetAllSubCells()
+	{
+		return m_subcells.ToArray ();
 	}
 
 	public void ShakeModel()

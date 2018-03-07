@@ -84,7 +84,7 @@ public class PDFManager : MonoBehaviour
         titles.Clear();
         descriptions.Clear();
 
-        int numberOfSubCells = ModelManager.Instance.m_subcells.Count;
+		int numberOfSubCells = ModelManager.Instance.GetAllSubCells().Length;
 
         imgs.Add(imageCellPrefab.GetComponent<RawImage>());
         titles.Add(imageCellPrefab.GetComponent<PDFCellContainer>().title);

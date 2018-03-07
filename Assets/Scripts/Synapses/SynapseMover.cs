@@ -36,7 +36,7 @@ public class SynapseMover : MonoBehaviour {
 	void Awake() {
 		iTween.Init (this.gameObject);
         thisTrail = GetComponent<TrailRenderer>();
-        allCells = ModelManager.Instance.m_subcells;
+		allCells = new List<Subcell>(ModelManager.Instance.GetAllSubCells ());
         //Invoke("FindClosest", 0.5f);
        
 	}

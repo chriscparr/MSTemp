@@ -51,7 +51,7 @@ public class ConnectionTracker : MonoBehaviour {
     private void OnEnable()
     {
         line = GetComponent<LineRenderer>();
-        allCells = ModelManager.Instance.m_subcells;
+		allCells = new List<Subcell>(ModelManager.Instance.GetAllSubCells ());
         tempCells = allCells;
 
         line.positionCount++;
