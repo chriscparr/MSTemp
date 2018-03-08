@@ -54,9 +54,9 @@ public class PersistentDataHandler
 	{
 		ValidateFolderPath();
 		string sourcePath = a_filePath.Replace ("file://","");	//convert from url to normal file path
-		string destinationPath = path + a_filePath.Substring (a_filePath.LastIndexOf ("/") + 1);
-		//Debug.Log ("PersistentDataHandler: Source file path: " + sourcePath + ", Destination file path: " + destinationPath);
-		File.Copy (sourcePath, destinationPath);
+		string destinationPath = Path.Combine(Application.persistentDataPath, a_filePath.Substring (a_filePath.LastIndexOf ("/") + 1));
+		Debug.Log ("PersistentDataHandler: Source file path: " + sourcePath + ", Destination file path: " + destinationPath);
+		File.Copy (sourcePath, destinationPath, true);
 		return destinationPath;
 	}
 
