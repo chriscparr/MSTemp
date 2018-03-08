@@ -109,8 +109,8 @@ public class CaseStudyConfigPanel : MonoBehaviour
 	private void VideoSelectedEventHandler(string a_videoPath)
 	{
 		m_videoPicker.OnVideoSelected -= VideoSelectedEventHandler;
-		m_caseData.VideoPath = a_videoPath;
-		m_videoPathText.text = "Video location : " + m_caseData.VideoPath;
+		m_caseData.VideoPath = "file://" + PersistentDataHandler.SaveVideo (a_videoPath);
+		m_videoPathText.text = m_caseData.VideoPath;
 	}
 
 	private void ClosePanel()

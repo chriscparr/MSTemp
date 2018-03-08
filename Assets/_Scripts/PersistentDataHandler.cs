@@ -50,6 +50,17 @@ public class PersistentDataHandler
 		}
 	}
 
+	public static string SaveVideo(string a_filePath)
+	{
+		ValidateFolderPath();
+		string sourcePath = a_filePath.Replace ("file://","");	//convert from url to normal file path
+		string destinationPath = path + a_filePath.Substring (a_filePath.LastIndexOf ("/") + 1);
+		//Debug.Log ("PersistentDataHandler: Source file path: " + sourcePath + ", Destination file path: " + destinationPath);
+		File.Copy (sourcePath, destinationPath);
+		return destinationPath;
+	}
+
+
 	/// <summary>
 	/// Saves the json file to persistant datapath of the device
 	/// </summary>
