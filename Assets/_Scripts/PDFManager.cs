@@ -344,7 +344,7 @@ public class PDFManager : MonoBehaviour
         }
 #endif
         PageOne.transform.parent.GetComponent<Canvas>().enabled = false;
-
+        DestroyAll();
     
 
     }
