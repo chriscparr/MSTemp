@@ -189,9 +189,12 @@ public class PDFManager : MonoBehaviour
         // TODO THIS ISNT WORKING WHATSOEVER LOL
 
         // here right,
-        GameObject sc = Instantiate(cellToBeCaptured.gameObject, transform.position, Quaternion.identity) as GameObject;
-        sc.GetComponent<Rigidbody>().isKinematic = true;
-        Destroy(sc.GetComponent<Subcell>());
+        GameObject sc = new GameObject();
+        sc.AddComponent<MeshFilter>();
+        sc.GetComponent<MeshFilter>().mesh = cellToBeCaptured.GetComponent<MeshFilter>().mesh;
+        sc.AddComponent<MeshRenderer>();
+        sc.GetComponent<MeshRenderer>().material = cellToBeCaptured.GetComponent<Renderer>().material;
+
         sc.transform.parent = spriteShotCamera.transform;
         sc.transform.localPosition = new Vector3(0, 0, 5);
         sc.transform.localScale = new Vector3(3.4f, 1.7f, 1.7f); // TODO DELETE ME LATER
