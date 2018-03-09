@@ -286,10 +286,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1898564179}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd03d7fa2d3e445ccaf136457fb24546, type: 3}
+  m_Script: {fileID: 11500000, guid: fdbee9bdb7e4a4dc29c24cf6d296f182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shareButtonImage: {fileID: 10912, guid: 0000000000000000f000000000000000, type: 0}
+  shareButtonImage: {fileID: 2800000, guid: 05c91d0d36f59420b81846df94371bf2, type: 3}
 --- !u!23 &1898564181
 MeshRenderer:
   m_ObjectHideFlags: 0
