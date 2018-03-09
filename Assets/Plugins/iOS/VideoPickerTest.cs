@@ -17,6 +17,7 @@ public class VideoPickerTest : MonoBehaviour
 
 
 	public Texture2D shareButtonImage; 
+	public VideoPlayer m_videoPlayer;
 
 	void OnGUI ()
 	{
@@ -36,8 +37,16 @@ public class VideoPickerTest : MonoBehaviour
 		//Playback (path);
 	}
 
-	void Playback(string path) {
+	void Playback(string path) 
+	{
+		Debug.Log ("Attempting playback from " + path);
+		m_videoPlayer.playOnAwake = false;
+		//m_videoPlayer.renderMode = UnityEngine.Video.VideoRenderMode.CameraNearPlane;
+		m_videoPlayer.source = VideoSource.Url;
+		m_videoPlayer.url = path;
+		m_videoPlayer.Play ();
 
+		/*
 		GameObject camera = GameObject.Find ("Main Camera");
 
 		var videoPlayer = camera.AddComponent<UnityEngine.Video.VideoPlayer> ();
@@ -48,6 +57,7 @@ public class VideoPickerTest : MonoBehaviour
 		videoPlayer.url = path;
 
 		videoPlayer.Play ();
+		*/
 		// End of Ali's changes 6/2/18
 	}
 
@@ -60,6 +70,6 @@ public class VideoPickerTest : MonoBehaviour
 		File.WriteAllBytes (destinationPath, wwwVid.bytes);
 		Debug.Log ("Data saved to: " + destinationPath);
 		yield return new WaitForSeconds (2f);
-		StartCoroutine ("Playback", destinationPath);
+		Playback (destinationPath);
 	}
 }
