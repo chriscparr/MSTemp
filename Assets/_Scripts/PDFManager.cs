@@ -194,7 +194,7 @@ public class PDFManager : MonoBehaviour
         Destroy(sc.GetComponent<Subcell>());
         sc.transform.parent = spriteShotCamera.transform;
         sc.transform.localPosition = new Vector3(0, 0, 5);
-
+        sc.transform.localScale = new Vector3(3.4f, 1.7f, 1.7f); // TODO DELETE ME LATER
         // TODO only call this function when a subcell has been locked!
 
         spriteShotCamera.enabled = true;
@@ -220,23 +220,40 @@ public class PDFManager : MonoBehaviour
         //    // SAME CELL
         //}
 
-        if (cachedCell == cellToBeCaptured)
+
+        List<PDFCellContainer> usedCells = new List<PDFCellContainer>();
+        bool getOut = false;
+
+        foreach (RawImage i in cellImages)
         {
-            // same cell, so... 
-            Debug.Log("SAME CELL TWICE IN A ROW");
-            cachedCellNumber--;
-            if (cachedCellNumber<0)
+            if (i.gameObject.GetComponent<PDFCellContainer>()!=null)
             {
-                cachedCellNumber = 0;
+                usedCells.Add(i.gameObject.GetComponent<PDFCellContainer>());
             }
-            cellImages[cachedCellNumber].texture = ourTexture;
-            cachedCellNumber++;
+        }
+
+        foreach (PDFCellContainer used in usedCells)
+        {
+            if (cellToBeCaptured == used.mycell)
+            {
+                cellImages[used.cellNumber].texture = ourTexture;
+                getOut = true;
+            }
+        }
+
+        if (getOut == true)
+        {
+            
+        cachedCell = cellToBeCaptured;
+            ourTexture = null;
+            return;
         }
 
         else
         {
             cellImages[cachedCellNumber].GetComponent<PDFCellContainer>().mycell = cellToBeCaptured;
             cellImages[cachedCellNumber].GetComponent<PDFCellContainer>().cellNumber = cachedCellNumber;
+            cellImages[cachedCellNumber].GetComponent<PDFCellContainer>().title.text = cellToBeCaptured.ServiceDat.ServiceName;
             cellImages[cachedCellNumber].texture = ourTexture;
 
             cachedCellNumber++;
