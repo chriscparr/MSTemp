@@ -38,6 +38,10 @@ public class PDFManager : MonoBehaviour
     public GameObject imageCellPrefab;
     public Transform gridLayoutParent;
 
+    private int cachedCellNumber = 0;
+    private Subcell cachedCell;
+
+
 
     [DllImport("__Internal")]
     private static extern void OpenPDF(string path, string imageOne, string imageTwo);
@@ -64,7 +68,7 @@ public class PDFManager : MonoBehaviour
 
     public void PrePopulate()
     {
-        PageOne.transform.parent.GetComponent<Canvas>().enabled = false; // in case it isnt disabled already, because we never want to see this canvas!
+        // PageOne.transform.parent.GetComponent<Canvas>().enabled = false; TODO UNCOMMENT ME LATER PLEASE
 
         //TODO get name of person and company from presentation data and put it in page 1 :-)
 
@@ -174,6 +178,7 @@ public class PDFManager : MonoBehaviour
 
     public void CaptureCell(Subcell cellToBeCaptured)
     {
+        // TODO THIS ISNT WORKING WHATSOEVER LOL
 
         // here right,
         GameObject sc = Instantiate(cellToBeCaptured.gameObject, transform.position, Quaternion.identity) as GameObject;
@@ -201,61 +206,46 @@ public class PDFManager : MonoBehaviour
 
         Destroy(sc);
 
-        switch (cellToBeCaptured.ServiceDat.ServiceName)
+        //if (cellToBeCaptured == cellImages[cachedCellNumber].GetComponent<PDFCellContainer>().mycell)
+        //{
+        //    cellImages[cellImages[cachedCellNumber].GetComponent<PDFCellContainer>().cellNumber].texture = ourTexture; 
+        //    // SAME CELL
+        //}
+
+        if (cachedCell == cellToBeCaptured)
         {
-            // TODO later - actually order them by importance, or something like that?
-            // TODO atm they are a pre-determined order... fix this when ur headache goes
-
-            // TODO my man, this doesnt accomodate for LESS THAN 8 CELLS in a presentation
-            // TODO so sort it out using your numbered grid TODO system up near the top of this script!!!!!!! TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
-
-            case "AGILE":
-                cellImages[0].texture = ourTexture;
-                cellNames[0].text = cellToBeCaptured.ServiceDat.ServiceName;
-                // TODO do the descriptors later, because fuck knows if they're even in the app yet
-                break;
-            case "CONTENT":
-                cellImages[1].texture = ourTexture;
-                cellNames[1].text = cellToBeCaptured.ServiceDat.ServiceName;
-                // TODO do the descriptors later, because fuck knows if they're even in the app yet
-                break;
-            case "DATA":
-                cellImages[2].texture = ourTexture;
-                cellNames[2].text = cellToBeCaptured.ServiceDat.ServiceName;
-                // TODO do the descriptors later, because fuck knows if they're even in the app yet
-                break;
-            case "FAST":
-                cellImages[3].texture = ourTexture;
-                cellNames[3].text = cellToBeCaptured.ServiceDat.ServiceName;
-                // TODO do the descriptors later, because fuck knows if they're even in the app yet
-                break;
-            case "GROWTH":
-                cellImages[4].texture = ourTexture;
-                cellNames[4].text = cellToBeCaptured.ServiceDat.ServiceName;
-                // TODO do the descriptors later, because fuck knows if they're even in the app yet
-                break;
-            case "LIFE":
-                cellImages[5].texture = ourTexture;
-                cellNames[5].text = cellToBeCaptured.ServiceDat.ServiceName;
-                // TODO do the descriptors later, because fuck knows if they're even in the app yet
-                break;
-            case "LOOP":
-                cellImages[6].texture = ourTexture;
-                cellNames[6].text = cellToBeCaptured.ServiceDat.ServiceName;
-                // TODO do the descriptors later, because fuck knows if they're even in the app yet
-                break;
-            case "SHOP":
-                cellImages[7].texture = ourTexture;
-                cellNames[7].text = cellToBeCaptured.ServiceDat.ServiceName;
-                // TODO do the descriptors later, because fuck knows if they're even in the app yet
-                break;
-                //}
+            // same cell, so... 
+            Debug.Log("SAME CELL TWICE IN A ROW");
+            cachedCellNumber--;
+            if (cachedCellNumber<0)
+            {
+                cachedCellNumber = 0;
+            }
+            cellImages[cachedCellNumber].texture = ourTexture;
+            cachedCellNumber++;
         }
-        ourTexture = null;
 
-        // then use the above steps and get a texture from our cell camera
-        // then pass that into our raw image - corresponding to that subcell's name? 
-        // or just do it via numbers? i dont know?
+        else
+        {
+            cellImages[cachedCellNumber].GetComponent<PDFCellContainer>().mycell = cellToBeCaptured;
+            cellImages[cachedCellNumber].GetComponent<PDFCellContainer>().cellNumber = cachedCellNumber;
+            cellImages[cachedCellNumber].texture = ourTexture;
+
+            cachedCellNumber++;
+
+            if (cachedCellNumber >= cellImages.Length)
+            {
+                // this sort of works but sort of doesn't.
+                // look at the above function and you'll fiogure iut out
+                cachedCellNumber = 0;
+            }
+        }
+
+
+        cachedCell = cellToBeCaptured;
+        ourTexture = null;
+        Debug.Log("Cell capture finished!");
+
     }
 
     public IEnumerator GenerateEntirePDF()

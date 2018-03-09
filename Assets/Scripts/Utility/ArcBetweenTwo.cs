@@ -39,7 +39,8 @@ public class ArcBetweenTwo : MonoBehaviour {
 
         if (destination == origin)
         {
-			destination = ModelManager.Instance.GetAllSubCells ()[Random.Range(0, 7)];
+            int max = Mathf.FloorToInt(ModelManager.Instance.GetAllSubCells().Count());
+            destination = ModelManager.Instance.GetAllSubCells ()[Random.Range(0, max)];
         }
 
         MidpointGeneration();

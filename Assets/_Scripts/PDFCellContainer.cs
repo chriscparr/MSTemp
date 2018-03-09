@@ -7,4 +7,8 @@ public class PDFCellContainer : MonoBehaviour {
 
     public Text title;
     public Text descriptor;
+    [HideInInspector]
+    public Subcell mycell;
+    [HideInInspector]
+    public int cellNumber;
 }

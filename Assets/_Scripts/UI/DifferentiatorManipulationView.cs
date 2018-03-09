@@ -20,6 +20,7 @@ public class DifferentiatorManipulationView : MonoBehaviour
 		if (CameraInputManager.Instance.SelectedCell != null)
 		{
 			m_serviceNameText.text = CameraInputManager.Instance.SelectedCell.ServiceDat.ServiceName;
+            PDFManager.Instance.CaptureCell(CameraInputManager.Instance.SelectedCell);
 		}			
 		m_lockToggle.onValueChanged.AddListener (LockSubcell);
 		m_homeButton.onClick.AddListener (GoHome);
