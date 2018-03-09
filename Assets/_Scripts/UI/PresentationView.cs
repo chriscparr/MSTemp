@@ -21,6 +21,10 @@ public class PresentationView : MonoBehaviour
         {
             ConnectionGenerator.Instance.DestroyAll();
         }
+        if (PDFManager.Instance != null)
+        {
+            PDFManager.Instance.DestroyAll();
+        }
 		gameObject.SetActive(false);
 	}
 

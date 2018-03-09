@@ -176,6 +176,14 @@ public class PDFManager : MonoBehaviour
 
     }
 
+    public void DestroyAll()
+    {
+        for (int i = 1; i < cellImages.Length; i++)
+        {
+            Destroy(cellImages[i].gameObject);
+        }
+    }
+
     public void CaptureCell(Subcell cellToBeCaptured)
     {
         // TODO THIS ISNT WORKING WHATSOEVER LOL
