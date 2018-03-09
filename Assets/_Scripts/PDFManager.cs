@@ -214,12 +214,8 @@ public class PDFManager : MonoBehaviour
 
         Destroy(sc);
 
-        //if (cellToBeCaptured == cellImages[cachedCellNumber].GetComponent<PDFCellContainer>().mycell)
-        //{
-        //    cellImages[cellImages[cachedCellNumber].GetComponent<PDFCellContainer>().cellNumber].texture = ourTexture; 
-        //    // SAME CELL
-        //}
-
+        // honestly you dont have to do this every single time
+        // you could just cache and update the list as you go
 
         List<PDFCellContainer> usedCells = new List<PDFCellContainer>();
         bool getOut = false;
@@ -243,8 +239,7 @@ public class PDFManager : MonoBehaviour
 
         if (getOut == true)
         {
-            
-        cachedCell = cellToBeCaptured;
+            cachedCell = cellToBeCaptured;
             ourTexture = null;
             return;
         }
@@ -348,7 +343,7 @@ public class PDFManager : MonoBehaviour
         }
 #endif
         PageOne.transform.parent.GetComponent<Canvas>().enabled = false;
-
+        DestroyAll();
     
 
     }
