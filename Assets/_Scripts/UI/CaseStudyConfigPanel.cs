@@ -103,14 +103,24 @@ public class CaseStudyConfigPanel : MonoBehaviour
 		return;
 		#endif
 		m_videoPicker.OnVideoSelected += VideoSelectedEventHandler;
-		m_videoPicker.ShowVideoPicker();
+		m_videoPicker.ShowVideoPicker ();
 	}
 
 	private void VideoSelectedEventHandler(string a_videoPath)
 	{
 		m_videoPicker.OnVideoSelected -= VideoSelectedEventHandler;
-		m_caseData.VideoPath = a_videoPath;
-		m_videoPathText.text = "Video location : " + m_caseData.VideoPath;
+		StartCoroutine ("SavePersistentVideo", a_videoPath);
+	}
+
+	private IEnumerator SavePersistentVideo(string a_videoURL)
+	{
+		WWW wwwVid = new WWW (a_videoURL);
+		yield return wwwVid;
+		Debug.Log ("Download from " + a_videoURL + " has completed");
+		m_caseData.VideoPath = a_videoURL.Substring (a_videoURL.LastIndexOf ("/") + 1);
+		m_videoPathText.text = m_caseData.VideoPath;
+		PersistentDataHandler.SaveVideoBytes (m_caseData.VideoPath, wwwVid.bytes);
+		yield return null;
 	}
 
 	private void ClosePanel()
