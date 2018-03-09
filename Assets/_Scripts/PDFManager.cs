@@ -322,7 +322,7 @@ public class PDFManager : MonoBehaviour
         combinedTextures[0].GetPixels();
         finalTexture.SetPixels(0, 0, Screen.width, Screen.height, combinedTextures[0].GetPixels());
         finalTexture.SetPixels(0, Screen.height, Screen.width, Screen.height, combinedTextures[1].GetPixels());
-        PageTwo.SetActive(false);
+        // PageTwo.SetActive(false);
         byte[] mBytes;
         mBytes = finalTexture.EncodeToPNG();
         string tempPath = Application.persistentDataPath + "/" + "OpenMind" + ".pdf";
@@ -330,6 +330,7 @@ public class PDFManager : MonoBehaviour
         // CONSIDER ADDING DATE AND CLIENT NAME TO THE TEMPPATH ABOVE.
 
         File.WriteAllBytes(tempPath, mBytes);
+        // DestroyAll();
 
 #if UNITY_IOS
         if (emailStrings.Length != 0)
@@ -343,7 +344,7 @@ public class PDFManager : MonoBehaviour
         }
 #endif
         PageOne.transform.parent.GetComponent<Canvas>().enabled = false;
-        DestroyAll();
+
     
 
     }
