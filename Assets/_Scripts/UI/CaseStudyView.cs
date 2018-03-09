@@ -91,14 +91,18 @@ public class CaseStudyView : MonoBehaviour
 
 	private void AfterMainPanelTween()
 	{
-		Debug.Log ("AfterMainPanelTween() - CaseStudyType = " + m_csData.CaseStudyType);
 		if (m_csData.CaseStudyType == "VIDEO")
 		{
-			string vidName = m_csData.VideoPath.Substring (m_csData.VideoPath.LastIndexOf ("/") + 1);
-			m_videoPlayer.url = System.IO.Path.Combine(Application.persistentDataPath, vidName);
+			m_videoPlayer.source = VideoSource.Url;
+			m_videoPlayer.url = System.IO.Path.Combine(Application.persistentDataPath, m_csData.VideoPath);
+			AudioManager.Instance.AddVideoAudio();
+			m_videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;
+			m_videoPlayer.controlledAudioTrackCount = 1;
+			m_videoPlayer.SetTargetAudioSource(0, AudioManager.Instance.vidSauce);
+			m_videoPlayer.EnableAudioTrack(0, true);
+			AudioManager.Instance.vidSauce.volume = 0;
 			m_videoPlayer.errorReceived += OnVideoError;
 			m_videoPlayer.prepareCompleted += OnPrepareComplete;
-			Debug.Log ("AfterMainPanelTween() - Start preparing video...");
 			m_videoPlayer.Prepare ();
 		}
 	}
@@ -114,7 +118,7 @@ public class CaseStudyView : MonoBehaviour
 		m_videoPlayer.errorReceived -= OnVideoError;
 		m_videoPlayer.prepareCompleted -= OnPrepareComplete;
 		Debug.Log ("Video Prepared!");
-		//PlayVideo ();
+		ApplyPlayIconAlpha (1f);
 	}
 
 	private void FinishCaseStudy()
@@ -135,20 +139,8 @@ public class CaseStudyView : MonoBehaviour
 	public void PlayVideo()
 	{
 		Debug.Log("Attempting to play video!");
-		m_videoPlayer.source = VideoSource.Url;
-
 		AudioManager.Instance.Pause();
-		AudioManager.Instance.AddVideoAudio();
-
-		m_videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;
-
-		AudioSource tempAud = AudioManager.Instance.vidSauce;
-		m_videoPlayer.controlledAudioTrackCount = 1;
-		m_videoPlayer.EnableAudioTrack(0, true);
-
-		m_videoPlayer.SetTargetAudioSource(0, tempAud);
-		tempAud.volume = 0;
-		AudioManager.Instance.StartCoroutine("FadeIn", tempAud);
+		AudioManager.Instance.StartCoroutine("FadeIn", AudioManager.Instance.vidSauce);
 		m_videoPlayer.Play();
 	}
 

@@ -117,8 +117,9 @@ public class CaseStudyConfigPanel : MonoBehaviour
 		WWW wwwVid = new WWW (a_videoURL);
 		yield return wwwVid;
 		Debug.Log ("Download from " + a_videoURL + " has completed");
-		m_caseData.VideoPath = PersistentDataHandler.SaveVideoBytes (a_videoURL.Substring (a_videoURL.LastIndexOf ("/") + 1), wwwVid.bytes);
+		m_caseData.VideoPath = a_videoURL.Substring (a_videoURL.LastIndexOf ("/") + 1);
 		m_videoPathText.text = m_caseData.VideoPath;
+		PersistentDataHandler.SaveVideoBytes (m_caseData.VideoPath, wwwVid.bytes);
 		yield return null;
 	}
 

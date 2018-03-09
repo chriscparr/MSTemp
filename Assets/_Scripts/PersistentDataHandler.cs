@@ -50,12 +50,11 @@ public class PersistentDataHandler
 		}
 	}
 
-	public static string SaveVideoBytes (string a_fileName, byte[] bytes)
+	public static void SaveVideoBytes (string a_fileName, byte[] bytes)
 	{
 		ValidateFolderPath();
 		string destinationPath = Path.Combine(Application.persistentDataPath, a_fileName);
 		File.WriteAllBytes (destinationPath, bytes);
-		return destinationPath;
 	}
 
 
