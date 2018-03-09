@@ -91,17 +91,27 @@ public class CaseStudyView : MonoBehaviour
 
 	private void AfterMainPanelTween()
 	{
-		Debug.Log ("AfterMainPanelTween()");
+		Debug.Log ("AfterMainPanelTween() - CaseStudyType = " + m_csData.CaseStudyType);
 		if (m_csData.CaseStudyType == "VIDEO")
 		{
-			m_videoPlayer.url = m_csData.VideoPath;
+			string vidName = m_csData.VideoPath.Substring (m_csData.VideoPath.LastIndexOf ("/") + 1);
+			m_videoPlayer.url = System.IO.Path.Combine(Application.persistentDataPath, vidName);
+			m_videoPlayer.errorReceived += OnVideoError;
 			m_videoPlayer.prepareCompleted += OnPrepareComplete;
+			Debug.Log ("AfterMainPanelTween() - Start preparing video...");
 			m_videoPlayer.Prepare ();
 		}
 	}
 
+	private void OnVideoError(VideoPlayer a_vPlayer, string message)
+	{
+		m_videoPlayer.errorReceived -= OnVideoError;
+		throw new System.Exception(message);
+	}
+
 	private void OnPrepareComplete(VideoPlayer a_vPlayer)
 	{
+		m_videoPlayer.errorReceived -= OnVideoError;
 		m_videoPlayer.prepareCompleted -= OnPrepareComplete;
 		Debug.Log ("Video Prepared!");
 		//PlayVideo ();
