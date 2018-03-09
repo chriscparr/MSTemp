@@ -109,7 +109,7 @@ public class CaseStudyConfigPanel : MonoBehaviour
 	private void VideoSelectedEventHandler(string a_videoPath)
 	{
 		m_videoPicker.OnVideoSelected -= VideoSelectedEventHandler;
-		StartCoroutine ("SavePersistentVideo", "file://" + a_videoPath);
+		StartCoroutine ("SavePersistentVideo", a_videoPath);
 	}
 
 	private IEnumerator SavePersistentVideo(string a_videoURL)
