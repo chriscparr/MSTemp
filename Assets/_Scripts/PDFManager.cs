@@ -330,7 +330,6 @@ public class PDFManager : MonoBehaviour
         // CONSIDER ADDING DATE AND CLIENT NAME TO THE TEMPPATH ABOVE.
 
         File.WriteAllBytes(tempPath, mBytes);
-        DestroyAll();
 
 #if UNITY_IOS
         if (emailStrings.Length != 0)
@@ -344,7 +343,7 @@ public class PDFManager : MonoBehaviour
         }
 #endif
         PageOne.transform.parent.GetComponent<Canvas>().enabled = false;
-
+        DestroyAll();
     
 
     }
