@@ -91,20 +91,34 @@ public class CaseStudyView : MonoBehaviour
 
 	private void AfterMainPanelTween()
 	{
-		Debug.Log ("AfterMainPanelTween()");
 		if (m_csData.CaseStudyType == "VIDEO")
 		{
-			m_videoPlayer.url = m_csData.VideoPath;
+			m_videoPlayer.source = VideoSource.Url;
+			m_videoPlayer.url = System.IO.Path.Combine(Application.persistentDataPath, m_csData.VideoPath);
+			AudioManager.Instance.AddVideoAudio();
+			m_videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;
+			m_videoPlayer.controlledAudioTrackCount = 1;
+			m_videoPlayer.SetTargetAudioSource(0, AudioManager.Instance.vidSauce);
+			m_videoPlayer.EnableAudioTrack(0, true);
+			AudioManager.Instance.vidSauce.volume = 0;
+			m_videoPlayer.errorReceived += OnVideoError;
 			m_videoPlayer.prepareCompleted += OnPrepareComplete;
 			m_videoPlayer.Prepare ();
 		}
 	}
 
+	private void OnVideoError(VideoPlayer a_vPlayer, string message)
+	{
+		m_videoPlayer.errorReceived -= OnVideoError;
+		throw new System.Exception(message);
+	}
+
 	private void OnPrepareComplete(VideoPlayer a_vPlayer)
 	{
+		m_videoPlayer.errorReceived -= OnVideoError;
 		m_videoPlayer.prepareCompleted -= OnPrepareComplete;
 		Debug.Log ("Video Prepared!");
-		//PlayVideo ();
+		ApplyPlayIconAlpha (1f);
 	}
 
 	private void FinishCaseStudy()
@@ -125,20 +139,8 @@ public class CaseStudyView : MonoBehaviour
 	public void PlayVideo()
 	{
 		Debug.Log("Attempting to play video!");
-		m_videoPlayer.source = VideoSource.Url;
-
 		AudioManager.Instance.Pause();
-		AudioManager.Instance.AddVideoAudio();
-
-		m_videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;
-
-		AudioSource tempAud = AudioManager.Instance.vidSauce;
-		m_videoPlayer.controlledAudioTrackCount = 1;
-		m_videoPlayer.EnableAudioTrack(0, true);
-
-		m_videoPlayer.SetTargetAudioSource(0, tempAud);
-		tempAud.volume = 0;
-		AudioManager.Instance.StartCoroutine("FadeIn", tempAud);
+		AudioManager.Instance.StartCoroutine("FadeIn", AudioManager.Instance.vidSauce);
 		m_videoPlayer.Play();
 	}
 

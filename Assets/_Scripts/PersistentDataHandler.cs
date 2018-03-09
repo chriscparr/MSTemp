@@ -50,6 +50,14 @@ public class PersistentDataHandler
 		}
 	}
 
+	public static void SaveVideoBytes (string a_fileName, byte[] bytes)
+	{
+		ValidateFolderPath();
+		string destinationPath = Path.Combine(Application.persistentDataPath, a_fileName);
+		File.WriteAllBytes (destinationPath, bytes);
+	}
+
+
 	/// <summary>
 	/// Saves the json file to persistant datapath of the device
 	/// </summary>

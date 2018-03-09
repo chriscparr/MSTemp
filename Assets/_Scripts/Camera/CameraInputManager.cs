@@ -122,7 +122,7 @@ public class CameraInputManager : MonoBehaviour
 	public void FocusOnSubCell(Subcell selectedCell)
 	{
 		m_selectedCell = selectedCell;
-        PDFManager.Instance.CaptureCell(m_selectedCell);
+        //PDFManager.Instance.CaptureCell(m_selectedCell);
 		m_CurrentTarget = selectedCell.transform;
 
 		Vector3 desiredPosition = Vector3.zero;	//m_mainContainer is always at zero, lets keep it private if we can...
