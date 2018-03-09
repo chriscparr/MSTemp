@@ -50,13 +50,11 @@ public class PersistentDataHandler
 		}
 	}
 
-	public static string SaveVideo(string a_filePath)
+	public static string SaveVideoBytes (string a_fileName, byte[] bytes)
 	{
 		ValidateFolderPath();
-		string sourcePath = a_filePath.Replace ("file://","");	//convert from url to normal file path
-		string destinationPath = Path.Combine(Application.persistentDataPath, a_filePath.Substring (a_filePath.LastIndexOf ("/") + 1));
-		Debug.Log ("PersistentDataHandler: Source file path: " + sourcePath + ", Destination file path: " + destinationPath);
-		File.Copy (sourcePath, destinationPath, true);
+		string destinationPath = Path.Combine(Application.persistentDataPath, a_fileName);
+		File.WriteAllBytes (destinationPath, bytes);
 		return destinationPath;
 	}
 
