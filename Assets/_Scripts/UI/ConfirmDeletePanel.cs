@@ -38,6 +38,16 @@ public class ConfirmDeletePanel : MonoBehaviour
 
 	private void RemovePresentation()
 	{
+		foreach (ServiceData serv in m_pData.Services)
+		{
+			foreach (CaseStudyData csDat in serv.CaseStudies)
+			{
+				if (!string.IsNullOrEmpty (csDat.VideoPath))
+				{
+					PersistentDataHandler.DeleteVideo (csDat.VideoPath);
+				}
+			}
+		}
 		PersistentDataHandler.DeleteFile (m_pData.ID);
 		ClosePanel ();
 	}

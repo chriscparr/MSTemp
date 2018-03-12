@@ -177,6 +177,16 @@ public class PersistentDataHandler
 		return fileNames.ToArray ();
 	}
 
+	public static void DeleteVideo(string videoName)
+	{
+		string filePath = Path.Combine (Application.persistentDataPath, videoName);
+		if (File.Exists (filePath))
+		{
+			File.Delete (filePath);
+			Debug.Log("PersistentDataHandler: " + filePath + " successfully deleted!");
+		}
+	}
+
 	public static void DeleteFile(string fileName)
 	{
 		StringBuilder filePath = new StringBuilder();
