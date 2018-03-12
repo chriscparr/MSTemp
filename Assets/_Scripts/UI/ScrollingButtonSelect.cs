@@ -56,6 +56,17 @@ public class ScrollingButtonSelect : MonoBehaviour
 			}
 		}
 		m_exitScrollSelectClickArea.onClick.AddListener (CloseRequest);
+		iTween.MoveFrom (gameObject, iTween.Hash ("position",transform.position - new Vector3(0f, 200f, 0f),"time",0.5f,"easetype",iTween.EaseType.linear));
+	}
+
+	public void AnimateExit()
+	{
+		iTween.MoveTo (gameObject, iTween.Hash ("position",transform.position - new Vector3(0f, 200f, 0f),"time",0.5f,"easetype",iTween.EaseType.linear, "oncompletetarget", gameObject, "oncomplete", "DestroyAfterExit"));
+	}
+
+	private void DestroyAfterExit()
+	{
+		Destroy (gameObject);
 	}
 
 	private void OnOptionSelected(string a_selected)
