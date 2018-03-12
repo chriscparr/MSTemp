@@ -26,11 +26,8 @@ public class MSAddStuffBox : MonoBehaviour
 	public bool IsToggled {get{ return m_isToggled;}set{ m_isToggled = value; UpdateColors ();}}
 	private bool m_isToggled = false;
 
-	private string m_buttonValue;
-
 	public void SetButtonValue(string a_value, bool a_isPreToggled = false)
 	{
-		m_buttonValue = a_value;
 		m_labelText.text = a_value.ToUpper ();
 		m_isToggled = a_isPreToggled;
 		UpdateColors ();
@@ -38,7 +35,6 @@ public class MSAddStuffBox : MonoBehaviour
 
 	private void Start()
 	{
-		//m_button.onClick.AddListener (OnButtonPressed);
 		UpdateColors ();
 	}
 

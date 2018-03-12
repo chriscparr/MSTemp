@@ -31,7 +31,6 @@ public class CaseStudyConfigPanel : MonoBehaviour
 	[SerializeField]
 	private Color m_msPurple;
 
-	private bool m_isVideoType = false;
 	private CaseStudyData m_caseData;
 	private VideoPicker m_videoPicker;
 
@@ -81,7 +80,6 @@ public class CaseStudyConfigPanel : MonoBehaviour
 			m_videoPathText.gameObject.SetActive (true);
 			m_addVideoButton.gameObject.SetActive (true);
 			m_caseData.CaseStudyType = "VIDEO";
-			m_isVideoType = true;
 	}
 
 	private void TextButtonPressed()
@@ -94,7 +92,6 @@ public class CaseStudyConfigPanel : MonoBehaviour
 			m_videoPathText.gameObject.SetActive (false);
 			m_addVideoButton.gameObject.SetActive (false);
 			m_caseData.CaseStudyType = "TEXT";
-			m_isVideoType = false;
 	}
 
 	private void AddVideoButtonPressed()
