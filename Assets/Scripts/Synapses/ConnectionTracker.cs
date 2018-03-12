@@ -30,7 +30,7 @@ public class ConnectionTracker : MonoBehaviour {
 
     private LineRenderer line;
     private ConnectionTracker[] existingConnections;
-    private int existingConnectionsAmount;
+    //private int existingConnectionsAmount;
 
     private GameObject cachedTrail;
     private bool alsoUsingTrails;
@@ -59,7 +59,7 @@ public class ConnectionTracker : MonoBehaviour {
         alsoUsingTrails = ConnectionGenerator.Instance.useTrails;
        
         existingConnections = GetComponentsInChildren<ConnectionTracker>();
-        existingConnectionsAmount = existingConnections.Length;
+        //existingConnectionsAmount = existingConnections.Length;
         parenter = ConnectionGenerator.Instance.baseParent.transform;
         this.transform.parent = parenter.transform;
         this.gameObject.name = "LineConnection";

@@ -7,9 +7,7 @@ using UnityEngine.Video;
 public class OnRailsMovement : MonoBehaviour 
 {
 	private float m_speed;
-	private iTween.EaseType m_easeType = iTween.EaseType.easeInOutSine;
 	private iTweenPath m_thisPath;
-	private List<Vector3> m_pathPoints = new List<Vector3>();
 	private List<CaseCell> m_allCases = new List<CaseCell>();
 	private int m_pathPointIndex = 0;
 

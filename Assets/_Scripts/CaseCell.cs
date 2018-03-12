@@ -13,7 +13,6 @@ public class CaseCell : MonoBehaviour
 
 	private bool m_isInited = false;
 	private CaseStudyData m_caseData;
-	private Subcell m_parentSubcell;
 
 	public Transform CameraPositioningPoint {get{ return m_camPosPoint;}}
 
@@ -21,7 +20,6 @@ public class CaseCell : MonoBehaviour
 	{
 		if (!m_isInited)
 		{
-			m_parentSubcell = a_parentSubcell;
 			m_caseData = a_caseData;
 			m_labelText.text = m_caseData.TitleText;
 			m_cellRend.material.color = Random.ColorHSV();
@@ -31,7 +29,6 @@ public class CaseCell : MonoBehaviour
 
 	public void PlayCaseStudy()
 	{
-		//Call some method in uimanager that displays case study in a nice panel or whatever...
 		if (m_isInited)
 		{
 			UIManager.Instance.CaseViewer.DisplayCaseStudy (m_caseData);
