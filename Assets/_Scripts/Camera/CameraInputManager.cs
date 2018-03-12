@@ -18,9 +18,6 @@ public class CameraInputManager : MonoBehaviour
 	public static CameraInputManager Instance { get { return s_instance; } }
 	private static CameraInputManager s_instance = null;
 
-	private float m_camVectorMagLowerBound = 5f;
-	private float m_camVectorMagHigherBound = -5f;
-
 	public Subcell SelectedCell { get { return m_selectedCell; } }
 	private Subcell m_selectedCell;
 
@@ -33,13 +30,10 @@ public class CameraInputManager : MonoBehaviour
 	[SerializeField]
 	private GameObject m_MainCamera;
 	[SerializeField]
-	private float m_DistanceFromSubCell = 25;
-	[SerializeField]
 	private float m_touchThresholdX = 20f;
 	[SerializeField]
 	private float m_touchThresholdY = 20f;
 
-	private Transform m_CurrentTarget;
 	private Vector3 m_CachedPosition;
 
 	private RailMover m_Mover;
@@ -66,7 +60,6 @@ public class CameraInputManager : MonoBehaviour
 
 	public void SetLookAtTarget(Transform target)
 	{
-		m_CurrentTarget = target;
 	}
 
 	public void SetPhase(Phase newPhase)
@@ -123,7 +116,6 @@ public class CameraInputManager : MonoBehaviour
 	{
 		m_selectedCell = selectedCell;
         //PDFManager.Instance.CaptureCell(m_selectedCell);
-		m_CurrentTarget = selectedCell.transform;
 
 		Vector3 desiredPosition = Vector3.zero;	//m_mainContainer is always at zero, lets keep it private if we can...
 
