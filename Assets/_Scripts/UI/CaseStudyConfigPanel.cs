@@ -101,9 +101,11 @@ public class CaseStudyConfigPanel : MonoBehaviour
 	{
 		#if UNITY_EDITOR
 		return;
-		#endif
+		#else
 		m_videoPicker.OnVideoSelected += VideoSelectedEventHandler;
 		m_videoPicker.ShowVideoPicker ();
+		#endif
+
 	}
 
 	private void VideoSelectedEventHandler(string a_videoPath)
