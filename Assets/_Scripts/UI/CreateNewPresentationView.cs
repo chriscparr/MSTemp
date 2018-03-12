@@ -144,7 +144,8 @@ public class CreateNewPresentationView : MonoBehaviour
 		m_scrollSelect.OnCloseRequest -= CloseAddIndustryPanel;
 		m_presentationData.Industries = m_scrollSelect.SelectedOptions;
 		m_serviceButtonGrid.SetActive (true);
-		Destroy (m_scrollSelect.gameObject);
+		m_scrollSelect.AnimateExit ();
+		//Destroy (m_scrollSelect.gameObject);
 		RefreshView ();
 	}
 
@@ -162,7 +163,8 @@ public class CreateNewPresentationView : MonoBehaviour
 		m_scrollSelect.OnCloseRequest -= CloseAddMarketPanel;
 		m_presentationData.Markets = m_scrollSelect.SelectedOptions;
 		m_serviceButtonGrid.SetActive (true);
-		Destroy (m_scrollSelect.gameObject);
+		m_scrollSelect.AnimateExit ();
+		//Destroy (m_scrollSelect.gameObject);
 		RefreshView ();
 	}
 
