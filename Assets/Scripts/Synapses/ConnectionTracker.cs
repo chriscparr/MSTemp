@@ -33,7 +33,6 @@ public class ConnectionTracker : MonoBehaviour {
     //private int existingConnectionsAmount;
 
     private GameObject cachedTrail;
-    private bool alsoUsingTrails;
 
     public static List<Subcell> allCells = new List<Subcell>();
 
@@ -55,8 +54,6 @@ public class ConnectionTracker : MonoBehaviour {
         tempCells = allCells;
 
         line.positionCount++;
-
-        alsoUsingTrails = ConnectionGenerator.Instance.useTrails;
        
         existingConnections = GetComponentsInChildren<ConnectionTracker>();
         //existingConnectionsAmount = existingConnections.Length;
@@ -137,7 +134,7 @@ public class ConnectionTracker : MonoBehaviour {
 
         line.positionCount = 2;
 
-        if (alsoUsingTrails == true && cachedTrail == null)
+		if (ConnectionGenerator.Instance.useTrails && cachedTrail == null)
         {
             TrailGeneration();
         }
