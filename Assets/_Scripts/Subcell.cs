@@ -177,4 +177,30 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 		}
 	}
 
+	public Subcell[] GetNearestNeighbours()
+	{
+		Dictionary<float, Subcell> cellDistances = new Dictionary<float, Subcell> ();
+		List<Subcell> cells = new List<Subcell> (ModelManager.Instance.GetAllSubCells ());
+		cells.Remove (this);
+		foreach (Subcell c in cells)
+		{
+			float dist = Vector3.Distance (transform.position, c.transform.position);
+			cellDistances.Add (dist, c);
+			//Debug.Log ("Adding " + c.ServiceDat.ServiceName + ", distance = " + dist.ToString());
+		}
+		SortedList sorted = new SortedList (cellDistances);
+		//Add sorted subcells back into the list so that we can return it .ToArray()
+		cells.Clear ();
+		for (int i = 0; i < sorted.Count; i++)
+		{
+			cells.Add ((Subcell)sorted.GetByIndex (i));
+		}
+		/*
+		for (int i = 0; i < cells.Count; i++)
+		{
+			Debug.Log ("List index " + i.ToString() + ", subcell name: " + cells[i].ServiceDat.ServiceName);
+		}
+		*/
+		return cells.ToArray ();
+	}
 }

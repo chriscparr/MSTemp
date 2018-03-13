@@ -46,7 +46,9 @@ public class GameManager : MonoBehaviour
 		if (Input.GetKeyDown (KeyCode.Q))
 		{
 			//SaveDummyData(GenerateTestPresentation ());
-			ModelManager.Instance.HaltSubcells();
+			//ModelManager.Instance.HaltSubcells();
+			Subcell[] sortedCells = ModelManager.Instance.GetAllSubCells()[0].GetNearestNeighbours();
+
 		}
 		if (Input.GetKeyDown (KeyCode.W))
 		{
