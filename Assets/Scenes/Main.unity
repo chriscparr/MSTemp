@@ -1276,7 +1276,6 @@ MonoBehaviour:
   m_RotationSpeed: 5
   m_ZoomSpeed: 5
   m_MainCamera: {fileID: 1088703387}
-  m_DistanceFromSubCell: 25
   m_touchThresholdX: 20
   m_touchThresholdY: 20
   homeVector: {x: 0, y: 0, z: -10}
@@ -1311,6 +1310,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1782334245}
   - component: {fileID: 1782334247}
+  - component: {fileID: 1782334246}
   m_Layer: 0
   m_Name: ModelRoot
   m_TagString: Untagged
@@ -1332,6 +1332,41 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1782334246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1782334244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48db2b47fd9eb466aa115d4c7d214ff1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useLineRenderers: 1
+  MaximumNumberOfConnections: 4
+  MinimumDetectionDistance: 6
+  MaximumDetectionDistance: 12
+  FadeDivisionRate: 4
+  ConnectionRefreshRate: 2
+  MinimumLineAlpha: 0
+  MaximumLineAlpha: 255
+  StartingMaterial: {fileID: 2100000, guid: 14f1e49e7a7e44601b45254b65a292e1, type: 2}
+  StartingWidth: 1.2
+  EndingWidth: 1.2
+  ShouldWeDoBasicAnimation: 1
+  BasicAnimationDirections: {x: 1, y: 0}
+  allCells: []
+  baseParent: {fileID: 0}
+  useTrails: 1
+  baseTrailObj: {fileID: 1021929068947600, guid: f98c38ca54c674758b53c9c5288c2c7e,
+    type: 2}
+  baseTrailMaterial: {fileID: 2100000, guid: 5180bff1b90314e669856183f0131ba5, type: 2}
+  trailMat: {fileID: 2100000, guid: bc4b461280c64491092b620fb5142e24, type: 2}
+  trailSpeed: 0.3
+  trailDuration: 0.5
+  trailWidth: 1
+  trailTexType: 2
 --- !u!114 &1782334247
 MonoBehaviour:
   m_ObjectHideFlags: 0
