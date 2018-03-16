@@ -4,7 +4,8 @@ using UnityEngine;
 using System.Linq;
 
 [RequireComponent(typeof(LineRenderer))]
-public class ConnectionTracker : MonoBehaviour {
+public class ConnectionTracker : MonoBehaviour
+{
 
     [HideInInspector]
     public Subcell trackCell;
@@ -33,6 +34,7 @@ public class ConnectionTracker : MonoBehaviour {
     //private int existingConnectionsAmount;
 
     private GameObject cachedTrail;
+    private bool alsoUsingTrails;
 
     public static List<Subcell> allCells = new List<Subcell>();
 
@@ -45,16 +47,20 @@ public class ConnectionTracker : MonoBehaviour {
 
     private Transform parenter;
 
+    Subcell[] sortedCells = new Subcell[0];
+
     // Use this for initialization
 
     private void OnEnable()
     {
         line = GetComponent<LineRenderer>();
-		allCells = new List<Subcell>(ModelManager.Instance.GetAllSubCells ());
+        allCells = new List<Subcell>(ModelManager.Instance.GetAllSubCells());
         tempCells = allCells;
 
         line.positionCount++;
-       
+
+        alsoUsingTrails = ConnectionGenerator.Instance.useTrails;
+
         existingConnections = GetComponentsInChildren<ConnectionTracker>();
         //existingConnectionsAmount = existingConnections.Length;
         parenter = ConnectionGenerator.Instance.baseParent.transform;
@@ -72,7 +78,8 @@ public class ConnectionTracker : MonoBehaviour {
     }
 
 
-    void FinalizeConnections () {
+    void FinalizeConnections()
+    {
 
         switch (line.positionCount)
         {
@@ -115,7 +122,7 @@ public class ConnectionTracker : MonoBehaviour {
                 if (secondLink == null)
                 {
                     GenerateSecondLink();
-                }       
+                }
                 secondLink.GetComponent<ConnectionFadeAndTrack>().Assign(secondClosestCell, thirdClosestCell);
 
                 if (thirdLink == null)
@@ -125,21 +132,21 @@ public class ConnectionTracker : MonoBehaviour {
                 thirdLink.GetComponent<ConnectionFadeAndTrack>().Assign(thirdClosestCell, fourthClosestCell);
 
 
-                    break;
-                default:
-                    line.SetPosition(0, originCell.transform.position);
-                    line.SetPosition(1, trackCell.transform.position);
-                    break;
-            }
+                break;
+            default:
+                line.SetPosition(0, originCell.transform.position);
+                line.SetPosition(1, trackCell.transform.position);
+                break;
+        }
 
         line.positionCount = 2;
 
-		if (ConnectionGenerator.Instance.useTrails && cachedTrail == null)
+        if (alsoUsingTrails == true && cachedTrail == null)
         {
             TrailGeneration();
         }
 
-	}
+    }
 
     private void GenerateSecondLink()
     {
@@ -161,7 +168,8 @@ public class ConnectionTracker : MonoBehaviour {
         secondLink.GetComponent<LavaMoving>().uvAnimationRate = ConnectionGenerator.Instance.BasicAnimationDirections;
     }
 
-    private void GenerateThirdLink() {
+    private void GenerateThirdLink()
+    {
         thirdLink = new GameObject();
         thirdLink.transform.parent = parenter.transform;
         thirdLink.AddComponent<LineRenderer>();
@@ -202,39 +210,45 @@ public class ConnectionTracker : MonoBehaviour {
         trail.GetComponent<ArcBetweenTwo>().smoothTime = ConnectionGenerator.Instance.trailSpeed;
     }
 
+    // you can now replace with Subcell.GetNearestNeighbours! srsly this cuts down all this shit below
+    // good guy chris
 
     void FindClosest()
     {
         distances.Clear();
 
-            foreach (Subcell c in allCells)
-            {
-                float d = Vector3.Distance(originCell.transform.position, c.transform.position);
-                if (c != originCell)
-                {
-                    distances.Add(d);
-                }
-         }
-
-        float closest = 0;
-
-        distances.Min();
-
-        for (int i = 0; i < distances.Count; i++)
+        foreach (Subcell c in allCells)
         {
-            if (i == 0)
-            {
-                closest = distances[i];
-                trackCell = tempCells[i];
-
-            }
-            if (distances[i] < closest)
-            {
-                closest = distances[i];
-                trackCell = tempCells[i];
-
-            }
+            sortedCells = c.GetNearestNeighbours();
+            //float d = Vector3.Distance(originCell.transform.position, c.transform.position);
+            //if (c != originCell)
+            //{
+            //    distances.Add(d);
+            //}
         }
+
+        //float closest = 0;
+
+        //distances.Min();
+
+        //for (int i = 0; i < distances.Count; i++)
+        //{
+        //    if (i == 0)
+        //    {
+        //        closest = distances[i];
+        //        trackCell = tempCells[i];
+
+        //    }
+        //    if (distances[i] < closest)
+        //    {
+        //        closest = distances[i];
+        //        trackCell = tempCells[i];
+
+        //    }
+        //}
+
+        trackCell = sortedCells[0];
+
         if (line.positionCount > 1)
         {
             FindSecondClosest();
@@ -245,41 +259,43 @@ public class ConnectionTracker : MonoBehaviour {
         }
     }
 
-    void FindSecondClosest() {
-        distances.Clear();
-        temps.Clear();
+    void FindSecondClosest()
+    {
+        secondClosestCell = sortedCells[1];
+        //distances.Clear();
+        //temps.Clear();
 
-        foreach (Subcell c in allCells)
-        {
-            float d = Vector3.Distance(originCell.transform.position, c.transform.position);
-            if (c != originCell && c != trackCell)
-            {
-                distances.Add(d);
-                temps.Add(c);
-            }
-        }
+        //foreach (Subcell c in allCells)
+        //{
+        //    float d = Vector3.Distance(originCell.transform.position, c.transform.position);
+        //    if (c != originCell && c != trackCell)
+        //    {
+        //        distances.Add(d);
+        //        temps.Add(c);
+        //    }
+        //}
 
-        distances.Min();
+        //distances.Min();
 
-        float closest = 0;
+        //float closest = 0;
 
-        for (int i = 0; i < distances.Count; i++)
-        {
-            if (i == 0)
-            {
-                closest = distances[i];
-                secondClosestCell = temps[i];
-            }
+        //for (int i = 0; i < distances.Count; i++)
+        //{
+        //    if (i == 0)
+        //    {
+        //        closest = distances[i];
+        //        secondClosestCell = temps[i];
+        //    }
 
-            if (distances[i] < closest)
-            {
-                closest = distances[i];
-                secondClosestCell = temps[i];
-            }
+        //    if (distances[i] < closest)
+        //    {
+        //        closest = distances[i];
+        //        secondClosestCell = temps[i];
+        //    }
 
-        }
+        //}
 
-        if (line.positionCount > 2 && allCells.Count > 3 )
+        if (line.positionCount > 2 && allCells.Count > 3)
         {
             FindThirdClosest();
         }
@@ -292,37 +308,38 @@ public class ConnectionTracker : MonoBehaviour {
 
     void FindThirdClosest()
     {
-        distances.Clear();
-        temps.Clear();
+        thirdClosestCell = sortedCells[2];
+        //distances.Clear();
+        //temps.Clear();
 
-        foreach (Subcell c in allCells)
-        {
-            float d = Vector3.Distance(originCell.transform.position, c.transform.position);
-            if (c != originCell && c != trackCell && c != secondClosestCell)
-            {
-                distances.Add(d);
-                temps.Add(c);
-            }
-        }
+        //foreach (Subcell c in allCells)
+        //{
+        //    float d = Vector3.Distance(originCell.transform.position, c.transform.position);
+        //    if (c != originCell && c != trackCell && c != secondClosestCell)
+        //    {
+        //        distances.Add(d);
+        //        temps.Add(c);
+        //    }
+        //}
 
-        distances.Min();
+        //distances.Min();
 
-        float closest = 0;
+        //float closest = 0;
 
-        for (int i = 0; i < distances.Count; i++)
-        {
-            if (i == 0)
-            {
-                closest = distances[i];
-                thirdClosestCell = temps[i];
-            }
+        //for (int i = 0; i < distances.Count; i++)
+        //{
+        //    if (i == 0)
+        //    {
+        //        closest = distances[i];
+        //        thirdClosestCell = temps[i];
+        //    }
 
-            if (distances[i] < closest)
-            {
-                closest = distances[i];
-                thirdClosestCell = temps[i];
-            }
-        }
+        //    if (distances[i] < closest)
+        //    {
+        //        closest = distances[i];
+        //        thirdClosestCell = temps[i];
+        //    }
+        //}
 
         if (line.positionCount > 3)
         {
@@ -337,37 +354,38 @@ public class ConnectionTracker : MonoBehaviour {
 
     void FindFourthClosest()
     {
-        distances.Clear();
-        temps.Clear();
+        fourthClosestCell = sortedCells[3];
+        //distances.Clear();
+        //temps.Clear();
 
-        foreach (Subcell c in allCells)
-        {
-            float d = Vector3.Distance(originCell.transform.position, c.transform.position);
-            if (c != originCell && c != trackCell && c != secondClosestCell && c != thirdClosestCell)
-            {
-                distances.Add(d);
-                temps.Add(c);
-            }
-        }
+        //foreach (Subcell c in allCells)
+        //{
+        //    float d = Vector3.Distance(originCell.transform.position, c.transform.position);
+        //    if (c != originCell && c != trackCell && c != secondClosestCell && c != thirdClosestCell)
+        //    {
+        //        distances.Add(d);
+        //        temps.Add(c);
+        //    }
+        //}
 
-        distances.Min();
+        //distances.Min();
 
-        float closest = 0;
+        //float closest = 0;
 
-        for (int i = 0; i < distances.Count; i++)
-        {
-            if (i == 0)
-            {
-                closest = distances[i];
-                fourthClosestCell = temps[i];
-            }
+        //for (int i = 0; i < distances.Count; i++)
+        //{
+        //    if (i == 0)
+        //    {
+        //        closest = distances[i];
+        //        fourthClosestCell = temps[i];
+        //    }
 
-            if (distances[i] < closest)
-            {
-                closest = distances[i];
-                fourthClosestCell = temps[i];
-            }
-        }
+        //    if (distances[i] < closest)
+        //    {
+        //        closest = distances[i];
+        //        fourthClosestCell = temps[i];
+        //    }
+        //}
 
         FinalizeConnections();
 
