@@ -57,7 +57,7 @@ extern "C" {
                                 reply:^(BOOL succes, NSError *error) {
                                     
                                     if (succes) {
-                                        i = 1;
+                                        UnitySendMessage("LoginView(Clone)", "Success", "");
                                         NSLog(@"User is authenticated successfully");
                                     } else {
                                         
@@ -87,15 +87,6 @@ extern "C" {
         } else {
             NSLog(@"Can not evaluate Touch ID");
             i = 1;
-        }
-        if (i == 1)
-        {
-            UnitySendMessage("LoginView", "Success", "");
-            return true;
-        }
-        else
-        {
-            return false;
         }
       
     }
