@@ -45,7 +45,15 @@ extern "C" {
     
     int i = 0;
     
-    bool TouchID() {
+    void TouchID() {
+        
+        // listen fuckwit
+        // have this function receive a string and pass it in from unity
+        // pass in the name of the gameobject, right
+        // then on success, use UnitySendMessage and pass in the name of that game obj
+        // and remove the i = 0 and = 1 shite as it not needed
+        
+        // after this, do some cool AF Siri shit
         
         LAContext *myContext = [[LAContext alloc] init];
         NSError *authError = nil;

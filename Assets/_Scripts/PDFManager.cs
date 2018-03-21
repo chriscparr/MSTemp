@@ -50,17 +50,6 @@ public class PDFManager : MonoBehaviour
     private static extern void OpenPDFThenEmail(string path, string imageOne, string imageTwo, string to, string cc, string subject);
 
 
-    //TODO right, each time u populate a cell
-    // save that cell with a number, corresponding to a grid entry
-    // if that number HASNT already been called, then populate the next cell
-    // if it HAS, then just replace whatever is in that numbered cell
-    // TODO TODO TODO ALI COME ON TODO TODO
-
-
-    // TODO WHY DOES THE GRID REGENERATE? MAKE SURE U CLEAR UR ARRAYS AND DESTROY SHIT ON CLEANUP
-
-
-
     private void Awake()
     {
         s_instance = this;
@@ -186,7 +175,6 @@ public class PDFManager : MonoBehaviour
 
     public void CaptureCell(Subcell cellToBeCaptured)
     {
-        // TODO THIS ISNT WORKING WHATSOEVER LOL
 
         // here right,
         GameObject sc = new GameObject();
@@ -216,9 +204,6 @@ public class PDFManager : MonoBehaviour
         ourTexture.Apply();
 
         Destroy(sc);
-
-        // honestly you dont have to do this every single time
-        // you could just cache and update the list as you go
 
         List<PDFCellContainer> usedCells = new List<PDFCellContainer>();
         bool getOut = false;
@@ -258,8 +243,6 @@ public class PDFManager : MonoBehaviour
 
             if (cachedCellNumber >= cellImages.Length)
             {
-                // this sort of works but sort of doesn't.
-                // look at the above function and you'll fiogure iut out
                 cachedCellNumber = 0;
             }
         }

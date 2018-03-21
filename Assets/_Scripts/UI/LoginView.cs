@@ -4,18 +4,23 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Runtime.InteropServices;
 
-public class LoginView : MonoBehaviour 
+public class LoginView : MonoBehaviour
 {
-	[SerializeField]
-	private Button m_loginButton;
+    [SerializeField]
+    private Button m_loginButton;
 
     [DllImport("__Internal")]
-    private static extern bool TouchID();
+    private static extern void TouchID();
 
-	private void OnLoginButtonPressed()
-	{
+    private void OnLoginButtonPressed()
+    {
+#if UNITY_EDITOR
+        Success("");
+#elif UNITY_IOS
         TouchID();
-	}
+#endif
+
+    }
 
     public void Success(string message)
     {
