@@ -8,33 +8,44 @@ public class LoginView : MonoBehaviour
     [SerializeField]
     private Button m_loginButton;
 	[SerializeField]
-	private BiometricTouch m_bioTouch;
+	private GameObject m_bioTouchPrefab;
 
-	private void Start()
-	{
-		//m_bioTouch = gameObject.AddComponent<BiometricTouch> ();
-	}
+	private BiometricTouch m_bioTouch;
 
     private void OnLoginButtonPressed()
 	{
-		m_bioTouch.RequestTouchAuth ();
+		if (m_bioTouch == null)
+		{
+			GameObject bioTouch = Instantiate<GameObject> (m_bioTouchPrefab, null);
+			m_bioTouch = bioTouch.GetComponent<BiometricTouch> ();
+			m_bioTouch.OnTouchResult += BioTouchEventHandler;
+			m_bioTouch.RequestTouchAuth ();
+		}
     }
 
 	private void OnEnable()
 	{
-		m_bioTouch.OnTouchResult += BioTouchEventHandler;
 		m_loginButton.onClick.AddListener (OnLoginButtonPressed);
 	}
 
 	private void OnDisable()
 	{
-		m_bioTouch.OnTouchResult -= BioTouchEventHandler;
 		m_loginButton.onClick.RemoveListener (OnLoginButtonPressed);
 	}
 
 	private void BioTouchEventHandler(bool a_result, string a_message)
 	{
-		UIManager.Instance.ShowNewOrSavedView();
-		gameObject.SetActive(false);
+		m_bioTouch.OnTouchResult -= BioTouchEventHandler;
+
+		if (a_result)
+		{
+			UIManager.Instance.ShowNewOrSavedView ();
+		}
+		else
+		{
+			Debug.Log (a_message);
+			//UIManager.Instance.ShowNewOrSavedView ();
+		}
+		Destroy (m_bioTouch.gameObject);
 	}
 }
