@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 public class BiometricTouch : MonoBehaviour 
 {
-	public delegate void BiometricTouchAction(bool success, string message);
+	public delegate void BiometricTouchAction(bool success, int messageCode, string message);
 	public BiometricTouchAction OnTouchResult;
 
 	[DllImport("__Internal")]
@@ -38,16 +38,21 @@ public class BiometricTouch : MonoBehaviour
 		{
 			if (OnTouchResult != null)
 			{
-				OnTouchResult (false, "Error parsing message code \"" + a_messageIndex + "\"");
+				OnTouchResult (false, indx, "Error parsing message code \"" + a_messageIndex + "\"");
 			}
 		}
 		else
 		{
-			bool successful = indx == 0;			
+			bool successful = false;
+			if (indx == 0)
+			{
+				successful = true;
+			}
+
 			Debug.Log ("OnTouchAuthResponse - msg code: " + a_messageIndex.ToString() + " message: " + m_touchErrorCodes[indx]);			
 			if (OnTouchResult != null)
 			{
-				OnTouchResult (successful, m_touchErrorCodes[indx]);
+				OnTouchResult (successful, indx, m_touchErrorCodes[indx]);
 			}
 		}
 	}
