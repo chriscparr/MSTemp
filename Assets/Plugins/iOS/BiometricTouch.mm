@@ -20,7 +20,9 @@ extern "C" {
     
     void TouchID(const char* gameObjectName) 
     {
-        NSLog(@"Game object name is" + gameObjectName);
+        NSLog(@"Game object name input is %s", gameObjectName);
+        NSString *goName = [NSString stringWithUTF8String:gameObjectName];
+        NSLog(@"Game object name nsstring is %@", goName);
         
         LAContext *myContext = [[LAContext alloc] init];
         NSError *authError = nil;
