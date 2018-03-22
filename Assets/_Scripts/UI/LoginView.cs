@@ -7,12 +7,12 @@ public class LoginView : MonoBehaviour
 {
     [SerializeField]
     private Button m_loginButton;
-
+	[SerializeField]
 	private BiometricTouch m_bioTouch;
 
 	private void Start()
 	{
-		m_bioTouch = gameObject.AddComponent<BiometricTouch> ();
+		//m_bioTouch = gameObject.AddComponent<BiometricTouch> ();
 	}
 
     private void OnLoginButtonPressed()
