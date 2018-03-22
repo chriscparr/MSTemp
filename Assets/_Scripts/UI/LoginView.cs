@@ -2,39 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Runtime.InteropServices;
 
 public class LoginView : MonoBehaviour
 {
     [SerializeField]
     private Button m_loginButton;
 
-    [DllImport("__Internal")]
-    private static extern void TouchID();
+	private BiometricTouch m_bioTouch;
+
+	private void Start()
+	{
+		m_bioTouch = gameObject.AddComponent<BiometricTouch> ();
+	}
 
     private void OnLoginButtonPressed()
-    {
-#if UNITY_EDITOR
-        Success("");
-#elif UNITY_IOS
-        TouchID();
-#endif
-
-    }
-
-    public void Success(string message)
-    {
-        UIManager.Instance.ShowNewOrSavedView();
-        gameObject.SetActive(false);
+	{
+		m_bioTouch.RequestTouchAuth ();
     }
 
 	private void OnEnable()
 	{
+		m_bioTouch.OnTouchResult += BioTouchEventHandler;
 		m_loginButton.onClick.AddListener (OnLoginButtonPressed);
 	}
 
 	private void OnDisable()
 	{
+		m_bioTouch.OnTouchResult -= BioTouchEventHandler;
 		m_loginButton.onClick.RemoveListener (OnLoginButtonPressed);
+	}
+
+	private void BioTouchEventHandler(bool a_result, string a_message)
+	{
+		UIManager.Instance.ShowNewOrSavedView();
+		gameObject.SetActive(false);
 	}
 }
