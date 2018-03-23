@@ -16,6 +16,12 @@ public class PDFManager : MonoBehaviour
     Text[] cellDescriptors;
 
     public GameObject PageOne;
+
+    [Header("Page One Texts")]
+    public Text ClientCompanyName;
+    public Text ClientActualName;
+    public Text ClientPosition;
+
     public GameObject PageTwo;
 
     List<Texture2D> combinedTextures = new List<Texture2D>();
@@ -55,7 +61,9 @@ public class PDFManager : MonoBehaviour
 		m_pData = a_Pdata;
         // PageOne.transform.parent.GetComponent<Canvas>().enabled = false; TODO UNCOMMENT ME LATER PLEASE
 
-        //TODO get name of person and company from presentation data and put it in page 1 :-) !! Ali, here's the presentation data for ya
+        ClientCompanyName.text = m_pData.ClientName;
+        ClientActualName.text = m_pData.PresenterName;
+        ClientPosition.text = m_pData.PresenterPosition;
 
         AdjustGrid();
         PrePopulateCells();

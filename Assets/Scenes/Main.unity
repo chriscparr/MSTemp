@@ -196,6 +196,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &179681377 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114773560962635412, guid: de39a3d9ef8366240b69a6689875429d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1113920326}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!1 &295542976 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1273531743002108, guid: 9c5708ad99e7946f48552bfb520c050e,
+    type: 2}
+  m_PrefabInternal: {fileID: 496384475}
 --- !u!1001 &496384475
 Prefab:
   m_ObjectHideFlags: 0
@@ -386,6 +397,12 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &940848417 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114079288946207268, guid: de39a3d9ef8366240b69a6689875429d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1113920326}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1 &1088703387
 GameObject:
   m_ObjectHideFlags: 0
@@ -1102,6 +1119,71 @@ Prefab:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114854843078117074, guid: de39a3d9ef8366240b69a6689875429d,
+        type: 2}
+      propertyPath: m_Text
+      value: CEO
+      objectReference: {fileID: 0}
+    - target: {fileID: 114548617756487282, guid: de39a3d9ef8366240b69a6689875429d,
+        type: 2}
+      propertyPath: m_Text
+      value: Mindshare
+      objectReference: {fileID: 0}
+    - target: {fileID: 114426163929154244, guid: de39a3d9ef8366240b69a6689875429d,
+        type: 2}
+      propertyPath: m_Text
+      value: Marco Rimini
+      objectReference: {fileID: 0}
+    - target: {fileID: 224609969653737684, guid: de39a3d9ef8366240b69a6689875429d,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 70.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 224831335958340088, guid: de39a3d9ef8366240b69a6689875429d,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 70.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 224728029408812664, guid: de39a3d9ef8366240b69a6689875429d,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 70.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 224609969653737684, guid: de39a3d9ef8366240b69a6689875429d,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 227.9945
+      objectReference: {fileID: 0}
+    - target: {fileID: 224609969653737684, guid: de39a3d9ef8366240b69a6689875429d,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 328.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 224831335958340088, guid: de39a3d9ef8366240b69a6689875429d,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 227.9945
+      objectReference: {fileID: 0}
+    - target: {fileID: 224831335958340088, guid: de39a3d9ef8366240b69a6689875429d,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 328.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 224728029408812664, guid: de39a3d9ef8366240b69a6689875429d,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 227.9945
+      objectReference: {fileID: 0}
+    - target: {fileID: 224728029408812664, guid: de39a3d9ef8366240b69a6689875429d,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 328.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 224728029408812664, guid: de39a3d9ef8366240b69a6689875429d,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -64.00001
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de39a3d9ef8366240b69a6689875429d, type: 2}
   m_IsPrefabParent: 0
@@ -1292,12 +1374,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PageOne: {fileID: 1113920330}
+  ClientCompanyName: {fileID: 940848417}
+  ClientActualName: {fileID: 179681377}
+  ClientPosition: {fileID: 1940390857}
   PageTwo: {fileID: 1113920328}
   finishedEcosystem: {fileID: 1113920329}
   pdfCamera: {fileID: 1113920327}
   emailStrings: []
   spriteShotCamera: {fileID: 33732748}
-  defaultSubcell: {fileID: 0}
+  defaultSubcell: {fileID: 295542976}
   pageTwoGrid: {fileID: 1645533911}
   imageCellPrefab: {fileID: 1700155859}
   gridLayoutParent: {fileID: 1645533910}
@@ -1505,6 +1590,12 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1940390857 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114352359784342770, guid: de39a3d9ef8366240b69a6689875429d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1113920326}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1 &1948381522
 GameObject:
   m_ObjectHideFlags: 0
