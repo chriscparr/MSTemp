@@ -6,13 +6,24 @@ using UnityEngine.UI;
 public class LoginView : MonoBehaviour
 {
     [SerializeField]
-    private Button m_loginButton;
+	private Button m_TouchIDButton;
 	[SerializeField]
 	private GameObject m_bioTouchPrefab;
 
+	[SerializeField]
+	private GameObject m_pwPanel;
+	[SerializeField]
+	private Button m_pwPanelCloseBtn;
+	[SerializeField]
+	private Button m_pwPanelLoginBtn;
+	[SerializeField]
+	private InputField m_pwPanelEmailInput;
+	[SerializeField]
+	private InputField m_pwPanelPWInput;
+
 	private BiometricTouch m_bioTouch;
 
-    private void OnLoginButtonPressed()
+    private void OnTouchIDButtonPressed()
 	{
 		if (m_bioTouch == null)
 		{
@@ -29,12 +40,12 @@ public class LoginView : MonoBehaviour
 
 	private void OnEnable()
 	{
-		m_loginButton.onClick.AddListener (OnLoginButtonPressed);
+		m_TouchIDButton.onClick.AddListener (OnTouchIDButtonPressed);
 	}
 
 	private void OnDisable()
 	{
-		m_loginButton.onClick.RemoveListener (OnLoginButtonPressed);
+		m_TouchIDButton.onClick.RemoveListener (OnTouchIDButtonPressed);
 	}
 
 	private void BioTouchEventHandler(bool a_result, int a_msgCode, string a_message)
