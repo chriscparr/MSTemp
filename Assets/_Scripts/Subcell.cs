@@ -5,21 +5,6 @@ using UnityEngine.EventSystems;
 
 public class Subcell : MonoBehaviour, IPointerClickHandler
 {
-	/*
-	public enum ServiceType
-	{
-		FAST,
-		SHOP,		//SHOP +
-		GROWTH,
-		DATA,		//DATA PLATFORMS AND SERVICES
-		LOOP,
-		CONTENT,	//CONTENT +
-		AGILE,		//PLAN FOR AGILE
-		LIFE		//LIFE +
-	}
-	private ServiceType m_serviceType;
-	*/
-
 	[SerializeField]
 	private TextMesh m_labelText;
 	[SerializeField]
@@ -28,7 +13,6 @@ public class Subcell : MonoBehaviour, IPointerClickHandler
 	private Material m_offMaterial;
 	[SerializeField]
 	private Material m_onMaterial;
-
 
 	public Rigidbody RigidBody {get{ return m_rigidBody; }}
 	private Rigidbody m_rigidBody;
