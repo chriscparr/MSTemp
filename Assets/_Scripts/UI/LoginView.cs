@@ -77,25 +77,39 @@ public class LoginView : MonoBehaviour
 			OpenEmailPWPanel ();
 		}
 	}
-
-	private void BioTouchEventHandler(bool a_result, int a_msgCode, string a_message)
+		
+	private void BioTouchEventHandler(BiometricTouch.TouchIDResult a_touchResult)
 	{
-		//m_bioTouch.OnTouchResult -= BioTouchEventHandler;
-
-		if (a_result)
+		switch (a_touchResult)
 		{
-			UIManager.Instance.ShowNewOrSavedView ();
-		}
-		else
-		{
-			Debug.Log (a_message);
-			//UIManager.Instance.ShowNewOrSavedView ();
-		}
-		if (a_msgCode == 0 || a_msgCode == 1)
-		{
-			m_bioTouch.OnTouchResult -= BioTouchEventHandler;
-			Destroy (m_bioTouch.gameObject);
-			m_bioTouch = null;
+			case BiometricTouch.TouchIDResult.SUCCESS:
+				Debug.Log ("Touch Result - User authenticated successfully");
+				UIManager.Instance.ShowNewOrSavedView ();
+				break;
+			case BiometricTouch.TouchIDResult.AUTH_FAIL:
+				Debug.Log ("Touch Result - Authentication Failed");
+				OpenEmailPWPanel ();
+				break;
+			case BiometricTouch.TouchIDResult.CANCEL_PRESSED:
+				Debug.Log ("Touch Result - User pressed the Cancel button");
+				OpenEmailPWPanel ();
+				break;
+			case BiometricTouch.TouchIDResult.ENTER_PW_PRESSED:
+				Debug.Log ("Touch Result - User pressed \"Enter Password\"");
+				OpenEmailPWPanel ();
+				break;
+			case BiometricTouch.TouchIDResult.NOT_CONFIGURED:
+				Debug.Log ("Touch Result - Touch ID is not configured");
+				OpenEmailPWPanel ();
+				break;
+			case BiometricTouch.TouchIDResult.CANT_EVALUATE:
+				Debug.Log ("Touch Result - Can not evaluate Touch ID");
+				OpenEmailPWPanel ();
+				break;
+			case BiometricTouch.TouchIDResult.IN_EDITOR:
+				Debug.Log ("Touch Result - In the editor, doughnut!");
+				OpenEmailPWPanel ();
+				break;
 		}
 	}
 }
