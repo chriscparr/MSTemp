@@ -24,11 +24,14 @@ public class BiometricTouch : MonoBehaviour
 
 	public void RequestTouchAuth()
 	{
-		#if UNITY_EDITOR
-		OnTouchAuthResponse("6");
-		#elif UNITY_IOS
-		TouchID();
-		#endif
+		if (Application.platform == RuntimePlatform.IPhonePlayer)
+		{
+			TouchID ();
+		}
+		else
+		{
+			OnTouchAuthResponse("6");
+		}
 	}
 
 	public void OnTouchAuthResponse(string a_messageIndex)
@@ -59,7 +62,6 @@ public class BiometricTouch : MonoBehaviour
 				break;
 			default:
 				throw new System.Exception ("Error parsing message code \"" + a_messageIndex + "\"");
-				break;
 		}
 
 		if (OnTouchResult != null)
@@ -67,5 +69,4 @@ public class BiometricTouch : MonoBehaviour
 			OnTouchResult (outputResult);
 		}
 	}
-
 }
