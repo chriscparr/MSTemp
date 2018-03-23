@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-
 using System.Runtime.InteropServices;
 using System.IO;
-
-
 
 public class PDFManager : MonoBehaviour
 {
@@ -40,8 +36,7 @@ public class PDFManager : MonoBehaviour
 
     private int cachedCellNumber = 0;
     private Subcell cachedCell;
-
-
+	private PresentationData m_pData;
 
     [DllImport("__Internal")]
     private static extern void OpenPDF(string path, string imageOne, string imageTwo);
@@ -55,11 +50,12 @@ public class PDFManager : MonoBehaviour
         s_instance = this;
     }
 
-    public void PrePopulate()
+	public void PrePopulate(PresentationData a_Pdata)
     {
+		m_pData = a_Pdata;
         // PageOne.transform.parent.GetComponent<Canvas>().enabled = false; TODO UNCOMMENT ME LATER PLEASE
 
-        //TODO get name of person and company from presentation data and put it in page 1 :-)
+        //TODO get name of person and company from presentation data and put it in page 1 :-) !! Ali, here's the presentation data for ya
 
         AdjustGrid();
         PrePopulateCells();
