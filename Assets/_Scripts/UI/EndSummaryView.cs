@@ -43,13 +43,10 @@ public class EndSummaryView : MonoBehaviour {
         ModelManager.Instance.ClearModel();
         UIManager.Instance.ShowEndPresentationView();
         CameraInputManager.Instance.SetPhase(CameraInputManager.Phase.SetupPhase);
-
         if (ConnectionGenerator.Instance != null)
         {
             ConnectionGenerator.Instance.DestroyAll();
         }
-
-        gameObject.SetActive(false);
     }
 
     private void OnSaveButtonClick()

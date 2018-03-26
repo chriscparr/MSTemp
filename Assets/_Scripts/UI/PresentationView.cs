@@ -25,13 +25,11 @@ public class PresentationView : MonoBehaviour
         {
             PDFManager.Instance.DestroyAll();
         }
-		gameObject.SetActive(false);
 	}
 
     private void OnSaveButtonPressed()
     {
         UIManager.Instance.ShowForwardSummaryView();
-        gameObject.SetActive(false);
     }
 
 	private void OnEnable()

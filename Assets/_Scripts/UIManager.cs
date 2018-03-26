@@ -161,6 +161,5 @@ public class UIManager : MonoBehaviour
 			view.transform.localPosition = m_viewStartPoint;
 			view.SetActive (false);
 		}
-
 	}
 }
