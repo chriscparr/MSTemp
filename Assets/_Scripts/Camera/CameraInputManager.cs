@@ -138,7 +138,7 @@ public class CameraInputManager : MonoBehaviour
 			if (a_doubleClickedCell == m_selectedCell)
 			{
 				SetPhase (Phase.InsideSubCellPhase);
-				UIManager.Instance.HideAllViews ();
+				//UIManager.Instance.HideAllViews ();
 				Camera.main.GetComponent<OnRailsMovement> ().Init (m_selectedCell.CaseCells);
 				m_CachedPosition = m_MainCamera.transform.position;
 				Vector3 desiredPosition = m_selectedCell.transform.position;
