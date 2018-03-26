@@ -55,6 +55,12 @@ public class ConnectionTracker : MonoBehaviour
     {
         line = GetComponent<LineRenderer>();
         allCells = new List<Subcell>(ModelManager.Instance.GetAllSubCells());
+
+        if (allCells.Count < 2)
+        {
+            return;
+        }
+
         tempCells = allCells;
 
         line.positionCount++;
@@ -249,7 +255,7 @@ public class ConnectionTracker : MonoBehaviour
 
         trackCell = sortedCells[0];
 
-        if (line.positionCount > 1)
+        if (line.positionCount > 1 && allCells.Count > 2 ) // this check, not the best. // consider checking COUNT of AllCells instead?
         {
             FindSecondClosest();
         }
@@ -341,7 +347,7 @@ public class ConnectionTracker : MonoBehaviour
         //    }
         //}
 
-        if (line.positionCount > 3)
+        if (line.positionCount > 3 && allCells.Count > 4)
         {
             FindFourthClosest();
         }
