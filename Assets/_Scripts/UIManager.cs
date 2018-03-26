@@ -70,7 +70,10 @@ public class UIManager : MonoBehaviour
 	}
 	public void ShowNewPresentationView(PresentationData a_pData = null)
 	{
-		m_newPresView.SetupView (a_pData);
+		m_newPresentationView.SetActive (true);
+		m_newPresentationView.GetComponent<CreateNewPresentationView> ().SetupView (a_pData);
+		//m_newPresView.SetupView (a_pData);
+		m_newPresentationView.SetActive (false);
 		TransitionToNextView (m_currentView, m_newPresentationView);
 	}
 	public void ShowSelectSavedView()
@@ -87,7 +90,10 @@ public class UIManager : MonoBehaviour
 	}
 	public void ShowServiceSummaryView(ServiceData a_sData)
 	{
-		m_servSummaryView.SetupServiceView (a_sData);
+		m_serviceSummaryView.SetActive (true);
+		m_serviceSummaryView.GetComponent<ServiceSummaryView> ().SetupServiceView (a_sData);
+		m_serviceSummaryView.SetActive (false);
+		//m_servSummaryView.SetupServiceView (a_sData);
 		TransitionToNextView (m_currentView, m_serviceSummaryView);
 	}
 	public void ShowCaseStudyView()
@@ -105,33 +111,25 @@ public class UIManager : MonoBehaviour
 
 	private void TransitionToNextView(GameObject a_currentView, GameObject a_nextView)
 	{
+		//Debug.Log ("<color=#00ffff>Transitioning between + " + a_currentView.name + " and " + a_nextView.name + "</color>");
 		m_previousView = a_currentView;
 		m_currentView = a_nextView;
-		iTween.MoveTo (m_previousView, iTween.Hash ("position",m_viewStartPoint,"time",0.25f,"easetype",iTween.EaseType.easeInBack,"oncomplete","OnTransitionOneComplete","islocal",true));
+		iTween.MoveTo (m_previousView, iTween.Hash ("position",m_viewStartPoint,"time",0.25f,"easetype",iTween.EaseType.easeInBack, "oncompletetarget", gameObject,"oncomplete","OnTransitionOneComplete","islocal",true));
 	}
 
 	private void OnTransitionOneComplete()
 	{
+		//Debug.Log ("<color=#00ffff>Completed animated transition out of " + m_previousView.name + "</color>");
 		m_previousView.SetActive (false);
 		m_currentView.SetActive (true);
 		m_currentView.transform.localPosition = m_viewStartPoint;
-		iTween.MoveTo (m_currentView, iTween.Hash ("position",Vector3.zero,"time",0.25f,"easetype",iTween.EaseType.easeInBack,"oncomplete","OnTransitionTwoComplete","islocal",true));
+		iTween.MoveTo (m_currentView, iTween.Hash ("position",Vector3.zero,"delay",0.25f,"time",0.25f,"easetype",iTween.EaseType.easeInBack, "oncompletetarget", gameObject,"oncomplete","OnTransitionTwoComplete","islocal",true));
 	}
 
 	private void OnTransitionTwoComplete()
 	{
-		Debug.Log ("<color=#00ffff>Completed animated transition between views!</color>");
+		//Debug.Log ("<color=#00ffff>Completed animated transition between views!</color>");
 	}
-
-	/*
-	public void HideAllViews()
-	{
-		foreach (GameObject g in m_allViewObjects)
-		{
-			g.SetActive (false);
-		}
-	}
-	*/
 
 	private void Awake()
 	{
