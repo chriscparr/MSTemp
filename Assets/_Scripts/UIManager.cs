@@ -44,8 +44,6 @@ public class UIManager : MonoBehaviour
 	private GameObject[] m_allViewObjects;
 
 	private CaseStudyView m_caseView;
-	private ServiceSummaryView m_servSummaryView;
-	private CreateNewPresentationView m_newPresView;
 
 	private GameObject m_currentView;
 	private GameObject m_previousView;
@@ -72,7 +70,6 @@ public class UIManager : MonoBehaviour
 	{
 		m_newPresentationView.SetActive (true);
 		m_newPresentationView.GetComponent<CreateNewPresentationView> ().SetupView (a_pData);
-		//m_newPresView.SetupView (a_pData);
 		m_newPresentationView.SetActive (false);
 		TransitionToNextView (m_currentView, m_newPresentationView);
 	}
@@ -93,7 +90,6 @@ public class UIManager : MonoBehaviour
 		m_serviceSummaryView.SetActive (true);
 		m_serviceSummaryView.GetComponent<ServiceSummaryView> ().SetupServiceView (a_sData);
 		m_serviceSummaryView.SetActive (false);
-		//m_servSummaryView.SetupServiceView (a_sData);
 		TransitionToNextView (m_currentView, m_serviceSummaryView);
 	}
 	public void ShowCaseStudyView()
@@ -151,8 +147,6 @@ public class UIManager : MonoBehaviour
             m_ForwardSummaryView};
 
 		m_caseView = m_caseStudyView.GetComponent<CaseStudyView> ();
-		m_servSummaryView = m_serviceSummaryView.GetComponent<ServiceSummaryView> ();
-		m_newPresView = m_presentationView.GetComponent<CreateNewPresentationView> ();
 
 		foreach (GameObject view in m_allViewObjects)
 		{
