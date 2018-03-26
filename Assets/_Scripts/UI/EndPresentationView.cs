@@ -11,7 +11,6 @@ public class EndPresentationView : MonoBehaviour
 	private void OnStartAgainButtonPressed()
 	{
 		UIManager.Instance.ShowNewOrSavedView ();
-		gameObject.SetActive(false);
 	}
 
 	private void OnEnable()

@@ -44,65 +44,91 @@ public class UIManager : MonoBehaviour
 	private GameObject[] m_allViewObjects;
 
 	private CaseStudyView m_caseView;
+	private ServiceSummaryView m_servSummaryView;
+	private CreateNewPresentationView m_newPresView;
+
+	private GameObject m_currentView;
+	private GameObject m_previousView;
+	private Vector3 m_viewStartPoint = new Vector3(0f, 800f, 0f);
 
 	public void ShowLoginView()
 	{
-		HideAllViews ();
-		m_loginView.SetActive (true);
+		if (m_currentView != null)
+		{
+			TransitionToNextView (m_currentView, m_loginView);
+		}
+		else
+		{
+			m_loginView.SetActive (true);
+			m_loginView.transform.localPosition = Vector3.zero;
+			m_currentView = m_loginView;
+		}
 	}
 	public void ShowNewOrSavedView()
 	{
-		HideAllViews ();
-		m_newOrSavedView.SetActive (true);
+		TransitionToNextView (m_currentView, m_newOrSavedView);
 	}
 	public void ShowNewPresentationView(PresentationData a_pData = null)
 	{
-		HideAllViews ();
 		m_newPresentationView.SetActive (true);
 		m_newPresentationView.GetComponent<CreateNewPresentationView> ().SetupView (a_pData);
+		//m_newPresView.SetupView (a_pData);
+		m_newPresentationView.SetActive (false);
+		TransitionToNextView (m_currentView, m_newPresentationView);
 	}
 	public void ShowSelectSavedView()
 	{
-		HideAllViews ();
-		m_selectSavedView.SetActive (true);
+		TransitionToNextView (m_currentView, m_selectSavedView);
 	}
 	public void ShowPresentationView()
 	{
-		HideAllViews ();
-		m_presentationView.SetActive (true);
+		TransitionToNextView (m_currentView, m_presentationView);
 	}
 	public void ShowEndPresentationView()
 	{
-		HideAllViews ();
-		m_endPresentationView.SetActive (true);
+		TransitionToNextView (m_currentView, m_endPresentationView);
 	}
 	public void ShowServiceSummaryView(ServiceData a_sData)
 	{
-		HideAllViews ();
 		m_serviceSummaryView.SetActive (true);
 		m_serviceSummaryView.GetComponent<ServiceSummaryView> ().SetupServiceView (a_sData);
+		m_serviceSummaryView.SetActive (false);
+		//m_servSummaryView.SetupServiceView (a_sData);
+		TransitionToNextView (m_currentView, m_serviceSummaryView);
 	}
 	public void ShowCaseStudyView()
 	{
-		HideAllViews ();
-		m_caseStudyView.SetActive(true);
+		TransitionToNextView (m_currentView, m_caseStudyView);
 	}
 	public void ShowManipulationView()
 	{
-		HideAllViews ();
-		m_DifferentiatorManipulationView.SetActive(true);
+		TransitionToNextView (m_currentView, m_DifferentiatorManipulationView);
 	}
     public void ShowForwardSummaryView()
     {
-        HideAllViews();
-        m_ForwardSummaryView.gameObject.SetActive(true);
+		TransitionToNextView (m_currentView, m_ForwardSummaryView);
     }
-	public void HideAllViews()
+
+	private void TransitionToNextView(GameObject a_currentView, GameObject a_nextView)
 	{
-		foreach (GameObject g in m_allViewObjects)
-		{
-			g.SetActive (false);
-		}
+		//Debug.Log ("<color=#00ffff>Transitioning between + " + a_currentView.name + " and " + a_nextView.name + "</color>");
+		m_previousView = a_currentView;
+		m_currentView = a_nextView;
+		iTween.MoveTo (m_previousView, iTween.Hash ("position",m_viewStartPoint,"time",0.25f,"easetype",iTween.EaseType.easeInBack, "oncompletetarget", gameObject,"oncomplete","OnTransitionOneComplete","islocal",true));
+	}
+
+	private void OnTransitionOneComplete()
+	{
+		//Debug.Log ("<color=#00ffff>Completed animated transition out of " + m_previousView.name + "</color>");
+		m_previousView.SetActive (false);
+		m_currentView.SetActive (true);
+		m_currentView.transform.localPosition = m_viewStartPoint;
+		iTween.MoveTo (m_currentView, iTween.Hash ("position",Vector3.zero,"delay",0.25f,"time",0.25f,"easetype",iTween.EaseType.easeInBack, "oncompletetarget", gameObject,"oncomplete","OnTransitionTwoComplete","islocal",true));
+	}
+
+	private void OnTransitionTwoComplete()
+	{
+		//Debug.Log ("<color=#00ffff>Completed animated transition between views!</color>");
 	}
 
 	private void Awake()
@@ -124,10 +150,14 @@ public class UIManager : MonoBehaviour
 			m_selectSavedView, m_presentationView, m_endPresentationView, m_serviceSummaryView, m_caseStudyView, m_DifferentiatorManipulationView,
             m_ForwardSummaryView};
 
-
-
 		m_caseView = m_caseStudyView.GetComponent<CaseStudyView> ();
+		m_servSummaryView = m_serviceSummaryView.GetComponent<ServiceSummaryView> ();
+		m_newPresView = m_presentationView.GetComponent<CreateNewPresentationView> ();
 
-		HideAllViews ();
+		foreach (GameObject view in m_allViewObjects)
+		{
+			view.transform.localPosition = m_viewStartPoint;
+			view.SetActive (false);
+		}
 	}
 }

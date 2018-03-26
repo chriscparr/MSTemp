@@ -66,20 +66,17 @@ public class SelectSavedPresentationView : MonoBehaviour
 	private void OnCloseButtonPressed()
 	{
 		UIManager.Instance.ShowNewOrSavedView ();
-		gameObject.SetActive(false);
 	}
 
 	private void OnPresentationSelectedEventHandler(PresentationData a_pData)
 	{
 		GameManager.Instance.SetupModel (a_pData);
 		UIManager.Instance.ShowPresentationView ();
-		gameObject.SetActive(false);
 	}
 
 	private void OnPresentationEditEventHandler(PresentationData a_pData)
 	{
 		UIManager.Instance.ShowNewPresentationView(a_pData);
-		gameObject.SetActive(false);
 	}
 
 	private void OnPresentationDeleteEventHandler(PresentationData a_pData)

@@ -15,19 +15,16 @@ public class SelectNewOrSavedView : MonoBehaviour
 	private void OnUseExistingButtonPressed()
 	{
 		UIManager.Instance.ShowSelectSavedView ();
-		gameObject.SetActive(false);
 	}
 
 	private void OnNewPresentationButtonPressed()
 	{
 		UIManager.Instance.ShowNewPresentationView ();
-		gameObject.SetActive(false);
 	}
 
 	private void OnCloseButtonPressed()
 	{
 		UIManager.Instance.ShowLoginView ();
-		gameObject.SetActive(false);
 	}
 
 	private void OnEnable()
