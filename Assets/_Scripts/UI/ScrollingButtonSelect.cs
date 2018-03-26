@@ -7,6 +7,7 @@ public class ScrollingButtonSelect : MonoBehaviour
 {
 	public delegate void ScrollingButtonSelectAction();
 	public ScrollingButtonSelectAction OnCloseRequest;
+	public ScrollingButtonSelectAction OnExitAnimFinished;
 
 	[SerializeField]
 	private GameObject m_msButtonPrefab;
@@ -66,6 +67,11 @@ public class ScrollingButtonSelect : MonoBehaviour
 
 	private void DestroyAfterExit()
 	{
+		if (OnExitAnimFinished != null)
+		{
+			OnExitAnimFinished ();
+		}
+		gameObject.SetActive (false);
 		Destroy (gameObject);
 	}
 
