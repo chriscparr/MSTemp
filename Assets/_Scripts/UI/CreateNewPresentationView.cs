@@ -142,10 +142,9 @@ public class CreateNewPresentationView : MonoBehaviour
 	private void CloseAddIndustryPanel()
 	{
 		m_scrollSelect.OnCloseRequest -= CloseAddIndustryPanel;
+		m_scrollSelect.OnExitAnimFinished += OnScrollExitComplete;
 		m_presentationData.Industries = m_scrollSelect.SelectedOptions;
-		m_serviceButtonGrid.SetActive (true);
 		m_scrollSelect.AnimateExit ();
-		//Destroy (m_scrollSelect.gameObject);
 		RefreshView ();
 	}
 
@@ -161,11 +160,23 @@ public class CreateNewPresentationView : MonoBehaviour
 	private void CloseAddMarketPanel()
 	{
 		m_scrollSelect.OnCloseRequest -= CloseAddMarketPanel;
+		m_scrollSelect.OnExitAnimFinished += OnScrollExitComplete;
 		m_presentationData.Markets = m_scrollSelect.SelectedOptions;
-		m_serviceButtonGrid.SetActive (true);
 		m_scrollSelect.AnimateExit ();
-		//Destroy (m_scrollSelect.gameObject);
 		RefreshView ();
+	}
+
+	private void OnScrollExitComplete()
+	{
+		m_scrollSelect.OnExitAnimFinished -= OnScrollExitComplete;
+		StartCoroutine ("WaitThenActivateButtonGrid");
+	}
+
+	private IEnumerator WaitThenActivateButtonGrid()
+	{
+		yield return new WaitForSeconds (0.25f);
+		m_serviceButtonGrid.SetActive (true);
+		yield return null;
 	}
 
 	private void OpenNotesPanel()
