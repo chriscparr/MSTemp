@@ -87,7 +87,7 @@ public class PDFManager : MonoBehaviour
         {
             GameObject c = Instantiate(imageCellPrefab, transform.position, Quaternion.identity) as GameObject;
 
-            c.transform.parent = gridLayoutParent.transform;
+			c.transform.SetParent (gridLayoutParent.transform, false);
             c.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
             c.GetComponent<RectTransform>().localPosition = new Vector3(c.GetComponent<RectTransform>().localPosition.x,
                                                                         c.GetComponent<RectTransform>().localPosition.y,
