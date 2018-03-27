@@ -132,6 +132,11 @@ public class CaseStudyConfigPanel : MonoBehaviour
 
 	private void SubmitCaseStudyData()
 	{
+		if (string.IsNullOrEmpty (m_csTitleInputText.text))
+		{
+			Debug.Log ("You need to fill in the required fields!!!");
+			return;
+		}
 		m_caseData.TitleText = m_csTitleInputText.text;
 		m_caseData.IntroText = m_csIntroInputText.text;
 		m_caseData.BodyText = m_csBodyInputText.text;
