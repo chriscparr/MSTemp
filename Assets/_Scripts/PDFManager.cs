@@ -55,7 +55,7 @@ public class PDFManager : MonoBehaviour
 	public void PrePopulate(PresentationData a_Pdata)
     {
 		m_pData = a_Pdata;
-        // PageOne.transform.parent.GetComponent<Canvas>().enabled = false; TODO UNCOMMENT ME LATER PLEASE
+        PageOne.transform.parent.GetComponent<Canvas>().enabled = false;
 
         ClientCompanyName.text = m_pData.ClientName;
         ClientActualName.text = m_pData.PresenterName;

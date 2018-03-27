@@ -39,7 +39,7 @@ public class CameraInputManager : MonoBehaviour
 	private RailMover m_Mover;
 
 	[Header("Preset rail positions")]
-	public Vector3 homeVector = new Vector3(0, 0, -15f);
+    public Vector3 MainPhasePosition = new Vector3(0, 0, -50f);
 	public Vector3 focusVector = new Vector3(0, 0, -7.5f);
 
 	private bool m_isTweening = false;
@@ -90,7 +90,7 @@ public class CameraInputManager : MonoBehaviour
 		}
 		else
 		{
-			m_MainCamera.GetComponent<RailMover>().TweenToPosition(homeVector, 2, false, iTween.EaseType.easeInOutSine);
+			m_MainCamera.GetComponent<RailMover>().TweenToPosition(MainPhasePosition, 2, false, iTween.EaseType.easeInOutSine);
 			Camera.main.transform.LookAt (Vector3.zero);
 			UIManager.Instance.ShowPresentationView ();
 		}
@@ -206,7 +206,7 @@ public class CameraInputManager : MonoBehaviour
 					{
 						case Phase.MainCellPhase:
 							Debug.Log("WE ARE MOVING TOWARDS THE MAIN CELL");
-							m_Mover.TweenToPosition(homeVector, 2, true, iTween.EaseType.easeInOutSine);
+							m_Mover.TweenToPosition(MainPhasePosition, 2, true, iTween.EaseType.easeInOutSine);
 							m_isTweening = true;
 							break;
 						case Phase.FocusedSubCellPhase:
