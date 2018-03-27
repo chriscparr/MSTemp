@@ -10,7 +10,6 @@ public class LavaMoving : MonoBehaviour
 	public Material Z1;
 	public Material Z2;
 	public Material Z3;
-	float Timer;
 	float Begin;
 	public Vector2 uvAnimationRate = new Vector2( 1.0f, 0.0f );
 	public string textureName = "_MainTex";
@@ -21,7 +20,6 @@ public class LavaMoving : MonoBehaviour
 	void Start () {
 
 		Begin = 0;
-		Timer = 3;
 	}
 	void LateUpdate() 
 	{
