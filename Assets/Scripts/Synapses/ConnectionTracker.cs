@@ -30,17 +30,11 @@ public class ConnectionTracker : MonoBehaviour
     private GameObject fourthLink;
 
     private LineRenderer line;
-    private ConnectionTracker[] existingConnections;
-    //private int existingConnectionsAmount;
 
     private GameObject cachedTrail;
     private bool alsoUsingTrails;
 
     public static List<Subcell> allCells = new List<Subcell>();
-
-    private List<Subcell> tempCells = new List<Subcell>();
-
-    List<Subcell> temps = new List<Subcell>();
 
     private GameObject extraConnections;
     private GameObject trailRenders;
@@ -61,14 +55,10 @@ public class ConnectionTracker : MonoBehaviour
             return;
         }
 
-        tempCells = allCells;
-
         line.positionCount++;
 
         alsoUsingTrails = ConnectionGenerator.Instance.useTrails;
 
-        existingConnections = GetComponentsInChildren<ConnectionTracker>();
-        //existingConnectionsAmount = existingConnections.Length;
         parenter = ConnectionGenerator.Instance.baseParent.transform;
         this.transform.parent = parenter.transform;
         this.gameObject.name = "LineConnection";

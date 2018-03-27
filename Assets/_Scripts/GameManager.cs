@@ -42,23 +42,10 @@ public class GameManager : MonoBehaviour
 			m_lastShakeTime = Time.fixedTime;
 		}
 
-
-		if (Input.GetKeyDown (KeyCode.Q))
-		{
-			//SaveDummyData(GenerateTestPresentation ());
-			//ModelManager.Instance.HaltSubcells();
-			Subcell[] sortedCells = ModelManager.Instance.GetAllSubCells()[0].GetNearestNeighbours();
-
-		}
+		//TODO - Debug triggers, Delete before delivery!
 		if (Input.GetKeyDown (KeyCode.W))
 		{
 			Debug.Log ("<color=#ff0000>" + "Persistent data directory contains " + PersistentDataHandler.GetJsonFilenames().Length.ToString() + " json data files!</color>");
-			/*
-			foreach (string filePath in PersistentDataHandler.GetJsonFilenames())
-			{
-				PersistentDataHandler.DeleteFile (filePath);
-			}
-			*/
 		}
 		if (Input.GetKeyDown (KeyCode.S))
 		{
@@ -88,11 +75,5 @@ public class GameManager : MonoBehaviour
 
 		string testData = "{\n\"ID\":\"9dd51a70-47e6-4eeb-a475-b7f80e29d201\",\n\"PresenterName\":\"Mr. Tester\",\n\"PresenterPosition\":\"Test Manager\",\n\"ClientName\":\"IndustryLeader Inc.\",\n\"Industries\":[\"Finance\", \"Retail\", \"World Domination\"],\n\"Markets\":[\"Europe\", \"Asia\", \"America\"],\n\"Notes\":[\"Note 1\", \"Note 2\", \"Note 3\"],\n\"Services\":\n[\n\t{\"ServiceName\":\"FAST\",\"InitialScale\":1.0,\"EditedScale\":1.0,\"Edited\":false,\"ServiceIntroQuestion\":\"Is this a question?\",\"CaseStudies\":\n\t\t[\n\t\t\t{\"CaseStudyType\":\"TEXT\",\"TitleText\":\"Title\",\"IntroText\":\"Question or statement about this case study?\",\"BodyText\":\"Body Text!\",\"VideoPath\":\"file:///path/to/asset/file.mp4\"},\n\t\t\t{\"CaseStudyType\":\"VIDEO\",\"TitleText\":\"Title\",\"IntroText\":\"Question or statement about this case study?\",\"BodyText\":\"Body Text!\",\"VideoPath\":\"file:///path/to/asset/file.mp4\"}\n\t\t]\n\t},\n\t{\"ServiceName\":\"SHOP\",\"InitialScale\":1.0,\"EditedScale\":1.0,\"Edited\":false,\"ServiceIntroQuestion\":\"Is this a question?\",\"CaseStudies\":\n\t\t[\n\t\t\t{\"CaseStudyType\":\"TEXT\",\"TitleText\":\"Title\",\"IntroText\":\"Question or statement about this case study?\",\"BodyText\":\"Body Text!\",\"VideoPath\":\"file:///path/to/asset/file.mp4\"},\n\t\t\t{\"CaseStudyType\":\"VIDEO\",\"TitleText\":\"Title\",\"IntroText\":\"Question or statement about this case study?\",\"BodyText\":\"Body Text!\",\"VideoPath\":\"file:///path/to/asset/file.mp4\"}\n\t\t]\n\t},\n\t{\"ServiceName\":\"GROWTH\",\"InitialScale\":1.0,\"EditedScale\":1.0,\"Edited\":false,\"ServiceIntroQuestion\":\"Is this a question?\",\"CaseStudies\":\n\t\t[\n\t\t\t{\"CaseStudyType\":\"TEXT\",\"TitleText\":\"Title\",\"IntroText\":\"Question or statement about this case study?\",\"BodyText\":\"Body Text!\",\"VideoPath\":\"file:///path/to/asset/file.mp4\"},\n\t\t\t{\"CaseStudyType\":\"VIDEO\",\"TitleText\":\"Title\",\"IntroText\":\"Question or statement about this case study?\",\"BodyText\":\"Body Text!\",\"VideoPath\":\"file:///path/to/asset/file.mp4\"}\n\t\t]\n\t},\n\t{\"ServiceName\":\"DATA\",\"InitialScale\":1.0,\"EditedScale\":1.0,\"Edited\":false,\"ServiceIntroQuestion\":\"Is this a question?\",\"CaseStudies\":\n\t\t[\n\t\t\t{\"CaseStudyType\":\"TEXT\",\"TitleText\":\"Title\",\"IntroText\":\"Question or statement about this case study?\",\"BodyText\":\"Body Text!\",\"VideoPath\":\"file:///path/to/asset/file.mp4\"},\n\t\t\t{\"CaseStudyType\":\"VIDEO\",\"TitleText\":\"Title\",\"IntroText\":\"Question or statement about this case study?\",\"BodyText\":\"Body Text!\",\"VideoPath\":\"file:///path/to/asset/file.mp4\"}\n\t\t]\n\t},\n\t{\"ServiceName\":\"LOOP\",\"InitialScale\":1.0,\"EditedScale\":1.0,\"Edited\":false,\"ServiceIntroQuestion\":\"Is this a question?\",\"CaseStudies\":\n\t\t[\n\t\t\t{\"CaseStudyType\":\"TEXT\",\"TitleText\":\"Title\",\"IntroText\":\"Question or statement about this case study?\",\"BodyText\":\"Body Text!\",\"VideoPath\":\"file:///path/to/asset/file.mp4\"},\n\t\t\t{\"CaseStudyType\":\"VIDEO\",\"TitleText\":\"Title\",\"IntroText\":\"Question or statement about this case study?\",\"BodyText\":\"Body Text!\",\"VideoPath\":\"file:///path/to/asset/file.mp4\"}\n\t\t]\n\t},\n\t{\"ServiceName\":\"CONTENT\",\"InitialScale\":1.0,\"EditedScale\":1.0,\"Edited\":false,\"ServiceIntroQuestion\":\"Is this a question?\",\"CaseStudies\":\n\t\t[\n\t\t\t{\"CaseStudyType\":\"TEXT\",\"TitleText\":\"Title\",\"IntroText\":\"Question or statement about this case study?\",\"BodyText\":\"Body Text!\",\"VideoPath\":\"file:///path/to/asset/file.mp4\"},\n\t\t\t{\"CaseStudyType\":\"VIDEO\",\"TitleText\":\"Title\",\"IntroText\":\"Question or statement about this case study?\",\"BodyText\":\"Body Text!\",\"VideoPath\":\"file:///path/to/asset/file.mp4\"}\n\t\t]\n\t},\n\t{\"ServiceName\":\"AGILE\",\"InitialScale\":1.0,\"EditedScale\":1.0,\"Edited\":false,\"ServiceIntroQuestion\":\"Is this a question?\",\"CaseStudies\":\n\t\t[\n\t\t\t{\"CaseStudyType\":\"TEXT\",\"TitleText\":\"Title\",\"IntroText\":\"Question or statement about this case study?\",\"BodyText\":\"Body Text!\",\"VideoPath\":\"file:///path/to/asset/file.mp4\"},\n\t\t\t{\"CaseStudyType\":\"VIDEO\",\"TitleText\":\"Title\",\"IntroText\":\"Question or statement about this case study?\",\"BodyText\":\"Body Text!\",\"VideoPath\":\"file:///path/to/asset/file.mp4\"}\n\t\t]\n\t},\n\t{\"ServiceName\":\"LIFE\",\"InitialScale\":1.0,\"EditedScale\":1.0,\"Edited\":false,\"ServiceIntroQuestion\":\"Is this a question?\",\"CaseStudies\":\n\t\t[\n\t\t\t{\"CaseStudyType\":\"TEXT\",\"TitleText\":\"Title\",\"IntroText\":\"Question or statement about this case study?\",\"BodyText\":\"Body Text!\",\"VideoPath\":\"file:///path/to/asset/file.mp4\"},\n\t\t\t{\"CaseStudyType\":\"VIDEO\",\"TitleText\":\"Title\",\"IntroText\":\"Question or statement about this case study?\",\"BodyText\":\"Body Text!\",\"VideoPath\":\"file:///path/to/asset/file.mp4\"}\n\t\t]\n\t}\n]\n}\n";
 		return JsonUtility.FromJson<PresentationData> (testData);
-	}
-
-	private void SaveDummyData(PresentationData a_pData)
-	{
-		PersistentDataHandler.SaveFile<PresentationData> (a_pData.ID, a_pData);
-		//Debug.Log ("<color=#ff0000>" + "Data file (id:" + data.ID + ") saved to persistent data directory!" + "</color>");
 	}
 }

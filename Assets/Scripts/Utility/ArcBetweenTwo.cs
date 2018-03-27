@@ -14,9 +14,6 @@ public class ArcBetweenTwo : MonoBehaviour {
 
     List<Vector3> curvePoints = new List<Vector3>();
     public Vector3[] waypoints;
-    int point = 0;
-
-    private float speed = 50;
 
     float Velocity = 0;
     public float smoothTime = 0.3f;
