@@ -7,13 +7,10 @@ using System.IO;
 
 public class PDFManager : MonoBehaviour
 {
-
     public static PDFManager Instance { get { return s_instance; } }
     private static PDFManager s_instance = null;
 
-    RawImage[] cellImages; 
-    Text[] cellNames;
-    Text[] cellDescriptors;
+    RawImage[] cellImages;
 
     public GameObject PageOne;
 
@@ -41,7 +38,6 @@ public class PDFManager : MonoBehaviour
     public Transform gridLayoutParent;
 
     private int cachedCellNumber = 0;
-    private Subcell cachedCell;
 	private PresentationData m_pData;
 
     [DllImport("__Internal")]
@@ -91,8 +87,6 @@ public class PDFManager : MonoBehaviour
         {
             GameObject c = Instantiate(imageCellPrefab, transform.position, Quaternion.identity) as GameObject;
 
-            RectTransform cachedRect = c.GetComponent<RectTransform>();
-
             c.transform.parent = gridLayoutParent.transform;
             c.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
             c.GetComponent<RectTransform>().localPosition = new Vector3(c.GetComponent<RectTransform>().localPosition.x,
@@ -104,10 +98,6 @@ public class PDFManager : MonoBehaviour
         }
 
         cellImages = imgs.ToArray();
-        cellNames = titles.ToArray();
-        cellDescriptors = descriptions.ToArray();
-
-
 
         Debug.Log(cellImages.Length);
     }
@@ -133,8 +123,6 @@ public class PDFManager : MonoBehaviour
         RenderTexture.active = null;
         Camera.main.targetTexture = null;
         Camera.main.transform.position = posCache;
-        byte[] bytes;
-        bytes = ourTexture.EncodeToPNG();
         ourTexture.Apply();
 
         finishedEcosystem.texture = ourTexture;
@@ -231,7 +219,6 @@ public class PDFManager : MonoBehaviour
 
         if (getOut == true)
         {
-            cachedCell = cellToBeCaptured;
             ourTexture = null;
             return;
         }
@@ -250,12 +237,8 @@ public class PDFManager : MonoBehaviour
                 cachedCellNumber = 0;
             }
         }
-
-
-        cachedCell = cellToBeCaptured;
         ourTexture = null;
         Debug.Log("Cell capture finished!");
-
     }
 
     public IEnumerator GenerateEntirePDF()
