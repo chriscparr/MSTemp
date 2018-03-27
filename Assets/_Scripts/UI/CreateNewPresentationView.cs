@@ -237,6 +237,11 @@ public class CreateNewPresentationView : MonoBehaviour
 
 	private void SubmitPresentationData()
 	{
+		if (string.IsNullOrEmpty (m_presentationData.ClientName) || string.IsNullOrEmpty (m_presentationData.PresenterName) || string.IsNullOrEmpty (m_presentationData.PresenterPosition))
+		{
+			Debug.Log ("You need to fill in the required fields!!!");
+			return;
+		}
 		PersistentDataHandler.SaveFile<PresentationData> (m_presentationData.ID, m_presentationData);
 		CloseButtonEventHandler ();
 	}
