@@ -40,7 +40,7 @@ namespace TextSpeech
         public void Setting(string _language)
         {
 #if UNITY_EDITOR
-#elif UNITY_IPHONE
+#elif UNITY_IOS
         _TAG_SettingSpeech(_language);
 #elif UNITY_ANDROID
         AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.starseed.speechtotext.Bridge");
@@ -50,7 +50,7 @@ namespace TextSpeech
         public void StartRecording(string _message = "")
         {
 #if UNITY_EDITOR
-#elif UNITY_IPHONE
+            #elif UNITY_IOS
         _TAG_startRecording();
 #elif UNITY_ANDROID
         if (isShowPopupAndroid)
@@ -68,7 +68,7 @@ namespace TextSpeech
         public void StopRecording()
         {
 #if UNITY_EDITOR
-#elif UNITY_IPHONE
+            #elif UNITY_IOS
         _TAG_stopRecording();
 #elif UNITY_ANDROID
         if (isShowPopupAndroid == false)
@@ -79,7 +79,7 @@ namespace TextSpeech
 #endif
         }
 
-#if UNITY_IPHONE
+            #if UNITY_IOS
         [DllImport("__Internal")]
         private static extern void _TAG_startRecording();
 
