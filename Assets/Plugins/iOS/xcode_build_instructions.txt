@@ -1,0 +1,4 @@
+Add speech.framework as a dependency in xcode
+Add permission keys within Build Info:
+	- "Privacy – Microphone Usage Description","App allows speech recognition"
+	- "Privacy – Speech Recognition Usage Description","App allows speech recognition"
