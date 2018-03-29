@@ -5,133 +5,144 @@
 #import "SpeechRecorderViewController.h"
 #import <Speech/Speech.h>
 
-@interface SpeechRecorderViewController ()
-{    
-    // Speech recognize
-    SFSpeechRecognizer *speechRecognizer;
-    SFSpeechAudioBufferRecognitionRequest *recognitionRequest;
-    SFSpeechRecognitionTask *recognitionTask;
-    // Record speech using audio Engine
-    AVAudioInputNode *inputNode;
-    AVAudioEngine *audioEngine;	
-	NSString * LanguageCode;
-    
-}
-@end
-
 @implementation SpeechRecorderViewController
+id thisClass;
+static NSString *trueString;
 
 - (id)init
 {
-	self = [super init];	
-	
-	audioEngine = [[AVAudioEngine alloc] init];
-    LanguageCode = @"ko-KR";
-    NSLocale *local =[[NSLocale alloc] initWithLocaleIdentifier:LanguageCode];
-    speechRecognizer = [[SFSpeechRecognizer alloc] initWithLocale:local];
     
-    //for (NSLocale *locate in [SFSpeechRecognizer supportedLocales]) {
-    //    NSLog(@"%@", [locate localizedStringForCountryCode:locate.countryCode]);
-    //}
-	
-    // Check Authorization Status
-    // Make sure you add "Privacy - Microphone Usage Description" key and reason in Info.plist to request micro permison
-    // And "NSSpeechRecognitionUsageDescription" key for requesting Speech recognize permison
+    
+    thisClass = self;
+    
+    self = [super init];    
+    
+    // Initialize the Speech Recognizer with the locale, couldn't find a list of locales
+    // but I assume it's standard UTF-8 https://wiki.archlinux.org/index.php/locale
+    speechRecognizer = [[SFSpeechRecognizer alloc] initWithLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+    
+    // Set speech recognizer delegate
+    speechRecognizer.delegate = self;
+    
+    // Request the authorization to make sure the user is asked for permission so you can
+    // get an authorized response, also remember to change the .plist file, check the repo's
+    // readme file or this project's info.plist
     [SFSpeechRecognizer requestAuthorization:^(SFSpeechRecognizerAuthorizationStatus status) {
-        //The callback may not be called on the main thread. Add an operation to the main queue to update the record button's state.
-        dispatch_async(dispatch_get_main_queue(), ^{
-            switch (status) {
-                case SFSpeechRecognizerAuthorizationStatusAuthorized: {
-                    NSLog(@"SUCCESS");
-                    break;
-                }
-                case SFSpeechRecognizerAuthorizationStatusDenied: {
-					NSLog(@"User denied access to speech recognition");
-                    break;
-                }
-                case SFSpeechRecognizerAuthorizationStatusRestricted: {
-					NSLog(@"User denied access to speech recognition");
-                    break;
-                }
-                case SFSpeechRecognizerAuthorizationStatusNotDetermined: {
-					NSLog(@"User denied access to speech recognition");
-                    break;
-                }
-            }
-        });
-        
+        switch (status) {
+            case SFSpeechRecognizerAuthorizationStatusAuthorized:
+                NSLog(@"Authorized");
+                break;
+            case SFSpeechRecognizerAuthorizationStatusDenied:
+                NSLog(@"Denied");
+                break;
+            case SFSpeechRecognizerAuthorizationStatusNotDetermined:
+                NSLog(@"Not Determined");
+                break;
+            case SFSpeechRecognizerAuthorizationStatusRestricted:
+                NSLog(@"Restricted");
+                break;
+            default:
+                break;
+        }
     }];
-	
-	return self;
 }
 
 - (void)SettingSpeech: (const char *) _language 
-{	
-    LanguageCode = [NSString stringWithUTF8String:_language];
-    NSLocale *local =[[NSLocale alloc] initWithLocaleIdentifier:LanguageCode];
-    speechRecognizer = [[SFSpeechRecognizer alloc] initWithLocale:local];
-    UnitySendMessage("SpeechToText", "onMessage", "Setting Success");
+{   
+    //LanguageCode = [NSString stringWithUTF8String:_language];
+    //NSLocale *local =[[NSLocale alloc] initWithLocaleIdentifier:LanguageCode];
+    //speechRecognizer = [[SFSpeechRecognizer alloc] initWithLocale:local];
+    //UnitySendMessage("SpeechToText", "onMessage", "Setting Success");
 }
 // recording
 - (void)startRecording {
-    if (!audioEngine.isRunning) {
-        if (recognitionTask) {
-            [recognitionTask cancel];
+
+    // Initialize the AVAudioEngine
+    audioEngine = [[AVAudioEngine alloc] init];
+    
+    // Make sure there's not a recognition task already running
+    if (recognitionTask) {
+        [recognitionTask cancel];
+        recognitionTask = nil;
+    }
+    
+    // Starts an AVAudio Session
+    NSError *error;
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    [audioSession setCategory:AVAudioSessionCategoryRecord error:&error];
+    [audioSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:&error];
+    
+    // Starts a recognition process, in the block it logs the input or stops the audio
+    // process if there's an error.
+    recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
+    AVAudioInputNode *inputNode = audioEngine.inputNode;
+    recognitionRequest.shouldReportPartialResults = YES;
+    recognitionTask = [speechRecognizer recognitionTaskWithRequest:recognitionRequest resultHandler:^(SFSpeechRecognitionResult * _Nullable result, NSError * _Nullable error) {
+        BOOL isFinal = NO;
+        if (result) {
+            // Whatever you say in the microphone after pressing the button should be being logged
+            // in the console.
+            NSLog(@"RESULT:%@",result.bestTranscription.formattedString);
+            
+            NSString *mString = result.bestTranscription.formattedString;
+            trueString = mString;
+            
+            isFinal = !result.isFinal;
+        }
+        if (error) {
+            [audioEngine stop];
+            [inputNode removeTapOnBus:0];
+            recognitionRequest = nil;
             recognitionTask = nil;
         }
-        		
-        AVAudioSession *session = [AVAudioSession sharedInstance];
-        [session setCategory:AVAudioSessionCategoryPlayAndRecord mode:AVAudioSessionModeMeasurement options:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
-        [session setActive:TRUE withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+    }];
+    
+    // Sets the recording format
+    AVAudioFormat *recordingFormat = [inputNode outputFormatForBus:0];
+    [inputNode installTapOnBus:0 bufferSize:1024 format:recordingFormat block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
+        [recognitionRequest appendAudioPCMBuffer:buffer];
+    }];
+    
+    // Starts the audio engine, i.e. it starts listening.
+    [audioEngine prepare];
+    [audioEngine startAndReturnError:&error];
+    NSLog(@"Say Something, I'm listening");
+}
+
+
+- (void)stopRecording {
+    if (audioEngine.isRunning) {
+        {
         
-        inputNode = audioEngine.inputNode;
-        
-        recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
-        recognitionRequest.shouldReportPartialResults = NO;
-        AVAudioFormat *format = [inputNode outputFormatForBus:0];
-        
-        [inputNode installTapOnBus:0 bufferSize:1024 format:format block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
-            [recognitionRequest appendAudioPCMBuffer:buffer];
-        }];
-        [audioEngine prepare];
-        NSError *error1;
-        [audioEngine startAndReturnError:&error1];
-        NSLog(@"errorAudioEngine.description: %@", error1.description);		
+                UnitySendMessage("SpeechToText", "onResults", [trueString UTF8String]);
+                NSLog(@"STOPRECORDING RESULT: %@", trueString);
+        }
+        trueString = @"";
+        // [inputNode removeTapOnBus:0];
+        [audioEngine stop];
+        recognitionTask = nil;
+        recognitionRequest = nil;
+        [recognitionRequest endAudio];
     }
 }
 
-- (void)stopRecording {
-    if (audioEngine.isRunning) {        
-        recognitionTask =[speechRecognizer recognitionTaskWithRequest:recognitionRequest resultHandler:^(SFSpeechRecognitionResult * _Nullable result, NSError * _Nullable error)
-		{           
-            if (result != nil) {
-                NSString *transcriptText = result.bestTranscription.formattedString;
-                UnitySendMessage("SpeechToText", "onResults", [transcriptText UTF8String]);
-                NSLog(@"STOPRECORDING RESULT: %@", transcriptText);
-            }
-            else {
-                UnitySendMessage("SpeechToText", "onResults", "nil");
-                NSLog(@"STOPRECORDING RESULT: %@", "nil");
-            }
-        }];
-        [inputNode removeTapOnBus:0];
-		[audioEngine stop];
-		recognitionTask = nil;
-		recognitionRequest = nil;
-        [recognitionRequest endAudio];
-    }
+
+#pragma mark - SFSpeechRecognizerDelegate Delegate Methods
+
+- (void)speechRecognizer:(SFSpeechRecognizer *)speechRecognizer availabilityDidChange:(BOOL)available {
+    NSLog(@"Availability:%d",available);
 }
 
 @end
 extern "C"{
     SpeechRecorderViewController *vc = [[SpeechRecorderViewController alloc] init];
     void _TAG_startRecording(){
-        [vc startRecording];
+        [thisClass startRecording];
     }    
     void _TAG_stopRecording(){
-        [vc stopRecording];
+        [thisClass stopRecording];
     }  
-	void _TAG_SettingSpeech(const char * _language){
-        [vc SettingSpeech:_language];
-    } 	
+    void _TAG_SettingSpeech(const char * _language){
+        //[vc SettingSpeech:_language];
+    }   
 }

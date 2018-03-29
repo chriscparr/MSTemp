@@ -1,8 +1,9 @@
+#import <Speech/Speech.h>
 
-#import <UIKit/UIKit.h>
-
-
-@interface SpeechRecorderViewController : UIViewController
-
+@interface SpeechRecorderViewController : UIViewController <SFSpeechRecognizerDelegate> {
+    SFSpeechRecognizer *speechRecognizer;
+    SFSpeechAudioBufferRecognitionRequest *recognitionRequest;
+    SFSpeechRecognitionTask *recognitionTask;
+    AVAudioEngine *audioEngine;
+}
 @end
-
