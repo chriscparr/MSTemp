@@ -11,7 +11,9 @@ static NSString *trueString;
 
 - (id)init
 {
-    
+    // when this function finishes, just call it again, over and over
+    // so you essentially turn this into Siri :-)
+    // openmind siri?
     
     thisClass = self;
     
@@ -90,10 +92,13 @@ static NSString *trueString;
             isFinal = !result.isFinal;
         }
         if (error) {
+            NSLog(@"TimeOutHasOccured");
             [audioEngine stop];
             [inputNode removeTapOnBus:0];
             recognitionRequest = nil;
             recognitionTask = nil;
+            NSLog(@"Repeating this function, apparently");
+            [self stopRecording];
         }
     }];
     
@@ -113,7 +118,6 @@ static NSString *trueString;
 - (void)stopRecording {
     if (audioEngine.isRunning) {
         {
-        
                 UnitySendMessage("SpeechToText", "onResults", [trueString UTF8String]);
                 NSLog(@"STOPRECORDING RESULT: %@", trueString);
         }
@@ -123,6 +127,15 @@ static NSString *trueString;
         recognitionTask = nil;
         recognitionRequest = nil;
         [recognitionRequest endAudio];
+        NSLog(@"Now THAT WE HAVE OUTPUTTED TO UNITY loop the function");
+        [self startRecording];
+        //
+
+    }
+    else
+    {
+        NSLog(@"Now loop the function");
+        [self startRecording];
     }
 }
 
