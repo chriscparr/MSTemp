@@ -1,15 +1,23 @@
 #import "SpeechUtteranceViewController.h"
 #import "AVFoundation/AVFoundation.h"
+#import <Speech/Speech.h>
+
+static NSString * LanguageCode = [NSString stringWithUTF8String:"en-GB"];
 
 @interface SpeechUtteranceViewController () <AVSpeechSynthesizerDelegate>
 {
 	AVSpeechSynthesizer *speechSynthesizer;
 	NSString * speakText;
-	NSString * LanguageCode;
+	
 	float pitch;
 	float rate;
+
 }
+@property (strong, nonatomic) AVSpeechSynthesizer *synthesizerO;
+
 @end
+
+
 
 @implementation SpeechUtteranceViewController
 
@@ -22,20 +30,33 @@
 }
 - (void)SettingSpeak: (const char *) _language pitchSpeak: (float)_pitch rateSpeak:(float)_rate
 {	
-	LanguageCode = [NSString stringWithUTF8String:_language];
+    LanguageCode = [NSString stringWithFormat:@"%s", "en-US"];
 	pitch = _pitch;
     rate = _rate;
     UnitySendMessage("TextToSpeech", "onMessage", "Setting Success");
+    
 }
 - (void)StartSpeak: (const char *) _text
 {
+
+    NSError *error;
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:&error];
+    [audioSession setMode:AVAudioSessionModeDefault error:&error];
+    [audioSession setActive:YES error:&error];
+    
+    NSLog(@"SPEAKING THE LINE");
     speakText = [NSString stringWithUTF8String:_text];
+    NSLog(@"SAY :  %@", speakText);
+    NSLog(@"WHAT IS OUR CODE    %@",LanguageCode);
+    
     AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:speakText];
     utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:LanguageCode];
-    utterance.pitchMultiplier = pitch;
-    utterance.rate = rate;
-    utterance.preUtteranceDelay = 0.2f;
-    utterance.postUtteranceDelay = 0.2f;
+    // utterance.pitchMultiplier = pitch;
+    utterance.rate = AVSpeechUtteranceDefaultSpeechRate;
+    utterance.volume = 1;
+//    utterance.preUtteranceDelay = 0.2f;
+//    utterance.postUtteranceDelay = 0.2f;
 
     [speechSynthesizer speakUtterance:utterance];
 }
