@@ -8,6 +8,7 @@
 @implementation SpeechRecorderViewController
 id thisClass;
 static NSString *trueString;
+static bool haveComeFromStop = false;
 
 - (id)init
 {
@@ -58,7 +59,8 @@ static NSString *trueString;
 }
 // recording
 - (void)startRecording {
-
+    
+    
     // Initialize the AVAudioEngine
     audioEngine = [[AVAudioEngine alloc] init];
     
@@ -74,31 +76,64 @@ static NSString *trueString;
     [audioSession setCategory:AVAudioSessionCategoryRecord error:&error];
     [audioSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:&error];
     
+//    NSTimer *finalTimer;
+//
+//    finalTimer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(stopRecording) userInfo:nil repeats:NO];
+    
     // Starts a recognition process, in the block it logs the input or stops the audio
     // process if there's an error.
     recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
     AVAudioInputNode *inputNode = audioEngine.inputNode;
+    
+
+    
     recognitionRequest.shouldReportPartialResults = YES;
     recognitionTask = [speechRecognizer recognitionTaskWithRequest:recognitionRequest resultHandler:^(SFSpeechRecognitionResult * _Nullable result, NSError * _Nullable error) {
         BOOL isFinal = NO;
         if (result) {
             // Whatever you say in the microphone after pressing the button should be being logged
             // in the console.
+            
             NSLog(@"RESULT:%@",result.bestTranscription.formattedString);
             
             NSString *mString = result.bestTranscription.formattedString;
             trueString = mString;
-            
+
             isFinal = !result.isFinal;
+            
+            //[finalTimer invalidate];
+            
+            NSTimer *finalTimer;
+            
+            finalTimer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(stopRecording) userInfo:nil repeats:NO];
+            
+            // this works, but calls the stop recording 3 times for whatever fucking reason?
+            // INTERESTING.
+            // im so fucking lost in my code but it all seems to work?
+            
         }
-        if (error) {
-            NSLog(@"TimeOutHasOccured");
-            [audioEngine stop];
-            [inputNode removeTapOnBus:0];
-            recognitionRequest = nil;
-            recognitionTask = nil;
-            NSLog(@"Repeating this function, apparently");
-            [self stopRecording];
+        if (error && haveComeFromStop != true) {
+            // right, understand. because you call STOP RECORDING, the bool is set to true
+            // and it's NEVER unset back to FALSE. so of course you will never see this?
+            NSLog(@"WE HAVE TIMED OUT, SO NOW WE SHOULD REPEAT");
+            NSLog(@"%@",[error localizedDescription]);
+            
+            
+            // new line - this doesnt seem to matter?
+            // isFinal = YES;
+            
+            
+            
+            
+//            if (audioEngine.isRunning)
+//            {
+//            [audioEngine stop];
+//            [inputNode removeTapOnBus:0];
+//            recognitionRequest = nil;
+//            recognitionTask = nil;
+//            }
+            //NSLog(@"Repeating this function, apparently");
+            [self startRecording];
         }
     }];
     
@@ -116,10 +151,17 @@ static NSString *trueString;
 
 
 - (void)stopRecording {
+    NSLog(@"WE HAVE EITHER TIMED OUT, OR MANUALLY CALLED STOP");
+    haveComeFromStop = true;
     if (audioEngine.isRunning) {
         {
+            if (trueString.length == 0)
+            {
+                trueString = @"nil";
+            }
                 UnitySendMessage("SpeechToText", "onResults", [trueString UTF8String]);
                 NSLog(@"STOPRECORDING RESULT: %@", trueString);
+            
         }
         trueString = @"";
         // [inputNode removeTapOnBus:0];
@@ -128,14 +170,30 @@ static NSString *trueString;
         recognitionRequest = nil;
         [recognitionRequest endAudio];
         NSLog(@"Now THAT WE HAVE OUTPUTTED TO UNITY loop the function");
-        [self startRecording];
+        //[self startRecording];
         //
 
     }
     else
     {
         NSLog(@"Now loop the function");
-        [self startRecording];
+        //[self startRecording];
+    }
+    // haveComeFromStop = false;
+}
+
+- (void)manuallyStopRecording {
+    NSLog(@"MANUALLY STOPPED RECORDING, YOU MUST CALL STARTRECORDING TO RECORD AGAIN");
+
+    if (audioEngine.isRunning) {
+
+        trueString = @"";
+        // [inputNode removeTapOnBus:0];
+        [audioEngine stop];
+        recognitionTask = nil;
+        recognitionRequest = nil;
+        [recognitionRequest endAudio];
+        
     }
 }
 
@@ -157,5 +215,8 @@ extern "C"{
     }  
     void _TAG_SettingSpeech(const char * _language){
         //[vc SettingSpeech:_language];
-    }   
+    }
+    void _TAG_manuallyStopRecording(){
+        [thisClass manuallyStopRecording];
+    }
 }

@@ -35,6 +35,11 @@ namespace TextSpeech
         }
         #endregion
 
+        private void Start()
+        {
+            StartRecording();
+        }
+
         public Action<string> onResultCallback;
 
         public void Setting(string _language)
@@ -50,8 +55,9 @@ namespace TextSpeech
         public void StartRecording(string _message = "")
         {
 #if UNITY_EDITOR
-            #elif UNITY_IOS
+#elif UNITY_IOS
         _TAG_startRecording();
+            StartCoroutine("LongWait");
 #elif UNITY_ANDROID
         if (isShowPopupAndroid)
         {
@@ -65,11 +71,26 @@ namespace TextSpeech
         }
 #endif
         }
-        public void StopRecording()
+
+        public void ManuallyStopRecording(string _message = "")
         {
 #if UNITY_EDITOR
-            #elif UNITY_IOS
+#elif UNITY_IOS
+            StopCoroutine("LongWait");
+            StopCoroutine("EWait");
+        _TAG_manuallyStopRecording();
+#endif
+        }
+
+        public void StopRecording(bool comeFromUnity = false)
+        {
+#if UNITY_EDITOR
+#elif UNITY_IOS
+            if (comeFromUnity!=true)
+            {
         _TAG_stopRecording();
+            }
+            TimeOut();
 #elif UNITY_ANDROID
         if (isShowPopupAndroid == false)
         {
@@ -79,12 +100,31 @@ namespace TextSpeech
 #endif
         }
 
-            #if UNITY_IOS
+            IEnumerator LongWait() {
+            yield return new WaitForSeconds(30);
+            StopRecording();
+            }
+
+            public void TimeOut()
+            {
+            StopCoroutine("LongWait");
+            StartCoroutine("EWait");
+            }
+
+            IEnumerator EWait() {
+            yield return new WaitForSeconds(1);
+            StartRecording();
+            }
+
+#if UNITY_IOS
         [DllImport("__Internal")]
         private static extern void _TAG_startRecording();
 
         [DllImport("__Internal")]
         private static extern void _TAG_stopRecording();
+
+            [DllImport("__Internal")]
+        private static extern void _TAG_manuallyStopRecording();
 
         [DllImport("__Internal")]
         private static extern void _TAG_SettingSpeech(string _language);
@@ -104,9 +144,9 @@ namespace TextSpeech
                 onResultCallback(_results);
         }
 
-        #region Android STT custom
+#region Android STT custom
 #if UNITY_ANDROID
-        #region Error Code
+#region Error Code
     /** Network operation timed out. */
     public const int ERROR_NETWORK_TIMEOUT = 1;
     /** Other network related errors. */
@@ -164,7 +204,7 @@ namespace TextSpeech
         }
         return message;
     }
-        #endregion
+#endregion
     public const bool isShowPopupAndroid = true;
     public Action onReadyForSpeechCallback;
     public Action onEndOfSpeechCallback;
@@ -204,6 +244,6 @@ namespace TextSpeech
     }
 
 #endif
-        #endregion
+#endregion
     }
 }

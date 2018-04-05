@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 public class TestSpeechToText : MonoBehaviour
 {
     public Text wordOutput;
+    public Image listeningIcon;
 
     void Start()
     {
@@ -24,8 +25,10 @@ public class TestSpeechToText : MonoBehaviour
     }
     public void StartRecording()
     {
+        listeningIcon.color = Color.green;
 #if UNITY_EDITOR
 #else
+
         SpeechToText.instance.StartRecording("Speak any");
 #endif
     }
@@ -33,16 +36,37 @@ public class TestSpeechToText : MonoBehaviour
 
     public void StopRecording()
     {
+        listeningIcon.color = Color.white;
 #if UNITY_EDITOR
         OnResultSpeech("Not support in editor.");
 #else
         SpeechToText.instance.StopRecording();
 #endif
     }
+
+    public void ManualStopRecording()
+    {
+        listeningIcon.color = Color.white;
+#if UNITY_EDITOR
+        OnResultSpeech("Not support in editor.");
+#else
+        SpeechToText.instance.ManuallyStopRecording();
+#endif
+    }
+
     void OnResultSpeech(string _data)
     {
         Debug.Log("NOW WEA RE OUTPUTTING WHATEVER WAS SAID, TO THE CONSOLE SO DEAL WITH IT");
         wordOutput.text = _data;
+        SpeechToText.instance.StopRecording(true);
+
+        if (_data.Contains("credits") || _data.Contains("Who made you") || _data.Contains("Who built you"))
+
+        {
+                SpeechToText.instance.ManuallyStopRecording();
+                TextToSpeech.instance.StartSpeak("I was made by Ali Collins and Chris Parr of Mindshare");
+                
+        }
     }
     //public void OnClickSpeak()
     //{

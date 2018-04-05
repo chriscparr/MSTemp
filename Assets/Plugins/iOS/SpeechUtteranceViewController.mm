@@ -6,11 +6,11 @@ static NSString * LanguageCode = [NSString stringWithUTF8String:"en-GB"];
 
 @interface SpeechUtteranceViewController () <AVSpeechSynthesizerDelegate>
 {
-	AVSpeechSynthesizer *speechSynthesizer;
-	NSString * speakText;
-	
-	float pitch;
-	float rate;
+    AVSpeechSynthesizer *speechSynthesizer;
+    NSString * speakText;
+    
+    float pitch;
+    float rate;
 
 }
 @property (strong, nonatomic) AVSpeechSynthesizer *synthesizerO;
@@ -23,15 +23,15 @@ static NSString * LanguageCode = [NSString stringWithUTF8String:"en-GB"];
 
 - (id)init
 {
-	self = [super init];	
-	speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
+    self = [super init];    
+    speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
     speechSynthesizer.delegate = self;
-	return self;
+    return self;
 }
 - (void)SettingSpeak: (const char *) _language pitchSpeak: (float)_pitch rateSpeak:(float)_rate
-{	
+{   
     LanguageCode = [NSString stringWithFormat:@"%s", "en-US"];
-	pitch = _pitch;
+    pitch = _pitch;
     rate = _rate;
     UnitySendMessage("TextToSpeech", "onMessage", "Setting Success");
     
@@ -52,7 +52,7 @@ static NSString * LanguageCode = [NSString stringWithUTF8String:"en-GB"];
     
     AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:speakText];
     utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:LanguageCode];
-    // utterance.pitchMultiplier = pitch;
+    utterance.pitchMultiplier = 1.5f;
     utterance.rate = AVSpeechUtteranceDefaultSpeechRate;
     utterance.volume = 1;
 //    utterance.preUtteranceDelay = 0.2f;
@@ -97,10 +97,10 @@ extern "C"{
     void _TAG_StartSpeak(const char * _text){
         [su StartSpeak:_text];
     }
-	void _TAG_StopSpeak(){
+    void _TAG_StopSpeak(){
         [su StopSpeak];
     } 
-	void _TAG_SettingSpeak(const char * _language, float _pitch, float _rate){
+    void _TAG_SettingSpeak(const char * _language, float _pitch, float _rate){
         [su SettingSpeak:_language pitchSpeak:_pitch rateSpeak:_rate];
     }    
 }
