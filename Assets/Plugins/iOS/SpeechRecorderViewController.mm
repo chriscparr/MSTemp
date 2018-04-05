@@ -73,7 +73,7 @@ static bool haveComeFromStop = false;
     // Starts an AVAudio Session
     NSError *error;
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    [audioSession setCategory:AVAudioSessionCategoryRecord error:&error];
+    [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
     [audioSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:&error];
     
 //    NSTimer *finalTimer;
@@ -159,6 +159,7 @@ static bool haveComeFromStop = false;
             {
                 trueString = @"nil";
             }
+            trueString = [trueString lowercaseString];
                 UnitySendMessage("SpeechToText", "onResults", [trueString UTF8String]);
                 NSLog(@"STOPRECORDING RESULT: %@", trueString);
             

@@ -128,6 +128,7 @@ public class CameraInputManager : MonoBehaviour
 		m_Mover.TweenToPosition(desiredPosition, 2f, false, iTween.EaseType.easeInOutSine);
 
 		m_MainCamera.GetComponent<RailMover>().TweenToPosition(focusVector, 2f, false, iTween.EaseType.easeInOutSine);
+        SetPhase(Phase.FocusedSubCellPhase);
 		UIManager.Instance.ShowManipulationView();
 	}
 

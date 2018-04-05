@@ -51,9 +51,9 @@ static NSString * LanguageCode = [NSString stringWithUTF8String:"en-GB"];
     NSLog(@"WHAT IS OUR CODE    %@",LanguageCode);
     
     AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:speakText];
-    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:LanguageCode];
-    utterance.pitchMultiplier = 1.5f;
-    utterance.rate = AVSpeechUtteranceDefaultSpeechRate;
+    utterance.voice = [AVSpeechSynthesisVoice voiceWithIdentifier:@"com.apple.ttsbundle.Samantha-compact"];
+    utterance.pitchMultiplier = 1.1f;
+    utterance.rate = 0.42f;
     utterance.volume = 1;
 //    utterance.preUtteranceDelay = 0.2f;
 //    utterance.postUtteranceDelay = 0.2f;

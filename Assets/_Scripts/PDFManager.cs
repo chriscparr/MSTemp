@@ -241,6 +241,11 @@ public class PDFManager : MonoBehaviour
         Debug.Log("Cell capture finished!");
     }
 
+    public void DoPDF()
+    {
+        StartCoroutine("GenerateEntirePDF");
+    }
+
     public IEnumerator GenerateEntirePDF()
     {
         

@@ -60,13 +60,7 @@ public class TestSpeechToText : MonoBehaviour
         wordOutput.text = _data;
         SpeechToText.instance.StopRecording(true);
 
-        if (_data.Contains("credits") || _data.Contains("Who made you") || _data.Contains("Who built you"))
-
-        {
-                SpeechToText.instance.ManuallyStopRecording();
-                TextToSpeech.instance.StartSpeak("I was made by Ali Collins and Chris Parr of Mindshare");
-                
-        }
+        PhraseActions.Instance.ActionToFollowPhrase(_data);
     }
     //public void OnClickSpeak()
     //{
